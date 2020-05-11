@@ -1,0 +1,2 @@
+class Bed < ApplicationRecord
+end
