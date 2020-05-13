@@ -1,0 +1,38 @@
+version: "2"
+services:
+  db:
+    image: postgres:12.1
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=covid
+      - POSTGRES_PASSWORD=covidpassword
+      - POSTGRES_DB=covid_development
+      - TZ=America/Sao_Paulo
+    networks: 
+      - covid
+
+  web:
+    tty: true # Enables debugging capabilities when attached to this container.
+    build: .
+    image: bivi/covid.server:alpine
+    restart: unless-stopped
+    command: sh /app/scripts/entrypoint.sh
+    environment:
+      - DATABASE_HOST=db
+      - DATABASE_NAME=covid
+      - DATABASE_USER=covid
+      - DATABASE_PASSWORD=covidpassword
+    volumes:
+      - .:/app
+    ports:
+      - 3000:3000
+    depends_on:
+      - db
+    networks: 
+      - covid
+
+networks:
+  covid:
+    driver: bridge

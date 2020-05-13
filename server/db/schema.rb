@@ -12,7 +12,10 @@
 
 ActiveRecord::Schema.define(version: 2020_05_11_013948) do
 
-  create_table "beds", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "beds", force: :cascade do |t|
     t.integer "hospital_id"
     t.integer "status", default: 1
     t.string "slug"
@@ -23,7 +26,7 @@ ActiveRecord::Schema.define(version: 2020_05_11_013948) do
     t.index ["slug"], name: "index_beds_on_slug"
   end
 
-  create_table "cities", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+  create_table "cities", force: :cascade do |t|
     t.integer "state_id"
     t.string "name"
     t.string "slug"
@@ -34,7 +37,7 @@ ActiveRecord::Schema.define(version: 2020_05_11_013948) do
     t.index ["slug"], name: "index_cities_on_slug", unique: true
   end
 
-  create_table "hospitals", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+  create_table "hospitals", force: :cascade do |t|
     t.integer "city_id"
     t.integer "hospital_type", default: 1
     t.string "name"
@@ -44,7 +47,7 @@ ActiveRecord::Schema.define(version: 2020_05_11_013948) do
     t.index ["slug"], name: "index_hospitals_on_slug", unique: true
   end
 
-  create_table "states", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+  create_table "states", force: :cascade do |t|
     t.string "name"
     t.string "slug"
     t.string "prefix"
