@@ -14,6 +14,8 @@ class Bed < ApplicationRecord
   friendly_id :generate_slug, use: :slugged
 
   scope :using_ventilator, -> { where(using_ventilator: false) }
+  scope :covids, -> { where(bed_type: [1, 3]) }
+  scope :no_covids, -> { where(bed_type: [2, 4]) }
 
   def generate_slug
     [hospital.name, bed_type].join(' ')

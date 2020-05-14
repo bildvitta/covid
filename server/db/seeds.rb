@@ -1,7 +1,10 @@
 if Hospital.none?
-  cities = City.offset(rand(35)).limit(3).to_a
+  rand_geocoded = -> { ([-1, 1].sample * rand(0..1.0).round(6)) }
+  cities = City.offset(rand(35)).limit(3)
 
-  cities << City.find_by_slug('ribeirao-preto')
+  unless cities.exists?(slug: 'ribeirao-preto')
+    cities = cities.to_a + [City.find_by_slug('ribeirao-preto')]
+  end
 
   cities.each do |city|
     rand(2..7).times do
@@ -9,6 +12,8 @@ if Hospital.none?
         city: city,
         hospital_type: Hospital::TYPES.sample.last,
         name: Faker::Company.name,
+        latitude: city.latitude + rand_geocoded.(),
+        longitude: city.longitude + rand_geocoded.(),
         beds_attributes: (1..15).map do
           {
             status: Bed.statuses.values.sample,
@@ -16,6 +21,24 @@ if Hospital.none?
             using_ventilator: rand(2).zero?
           }
         end
+      )
+    end
+  end
+end
+
+if CovidCase.none?
+  City.all.each do |city|
+    rand(6..30).times do |i|
+      deaths = rand(500)
+      cureds = rand(500)
+      total = cureds + deaths
+
+      covid_case = CovidCase.create!(
+        city: city,
+        total: rand(total..(total + 500)),
+        deaths: deaths,
+        cureds: cureds,
+        created_at: i.days.ago
       )
     end
   end
