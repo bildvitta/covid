@@ -4,6 +4,6 @@ Rails.application.routes.draw do
   }, via: [:options]
 
   namespace :pages, path: '/' do
-    get :home
+    get :dashboard
   end
 end
