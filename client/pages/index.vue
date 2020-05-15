@@ -18,7 +18,11 @@
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam ducimus autem minus odit! Cum, maxime quibusdam. Doloribus velit consequatur optio laborum natus neque vel nostrum reiciendis possimus soluta, sequi ipsam.
       </cov-grid-cell>
     </cov-grid>
-    <CovBadge color="secondary">Texto</CovBadge>
+    
+    <CovBadge>100%</CovBadge>
+    <CovBadge color="negative">12,5%</CovBadge>
+    <CovBadge color="positive">89,14%</CovBadge>
+    <CovBadge color="warning">67,5%</CovBadge>
   </div>
 </template>
 

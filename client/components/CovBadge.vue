@@ -29,12 +29,24 @@ export default {
   @import '../assets/styles/settings.scss';
 
   .badge {
-    border-radius: 11px;
+    background-color: $primary-color;
+    border-radius: $radius;
+    color: $white;
+    font-weight: bold;
     display: inline;
     padding: 3px 6px;
+    font-size: $font-size-small;
 
-    &--secondary {
-      background-color: $secondary-color;
+    &--negative {
+      background-color: $negative-color;
+    }
+
+    &--positive {
+      background-color: $positive-color;
+    }
+
+    &--warning {
+      background-color: $warning-color;
     }
   }
 </style>
