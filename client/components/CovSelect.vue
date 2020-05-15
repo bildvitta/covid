@@ -1,10 +1,5 @@
 <template>
   <select v-model="model" v-bind="$attrs" v-on="$listeners">
-    <!-- <slot v-for="(option, index) in formattedOptions" :name="`option-${option.value}`" :option="option">
-      <option :key="index" :value="option.value">
-        {{ option.label }}
-      </option>
-    </slot> -->
     <option v-for="(option, index) in formattedOptions" :key="index" :value="option.value">
       {{ option.label }}
     </option>
