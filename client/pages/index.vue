@@ -1,11 +1,11 @@
 <template>
   <div class="container">
-    <CovSelect v-model="model" :options="['teste', 'teste2']">
-      <template v-slot:option-teste="{ option }">
+    <CovSelect v-model="model" map-options :options="[{ label: 'teste', value: 1 }, { label: 'teste2', value: 2 }]">
+      <!-- <template v-slot:option-teste="{ option }">
         <div>
           {{ option }} Testando slot
         </div>
-      </template>
+      </template> -->
     </CovSelect>
 
     <div>{{ model }}</div>

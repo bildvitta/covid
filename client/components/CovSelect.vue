@@ -32,7 +32,7 @@ export default {
   computed: {
     model: {
       get () {
-        return this.value
+        return this.mapOptions ? this.value.value : this.value
       },
 
       set (value) {
@@ -45,7 +45,7 @@ export default {
     formattedOptions () {
       return this.options.map((option) => {
         if (typeof option === 'object' && !Array.isArray(option)) {
-          if ((!option.label || option.value)) {
+          if ((!option.label || !option.value)) {
             throw new Error('Object option must have label and value')
           }
 

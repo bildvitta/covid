@@ -17,7 +17,7 @@ export default {
 
   computed: {
     defaultBreakpoint () {
-      return { col: '1of6', sm: '1of6', md: '1of6', lg: '1of6', ...this.breakpoints }
+      return { col: 'Full', sm: '1of2', md: '1of2', lg: '1of2', ...this.breakpoints }
     },
 
     classes () {
@@ -26,7 +26,7 @@ export default {
       for (const key in this.defaultBreakpoint) {
         const breakpoint = ignore.includes(key) ? '' : `${key}-`
 
-        classes.push(`${breakpoint}cov-grid-cell-size${this.defaultBreakpoint[key]}`)
+        classes.push(`${breakpoint}size${this.defaultBreakpoint[key]}`)
       }
 
       return classes
@@ -189,27 +189,15 @@ export default {
 
 @include cov-grid-cell;
 
-// @include breakpoint('480px') {
-//   @include cov-grid-cell('sm-');
-// }
-
-@media screen and (max-width: 480px) {
+@include breakpoint('480px') {
   @include cov-grid-cell('sm-');
 }
 
-@media screen and (max-width: 768px) {
+@include breakpoint('768px') {
   @include cov-grid-cell('md-');
 }
 
-@media screen and (max-width: 1080px) {
+@include breakpoint('1080px') {
   @include cov-grid-cell('lg-');
 }
-
-// @include breakpoint('768px') {
-//   @include cov-grid-cell('md-');
-// }
-
-// @include breakpoint('1080px') {
-//   @include cov-grid-cell('lg-');
-// }
 </style>
