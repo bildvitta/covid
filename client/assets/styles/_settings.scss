@@ -1,4 +1,55 @@
-$primary: blue;
-$secondary: red;
-
+// Fonts
+// ==========================================================================
+$font-size: 16px;
 $font-family: 'Source Sans Pro', sans-serif;
+$font-weight: normal;
+$line-height: 1.5;
+
+// Cool
+$aqua: #00B9F7;
+$blue: #0074d9;
+$whisper: #F0F0f7;
+$melrose: #A3A1FB;
+$bali: #8288AC;
+$navy: #4b00ce;
+$green: #34C360;
+$lime: #39f8bb;
+
+// Warn
+$yellow: #FFB713;
+$orange: #ff9d00;
+$salmon: #FF8474;
+$red: #FA5252;
+$maroon: #ae0057;
+
+// Gray Scale
+$white: #ffffff;
+$lightgray: #f0f0f0;
+$gray: #bcbccb;
+$darkgray: #777777;
+$black: #2a2d31;
+
+// Emotive
+$positive-color: $green;
+$negative-color: $red;
+$info-color: $blue;
+$warning-color: $yellow;
+
+// Header
+$header-font-family: $font-family;
+$header-font-weight: bold;
+$header-line-height: 1.25;
+
+// Theme
+$primary-color: $melrose;
+$secondary-color: $whisper;
+
+// Page
+$background-color: $whisper;
+$text-color: $bali;
+
+
+// Radius
+// ==========================================================================
+$radius: 11px;
+$circular-radius: 500rem;

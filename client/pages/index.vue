@@ -18,19 +18,22 @@
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam ducimus autem minus odit! Cum, maxime quibusdam. Doloribus velit consequatur optio laborum natus neque vel nostrum reiciendis possimus soluta, sequi ipsam.
       </cov-grid-cell>
     </cov-grid>
+    <CovBadge color="secondary">Texto</CovBadge>
   </div>
 </template>
 
 <script>
-import CovSelect from './../components/CovSelect'
+import CovBadge from './../components/CovBadge'
 import CovGrid from './../components/CovGrid'
 import CovGridCell from './../components/CovGridCell'
+import CovSelect from './../components/CovSelect'
 
 export default {
   components: {
-    CovSelect,
+    CovBadge,
     CovGrid,
-    CovGridCell
+    CovGridCell,
+    CovSelect
   },
 
   data () {

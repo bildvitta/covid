@@ -26,12 +26,15 @@ export default {
 </script>
 
 <style lang="scss">
+  @import '../assets/styles/settings.scss';
+
   .badge {
     border-radius: 11px;
+    display: inline;
     padding: 3px 6px;
 
     &--secondary {
-      background-color: red;
+      background-color: $secondary-color;
     }
   }
 </style>
