@@ -1,9 +1,9 @@
 <template>
   <div>
-    <header class="header">
+    <header class="header box-shadow">
       <div class="container">
         <div class="header__brand">
-          COVID-19
+          covid-19
         </div>
 
         <div class="header__title">
@@ -25,3 +25,33 @@
     </footer>
   </div>
 </template>
+
+<style lang="scss">
+@import '../assets/styles/settings.scss';
+
+.header {
+  padding: 40px 0;
+
+  .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__brand,
+  &__title {
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+
+  &__brand {
+    color: $text-color;
+    font-size: 38px;
+  }
+
+  &__title {
+    color: $primary-color;
+    font-size: 32px;
+  }
+}
+</style>

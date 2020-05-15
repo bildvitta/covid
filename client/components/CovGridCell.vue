@@ -37,6 +37,7 @@ export default {
 
 <style lang="scss">
 @import '../node_modules/breakpoint-sass/stylesheets/_breakpoint';
+@import '../assets/styles/settings.scss';
 
 @mixin cov-grid-cell($prefix: '') {
   .#{$prefix}size1of12 {
@@ -189,15 +190,15 @@ export default {
 
 @include cov-grid-cell;
 
-@include breakpoint('480px') {
+@include breakpoint($small-screen) {
   @include cov-grid-cell('sm-');
 }
 
-@include breakpoint('768px') {
+@include breakpoint($small-screen) {
   @include cov-grid-cell('md-');
 }
 
-@include breakpoint('1080px') {
+@include breakpoint($large-screen) {
   @include cov-grid-cell('lg-');
 }
 </style>
