@@ -1,5 +1,19 @@
+// ==========================================================================
+// Settings
+// ==========================================================================
+
+//Screens
+$small-screen: 480px;
+$medium-screen: 768px;
+$large-screen: 992px;
+
+// Page
+$minimum-page-width: 320px;
+$maximum-page-width: 1080px;
+
 // Fonts
 // ==========================================================================
+$font-size-small: 11px;
 $font-size: 16px;
 $font-family: 'Source Sans Pro', sans-serif;
 $font-weight: normal;
