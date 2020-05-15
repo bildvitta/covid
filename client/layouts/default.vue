@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="defaut">
     <header class="header box-shadow">
       <div class="container">
         <div class="header__brand">
@@ -20,7 +20,7 @@
 
     <footer class="footer">
       <div class="container">
-        Este é um projeto Open Source. Tenha <a href="?" target="_blank">acesso ao código-fonte na íntegra</a>.
+        Este é um projeto Open Source. Tenha acesso ao código-fonte na íntegra <a href="?" target="_blank">aqui</a>.
       </div>
     </footer>
   </div>
@@ -28,6 +28,12 @@
 
 <style lang="scss">
 @import '../assets/styles/settings.scss';
+
+.defaut {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
 
 .header {
   padding: 40px 0;
@@ -46,12 +52,26 @@
 
   &__brand {
     color: $text-color;
-    font-size: 38px;
+    font-size: 40px;
   }
 
   &__title {
     color: $primary-color;
     font-size: 32px;
+  }
+}
+
+.main {
+  flex: 1 0 auto;
+}
+
+.footer {
+  padding: 30px;
+  background-color: $secondary-color;
+  color: $text-color;
+
+  .container {
+    text-align: center;
   }
 }
 </style>
