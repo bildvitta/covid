@@ -1,6 +1,6 @@
 <template>
-  <div class="defaut">
-    <header class="header box-shadow">
+  <div class="default-layout">
+    <header class="header">
       <div class="container">
         <div class="header__brand">
           Covid-19
@@ -27,27 +27,26 @@
 </template>
 
 <style lang="scss">
-@import '../assets/styles/settings.scss';
-
-.defaut {
-  min-height: 100vh;
+.default-layout {
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
 }
 
 .header {
-  padding: 40px 0;
+  box-shadow: $shadow;
+  padding: 20px 0;
 
   .container {
+    align-items: center;
     display: flex;
     justify-content: space-between;
-    align-items: center;
   }
 
   &__brand,
   &__title {
-    text-transform: uppercase;
     font-weight: bold;
+    text-transform: uppercase;
   }
 
   &__brand {
@@ -67,9 +66,9 @@
 }
 
 .footer {
-  padding: 30px;
   background-color: $secondary-color;
   color: $text-color;
+  padding: 30px;
 
   .container {
     text-align: center;

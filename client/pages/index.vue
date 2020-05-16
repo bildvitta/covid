@@ -25,6 +25,33 @@
     <CovBadge color="negative">12,5%</CovBadge>
     <CovBadge color="positive">89,14%</CovBadge>
     <CovBadge color="warning">67,5%</CovBadge>
+
+    <div>
+      <div>
+        <div>
+          <h3 class="typography--title">Cidade</h3>
+        </div>
+
+        <div>
+          <h3 class="typography--title">Hospitais</h3>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="typography--title">Leitos</h3>
+        <div class="typography--subtitle">Atualizado há 10min</div>
+        <CovCard>
+          <div class="typography--caption">Covid-19</div>
+          <div class="typography--caption">Não Covid-19</div>
+        </CovCard>
+      </div>
+
+      <div>
+        <h3 class="typography--title">Casos</h3>
+        <div class="typography--subtitle">Atualizado em 13/05/2020</div>
+      </div>
+    </div>
+
   </div>
 </template>
 

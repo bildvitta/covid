@@ -36,9 +36,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../node_modules/breakpoint-sass/stylesheets/_breakpoint';
-@import '../assets/styles/settings.scss';
-
 @mixin cov-grid-cell($prefix: '') {
   .#{$prefix}size1of12 {
     flex-basis: auto;

@@ -1,1 +1,14 @@
-@import 'settings', 'mixins', 'reset', 'global', 'container','box-shadow', 'typography';
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+
+  &::before,
+  &::after {
+    box-sizing: inherit;
+  }
+}
+
+body {
+  font: $font-weight $font-size $font-family;
+}

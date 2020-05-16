@@ -1,5 +1,14 @@
 module.exports = {
-  // add your custom config here
-  // https://stylelint.io/user-guide/configuration
-  rules: {}
+  extends: 'stylelint-config-standard',
+
+  plugins: [
+    'stylelint-order',
+    'stylelint-selector-bem-pattern'
+  ],
+
+  rules: {
+    'at-rule-no-unknown': null,
+    'order/properties-alphabetical-order': true,
+    'plugin/selector-bem-pattern': { preset: 'bem' }
+  }
 }
