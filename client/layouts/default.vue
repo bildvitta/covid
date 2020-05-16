@@ -3,7 +3,7 @@
     <header class="header box-shadow">
       <div class="container">
         <div class="header__brand">
-          covid-19
+          Covid-19
         </div>
 
         <div class="header__title">
@@ -63,6 +63,7 @@
 
 .main {
   flex: 1 0 auto;
+  background-color: $secondary-color;
 }
 
 .footer {
