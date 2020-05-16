@@ -1,5 +1,5 @@
 <template>
-  <div class="badge" :class="modifier">
+  <div class="badge" :class="classes">
     <slot />
   </div>
 </template>
@@ -18,7 +18,7 @@ export default {
   },
 
   computed: {
-    modifier () {
+    classes () {
       return `badge--${this.color}`
     }
   }
@@ -32,10 +32,10 @@ export default {
     background-color: $primary-color;
     border-radius: $radius;
     color: $white;
-    font-weight: bold;
     display: inline;
-    padding: 3px 6px;
     font-size: $font-size-small;
+    font-weight: bold;
+    padding: 3px 6px;
 
     &--negative {
       background-color: $negative-color;

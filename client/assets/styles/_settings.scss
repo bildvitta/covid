@@ -1,8 +1,4 @@
-// ==========================================================================
-// Settings
-// ==========================================================================
-
-//Screens
+// Breakpoints
 $small-screen: 480px;
 $medium-screen: 768px;
 $large-screen: 992px;
@@ -12,35 +8,38 @@ $minimum-page-width: 320px;
 $maximum-page-width: 1080px;
 
 // Fonts
-// ==========================================================================
-$font-size-small: 11px;
 $font-size: 16px;
+$font-size-small: 11px;
+
 $font-family: 'Source Sans Pro', sans-serif;
 $font-weight: normal;
+
 $line-height: 1.5;
 
+// Colors
+
 // Cool
-$aqua: #00B9F7;
+$aqua: #00b9f7;
 $blue: #0074d9;
-$whisper: #F0F0f7;
-$melrose: #A3A1FB;
-$bali: #8288AC;
+$whisper: #f0f0f7;
+$melrose: #a3a1fb;
+$bali: #8288ac;
 $navy: #4b00ce;
-$green: #34C360;
+$green: #34c360;
 $lime: #39f8bb;
 
 // Warn
-$yellow: #FFB713;
+$yellow: #ffb713;
 $orange: #ff9d00;
-$salmon: #FF8474;
-$red: #FA5252;
+$salmon: #ff8474;
+$red: #fa5252;
 $maroon: #ae0057;
 
 // Gray Scale
-$white: #ffffff;
+$white: #fff;
 $lightgray: #f0f0f0;
 $gray: #bcbccb;
-$darkgray: #777777;
+$darkgray: #777;
 $black: #2a2d31;
 
 // Emotive
@@ -62,8 +61,6 @@ $secondary-color: $whisper;
 $background-color: $whisper;
 $text-color: $bali;
 
-
 // Radius
-// ==========================================================================
 $radius: 11px;
 $circular-radius: 500rem;

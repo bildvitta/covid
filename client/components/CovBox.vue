@@ -1,5 +1,5 @@
 <template>
-  <div v-bind="$attrs" class="cov-box box-shadow">
+  <div class="cov-box box-shadow">
     <slot />
   </div>
 </template>
@@ -9,6 +9,6 @@
 
 .cov-box {
   border-radius: $radius;
-  padding: 20px;
+  padding: 15px;
 }
 </style>

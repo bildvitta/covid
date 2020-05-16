@@ -11,7 +11,7 @@ export default {
   props: {
     options: {
       type: Array,
-      default: () => ([])
+      default: () => []
     },
 
     mapOptions: {
@@ -31,9 +31,10 @@ export default {
       },
 
       set (value) {
-        const mapOption = this.formattedOptions.find(option => option.value === value)
-
-        return this.$emit('input', this.mapOptions ? mapOption : value)
+        return this.$emit('input', this.mapOptions
+          ? this.formattedOptions.find(option => option.value === value)
+          : value
+        )
       }
     },
 
