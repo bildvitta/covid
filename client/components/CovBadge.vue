@@ -8,8 +8,8 @@
 export default {
   props: {
     color: {
-      type: String,
-      default: 'primary'
+      default: 'primary',
+      type: String
     },
 
     outlined: {
@@ -26,27 +26,25 @@ export default {
 </script>
 
 <style lang="scss">
-  @import '../assets/styles/settings.scss';
+.badge {
+  background-color: $primary-color;
+  border-radius: $radius;
+  color: $white;
+  display: inline;
+  font-size: $font-size-small;
+  font-weight: bold;
+  padding: 3px 6px;
 
-  .badge {
-    background-color: $primary-color;
-    border-radius: $radius;
-    color: $white;
-    display: inline;
-    font-size: $font-size-small;
-    font-weight: bold;
-    padding: 3px 6px;
-
-    &--negative {
-      background-color: $negative-color;
-    }
-
-    &--positive {
-      background-color: $positive-color;
-    }
-
-    &--warning {
-      background-color: $warning-color;
-    }
+  &--negative {
+    background-color: $negative-color;
   }
+
+  &--positive {
+    background-color: $positive-color;
+  }
+
+  &--warning {
+    background-color: $warning-color;
+  }
+}
 </style>

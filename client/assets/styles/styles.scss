@@ -1,1 +1,14 @@
-@import 'settings', 'reset', 'global', 'container','box-shadow', 'typography';
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+
+  &::before,
+  &::after {
+    box-sizing: inherit;
+  }
+}
+
+body {
+  font: normal 16px $font-family;
+}

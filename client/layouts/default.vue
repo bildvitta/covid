@@ -1,6 +1,6 @@
 <template>
   <div class="default-layout">
-    <header class="header box-shadow">
+    <header class="header">
       <div class="container">
         <div class="header__brand">
           covid-19
@@ -27,8 +27,6 @@
 </template>
 
 <style lang="scss">
-@import '../assets/styles/settings.scss';
-
 .default-layout {
   display: flex;
   flex-direction: column;
@@ -36,6 +34,7 @@
 }
 
 .header {
+  box-shadow: $shadow;
   padding: 20px 0;
 
   .container {

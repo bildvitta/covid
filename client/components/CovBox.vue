@@ -1,14 +1,13 @@
 <template>
-  <div class="cov-box box-shadow">
+  <div class="cov-box">
     <slot />
   </div>
 </template>
 
 <style lang="scss">
-@import '../assets/styles/settings.scss';
-
 .cov-box {
   border-radius: $radius;
+  box-shadow: $shadow;
   padding: 15px;
 }
 </style>
