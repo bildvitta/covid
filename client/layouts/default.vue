@@ -3,7 +3,7 @@
     <header class="header">
       <div class="container">
         <div class="header__brand">
-          Covid-19
+          COVID-19
         </div>
 
         <div class="header__title">
@@ -13,9 +13,7 @@
     </header>
 
     <main class="main">
-      <div class="container">
-        <nuxt />
-      </div>
+      <nuxt />
     </main>
 
     <footer class="footer">
@@ -45,18 +43,18 @@
 
   &__brand,
   &__title {
-    font-weight: bold;
     text-transform: uppercase;
   }
 
   &__brand {
     color: $text-color;
-    font-size: 40px;
+    font-size: 32px;
+    font-weight: bold;
   }
 
   &__title {
     color: $primary-color;
-    font-size: 32px;
+    font-size: 28px;
   }
 }
 
