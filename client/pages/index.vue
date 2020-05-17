@@ -57,7 +57,7 @@
         </cov-grid>
       </div>
     </cov-section>
-    <cov-loading :show="true" />
+    <cov-loading :show="showLoading" />
   </div>
 </template>
 
@@ -85,6 +85,12 @@ export default {
     CovLoading
   },
 
+  data () {
+    return {
+      showLoading: false
+    }
+  },
+
   computed: {
     ...mapGetters({
       dashboard: 'dashboard/dashboard',
@@ -107,10 +113,14 @@ export default {
     }),
 
     async fetch () {
+      this.showLoading = true
+
       try {
         await this.fetchDashboard({ city: 'ribeirao-preto' })
       } catch (error) {
-        console.log('OPSSS ACONTECEU UM ERRO')
+        throw new Error('Error on fetch "/dashboard/"')
+      } finally {
+        this.showLoading = true
       }
     }
   }
