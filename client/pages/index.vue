@@ -16,7 +16,7 @@
       </cov-grid-cell>
       <cov-grid-cell>
         <cov-box>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam ducimus autem minus odit! Cum, maxime quibusdam. Doloribus velit consequatur optio laborum natus neque vel nostrum reiciendis possimus soluta, sequi ipsam.
+          {{ dashboard }}
         </cov-box>
       </cov-grid-cell>
     </cov-grid>
@@ -51,11 +51,13 @@
         <div class="typography--subtitle">Atualizado em 13/05/2020</div>
       </div>
     </div>
-
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+// import axios from 'axios'
+
 import CovBadge from './../components/CovBadge'
 import CovGrid from './../components/CovGrid'
 import CovGridCell from './../components/CovGridCell'
@@ -75,6 +77,16 @@ export default {
     return {
       model: '2'
     }
+  },
+
+  created () {
+    console.log(this.$axios)
+  },
+
+  computed: {
+    ...mapGetters({
+      dashboard: 'dashboard/dashboard'
+    })
   }
 }
 </script>

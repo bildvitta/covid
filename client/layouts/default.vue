@@ -61,8 +61,8 @@
 }
 
 .main {
-  flex: 1 0 auto;
   background-color: $secondary-color;
+  flex: 1 0 auto;
 }
 
 .footer {
