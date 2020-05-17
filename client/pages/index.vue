@@ -19,7 +19,7 @@
             </div>
 
             <div>
-              <h3 class="typography--title">Casos</h3>
+              <h3 class="typography--title">Casos em Ribeirão Preto</h3>
               <div class="typography--subtitle">Atualizado há 10 min</div>
 
               <cov-card>
@@ -32,7 +32,7 @@
             </div>
           </cov-grid-cell>
           <cov-grid-cell>
-            2
+            <cov-heatmap />
           </cov-grid-cell>
         </cov-grid>
       </div>
@@ -66,6 +66,7 @@ import CovBox from '~/components/CovBox'
 import CovCard from '~/components/CovCard'
 import CovGrid from '~/components/CovGrid'
 import CovGridCell from '~/components/CovGridCell'
+import CovHeatmap from '~/components/CovHeatmap'
 import CovSection from '~/components/CovSection'
 
 export default {
@@ -75,13 +76,12 @@ export default {
     CovCard,
     CovGrid,
     CovGridCell,
+    CovHeatmap,
     CovSection
-  },
-
-  data () {
-    return {
-      model: '2'
-    }
   }
+
+  // data () {
+  //   return {}
+  // }
 }
 </script>

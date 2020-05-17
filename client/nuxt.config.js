@@ -42,7 +42,8 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/dotenv',
     '@nuxtjs/pwa',
-    '@nuxtjs/style-resources'
+    '@nuxtjs/style-resources',
+    'nuxt-leaflet'
   ],
 
   // axios: {
