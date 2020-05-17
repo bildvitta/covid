@@ -31,7 +31,9 @@ export default {
     ]
   },
 
-  // plugins: [],
+  plugins: [
+    '~/plugins/axios'
+  ],
 
   buildModules: [
     '@nuxtjs/eslint-module',
