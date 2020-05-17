@@ -44,14 +44,18 @@
           <cov-grid-cell>
             <h3 class="typography typography--title">Dashboard 1</h3>
             <cov-box>
-              Gráfico 1
+              <client-only>
+                <cov-line-chart :chart-data="historyChartData" />
+              </client-only>
             </cov-box>
           </cov-grid-cell>
 
           <cov-grid-cell>
             <h3 class="typography typography--title">Dashboard 2</h3>
             <cov-box>
-              Gráfico 2
+              <client-only>
+                <cov-line-chart :chart-data="historyChartData" />
+              </client-only>
             </cov-box>
           </cov-grid-cell>
         </cov-grid>
@@ -67,6 +71,7 @@ import CovCard from '~/components/CovCard'
 import CovGrid from '~/components/CovGrid'
 import CovGridCell from '~/components/CovGridCell'
 import CovHeatmap from '~/components/CovHeatmap'
+import CovLineChart from '~/components/CovLineChart'
 import CovSection from '~/components/CovSection'
 
 export default {
@@ -77,7 +82,31 @@ export default {
     CovGrid,
     CovGridCell,
     CovHeatmap,
+    CovLineChart,
     CovSection
+  },
+
+  computed: {
+    historyChartData () {
+      function getRandomInt () {
+        return Math.floor(Math.random() * (50 - 5 + 1)) + 5
+      }
+
+      return {
+        labels: [getRandomInt(), getRandomInt()],
+        datasets: [
+          {
+            label: 'Primeira linha',
+            backgroundColor: '#f87979',
+            data: [getRandomInt(), getRandomInt()]
+          }, {
+            label: 'Segunda linha',
+            backgroundColor: '#f87979',
+            data: [getRandomInt(), getRandomInt()]
+          }
+        ]
+      }
+    }
   }
 
   // data () {
