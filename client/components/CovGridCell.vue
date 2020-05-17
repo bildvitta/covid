@@ -25,7 +25,6 @@ export default {
 
       for (const key in this.defaultBreakpoint) {
         const breakpoint = ignore.includes(key) ? '' : `${key}-`
-
         classes.push(`${breakpoint}size${this.defaultBreakpoint[key]}`)
       }
 
