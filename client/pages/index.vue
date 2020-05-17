@@ -42,7 +42,7 @@
       <div class="container">
         <cov-grid>
           <cov-grid-cell>
-            <h3 class="typography typography--title">{{ dashboard }}</h3>
+            <h3 class="typography typography--title">Dashboard 1</h3>
             <cov-box>
               Gráfico 1
             </cov-box>
@@ -57,6 +57,7 @@
         </cov-grid>
       </div>
     </cov-section>
+    <cov-loading :show="true" />
   </div>
 </template>
 
@@ -70,6 +71,7 @@ import CovGrid from '~/components/CovGrid'
 import CovGridCell from '~/components/CovGridCell'
 import CovHeatmap from '~/components/CovHeatmap'
 import CovSection from '~/components/CovSection'
+import CovLoading from '~/components/CovLoading'
 
 export default {
   components: {
@@ -79,17 +81,24 @@ export default {
     CovGrid,
     CovGridCell,
     CovHeatmap,
-    CovSection
+    CovSection,
+    CovLoading
   },
 
   computed: {
     ...mapGetters({
-      dashboard: 'dashboard/dashboard'
-    })
+      dashboard: 'dashboard/dashboard',
+      error: 'dashboard/error'
+    }),
+
+    hasError () {
+      return !!this.error
+    }
   },
 
   created () {
     this.fetch()
+    console.log(!!this.dashboard, '>>>>>')
   },
 
   methods: {
