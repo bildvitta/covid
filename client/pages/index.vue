@@ -61,10 +61,13 @@
         </cov-grid>
       </div>
     </cov-section>
+    <cov-loading :show="showLoading" />
   </div>
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
+
 import CovBadge from '~/components/CovBadge'
 import CovBox from '~/components/CovBox'
 import CovCard from '~/components/CovCard'
@@ -73,6 +76,7 @@ import CovGridCell from '~/components/CovGridCell'
 import CovHeatmap from '~/components/CovHeatmap'
 import CovLineChart from '~/components/CovLineChart'
 import CovSection from '~/components/CovSection'
+import CovLoading from '~/components/CovLoading'
 
 export default {
   components: {
@@ -83,10 +87,26 @@ export default {
     CovGridCell,
     CovHeatmap,
     CovLineChart,
+    CovLoading,
     CovSection
   },
 
+  data () {
+    return {
+      showLoading: false
+    }
+  },
+
   computed: {
+    ...mapGetters({
+      dashboard: 'dashboard/dashboard',
+      error: 'dashboard/error'
+    }),
+
+    hasError () {
+      return !!this.error
+    },
+
     historyChartData () {
       function getRandomInt () {
         return Math.floor(Math.random() * (50 - 5 + 1)) + 5
@@ -107,10 +127,28 @@ export default {
         ]
       }
     }
-  }
+  },
 
-  // data () {
-  //   return {}
-  // }
+  created () {
+    this.fetch()
+  },
+
+  methods: {
+    ...mapActions({
+      fetchDashboard: 'dashboard/fetch'
+    }),
+
+    async fetch () {
+      this.showLoading = true
+
+      try {
+        await this.fetchDashboard({ city: 'ribeirao-preto' })
+      } catch (error) {
+        throw new Error('Error fetching "dashboard" data.', error)
+      } finally {
+        this.showLoading = false
+      }
+    }
+  }
 }
 </script>
