@@ -17,7 +17,7 @@ module.exports = {
   ],
 
   rules: {
-    'max-len': { tabWidth: 2 },
+    'max-len': ['error', { tabWidth: 2 }],
 
     // Recommended
     'vue/max-attributes-per-line': 'off',

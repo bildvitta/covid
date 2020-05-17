@@ -51,7 +51,6 @@
         <div class="typography--subtitle">Atualizado em 13/05/2020</div>
       </div>
     </div>
-
   </div>
 </template>
 
