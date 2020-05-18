@@ -152,7 +152,8 @@ export default {
   data () {
     return {
       showLoading: false,
-      city: 'ribeirao-preto',
+      city: '',
+      cachedCity: '',
       hospital: ''
     }
   },
@@ -194,6 +195,10 @@ export default {
   },
 
   watch: {
+    city (newValue) {
+      this.cachedCity = newValue
+    },
+
     $route () {
       this.fetch()
     }
@@ -201,7 +206,7 @@ export default {
 
   created () {
     this.fetch()
-    this.setSelectValue()
+    this.setSelect()
   },
 
   methods: {
@@ -222,17 +227,20 @@ export default {
     },
 
     filter () {
+      this.city !== this.cachedCity && this.clearHospital()
+
       const query = omitBy({ ...this.$route.query, city: this.city, hospital: this.hospital }, isEmpty)
 
       this.$router.push({ query })
     },
 
-    setSelectValue () {
-      const query = this.$route.query
+    setSelect () {
+      this.city = this.$route.query.city || 'ribeirao-preto'
+      this.hospital = this.$route.query.hospital || ''
+    },
 
-      for (const key in query) {
-        this[key] = query[key]
-      }
+    clearHospital () {
+      this.hospital = ''
     }
   }
 }
