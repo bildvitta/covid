@@ -21,7 +21,7 @@
               <div class="typography typography--subtitle">Atualizado há 10 min</div>
 
               <cov-grid class="cov-grid--with-gutter">
-                <cov-grid-cell :breakpoints="{col: '1of2', sm: '1of2', md: '1of3', lg: '1of3'}">
+                <cov-grid-cell :breakpoints="{ col: '1-of-2', sm: '1-of-2', md: '1-of-3', lg: '1-of-3' }">
                   <cov-card class="typography">
                     <template v-slot:header>
                       <span>UTI</span>
