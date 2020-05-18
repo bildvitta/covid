@@ -25,7 +25,6 @@ export default {
 
       for (const key in this.defaultBreakpoint) {
         const breakpoint = ignore.includes(key) ? '' : `-${key}`
-        console.log(breakpoint)
         classes.push(`cov-grid-cell-${breakpoint}-${this.defaultBreakpoint[key]}`)
       }
 

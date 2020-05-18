@@ -120,6 +120,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import { isEmpty, omitBy } from 'lodash-es'
 
 import CovBadge from '~/components/CovBadge'
 import CovButton from '~/components/CovButton'
@@ -200,6 +201,7 @@ export default {
 
   created () {
     this.fetch()
+    this.setSelectValue()
   },
 
   methods: {
@@ -220,12 +222,17 @@ export default {
     },
 
     filter () {
-      const query = {
-        city: this.city,
-        hospital: this.hospital
-      }
+      const query = omitBy({ ...this.$route.query, city: this.city, hospital: this.hospital }, isEmpty)
 
       this.$router.push({ query })
+    },
+
+    setSelectValue () {
+      const query = this.$route.query
+
+      for (const key in query) {
+        this[key] = query[key]
+      }
     }
   }
 }
