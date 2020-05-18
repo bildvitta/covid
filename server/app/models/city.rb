@@ -8,11 +8,11 @@ class City < ApplicationRecord
   extend FriendlyId
   friendly_id :name, use: :slugged
 
-  scope :is_active, -> { joins(:hospitals).includes(:state, :hospitals) }
+  after_commit :flush_cache
 
   validates_presence_of :name, :state
 
-  after_commit :flush_cache
+  scope :is_active, -> { joins(:hospitals).includes(:state, :hospitals) }
 
   def flush_cache
     Rails.cache.delete([self.class, "cached_city_#{slug}"])
