@@ -7,7 +7,6 @@
         </option>
       </select>
     </cov-box>
-
   </div>
 </template>
 
@@ -52,7 +51,7 @@ export default {
     formattedOptions () {
       return this.options.map((option) => {
         if (typeof option === 'object' && !Array.isArray(option)) {
-          if ((!option.label || !option.value)) {
+          if (!('label' in option || 'value' in option)) {
             throw new Error('Object option must have label and value')
           }
 

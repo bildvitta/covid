@@ -7,14 +7,12 @@
             <form action="">
               <div>
                 <h3 class="typography typography--title">Cidade</h3>
-                <cov-select v-model="model" map-options :options="[{ label: 'Ribeirão Preto', value: 1 }, { label: 'Campinas', value: 2 }]">
-                </cov-select>
+                <cov-select v-model="city" :options="dashboard.cities" @input="filter" />
               </div>
 
               <div>
                 <h3 class="typography typography--title">Hospitais</h3>
-                <cov-select v-model="model" map-options :options="[{ label: 'Todos', value: 1 }, { label: 'Hospital São Lucas', value: 2 }]">
-                </cov-select>
+                <cov-select v-model="hospital" :options="hospitalOptions" @input="filter" />
               </div>
             </form>
 
@@ -37,13 +35,13 @@
                         <cov-grid-cell><span>Total</span></cov-grid-cell>
 
                         <cov-grid-cell :breakpoints="{col: 'Fit', sm: 'Fit', md: 'Fit', lg: 'Fit'}">
-                          <span class="typography--weight-bold typography--primary-color" >150</span>
+                          <span class="typography--weight-bold typography--primary-color">150</span>
                         </cov-grid-cell>
 
                         <cov-grid-cell><span>Ocupados</span></cov-grid-cell>
 
                         <cov-grid-cell :breakpoints="{col: 'Fit', sm: 'Fit', md: 'Fit', lg: 'Fit'}">
-                          <span class="typography--weight-bold typography--primary-color" >150</span>
+                          <span class="typography--weight-bold typography--primary-color">150</span>
                         </cov-grid-cell>
 
                         <div class="typography--caption">Não Covid-19</div>
@@ -51,17 +49,16 @@
                         <cov-grid-cell><span>Total</span></cov-grid-cell>
 
                         <cov-grid-cell :breakpoints="{col: 'Fit', sm: 'Fit', md: 'Fit', lg: 'Fit'}">
-                          <span class="typography--weight-bold typography--primary-color" >150</span>
+                          <span class="typography--weight-bold typography--primary-color">150</span>
                         </cov-grid-cell>
 
                         <cov-grid-cell><span>Ocupados</span></cov-grid-cell>
 
                         <cov-grid-cell :breakpoints="{col: 'Fit', sm: 'Fit', md: 'Fit', lg: 'Fit'}">
-                          <span class="typography--weight-bold typography--primary-color" >150</span>
+                          <span class="typography--weight-bold typography--primary-color">150</span>
                         </cov-grid-cell>
                       </cov-grid>
                     </div>
-
                   </cov-card>
                 </cov-grid-cell>
               </cov-grid>
@@ -153,7 +150,9 @@ export default {
 
   data () {
     return {
-      showLoading: false
+      showLoading: false,
+      city: 'ribeirao-preto',
+      hospital: ''
     }
   },
 
@@ -186,6 +185,16 @@ export default {
           }
         ]
       }
+    },
+
+    hospitalOptions () {
+      return this.dashboard.cities ? this.dashboard.cities.find(item => item.value === this.city).hospitals : []
+    }
+  },
+
+  watch: {
+    $route () {
+      this.fetch()
     }
   },
 
@@ -202,12 +211,21 @@ export default {
       this.showLoading = true
 
       try {
-        await this.fetchDashboard({ city: 'ribeirao-preto' })
+        await this.fetchDashboard(this.$route.query)
       } catch (error) {
         throw new Error('Error fetching "dashboard" data.', error)
       } finally {
         this.showLoading = false
       }
+    },
+
+    filter () {
+      const query = {
+        city: this.city,
+        hospital: this.hospital
+      }
+
+      this.$router.push({ query })
     }
   }
 }
