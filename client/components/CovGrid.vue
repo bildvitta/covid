@@ -13,6 +13,7 @@ $grid-gutter: 25px !default;
   box-sizing: border-box;
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   margin: 0;
   padding: 0;
 
@@ -36,6 +37,10 @@ $grid-gutter: 25px !default;
 
   &--align-bottom {
     align-items: flex-end;
+  }
+
+  &--justify-between {
+    justify-content: space-between;
   }
 
   &--fill > * {
