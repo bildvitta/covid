@@ -1,0 +1,25 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+
+  &::before,
+  &::after {
+    box-sizing: inherit;
+  }
+}
+
+body {
+  font: $font-weight $font-size $font-family;
+}
+
+// Vue Transitions
+.fade-leave-to,
+.fade-enter {
+  opacity: 0;
+}
+
+.fade-leave-active,
+.fade-enter-active {
+  transition: opacity 300ms ease-in-out;
+}

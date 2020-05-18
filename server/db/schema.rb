@@ -10,20 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_11_013948) do
+ActiveRecord::Schema.define(version: 2020_05_14_221406) do
 
-  create_table "beds", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "beds", force: :cascade do |t|
     t.integer "hospital_id"
     t.integer "status", default: 1
-    t.string "slug"
     t.integer "bed_type", default: 1
+    t.string "slug"
     t.boolean "using_ventilator", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["slug"], name: "index_beds_on_slug"
   end
 
-  create_table "cities", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+  create_table "cities", force: :cascade do |t|
     t.integer "state_id"
     t.string "name"
     t.string "slug"
@@ -31,26 +34,43 @@ ActiveRecord::Schema.define(version: 2020_05_11_013948) do
     t.float "longitude"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["slug"], name: "index_cities_on_slug", unique: true
+    t.index ["latitude"], name: "index_cities_on_latitude"
+    t.index ["longitude"], name: "index_cities_on_longitude"
+    t.index ["state_id"], name: "index_cities_on_state_id"
   end
 
-  create_table "hospitals", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+  create_table "covid_cases", force: :cascade do |t|
+    t.integer "city_id"
+    t.integer "total"
+    t.integer "deaths"
+    t.integer "cureds"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["city_id"], name: "index_covid_cases_on_city_id"
+  end
+
+  create_table "hospitals", force: :cascade do |t|
     t.integer "city_id"
     t.integer "hospital_type", default: 1
     t.string "name"
     t.string "slug"
+    t.float "latitude"
+    t.float "longitude"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["slug"], name: "index_hospitals_on_slug", unique: true
+    t.index ["city_id"], name: "index_hospitals_on_city_id"
+    t.index ["latitude"], name: "index_hospitals_on_latitude"
+    t.index ["longitude"], name: "index_hospitals_on_longitude"
+    t.index ["slug"], name: "index_hospitals_on_slug"
   end
 
-  create_table "states", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+  create_table "states", force: :cascade do |t|
     t.string "name"
     t.string "slug"
     t.string "prefix"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["slug"], name: "index_states_on_slug", unique: true
+    t.index ["slug"], name: "index_states_on_slug"
   end
 
 end

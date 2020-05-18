@@ -1,0 +1,6 @@
+.container {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: $maximum-page-width;
+  width: calc(100% - 50px);
+}

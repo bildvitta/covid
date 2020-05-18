@@ -1,0 +1,17 @@
+.typography {
+  &--caption {
+    color: $text-color;
+    font-weight: bold;
+  }
+
+  &--subtitle {
+    color: $secondary-color;
+  }
+
+  &--title {
+    color: $primary-color;
+    font-size: 18px;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+}

@@ -1,0 +1,69 @@
+// Breakpoints
+$small-screen: 480px;
+$medium-screen: 768px;
+$large-screen: 992px;
+
+// Page
+$minimum-page-width: 320px;
+$maximum-page-width: 1080px;
+
+// Fonts
+$font-size: 16px;
+$font-size-small: 11px;
+
+$font-family: 'Source Sans Pro', sans-serif;
+$font-weight: normal;
+
+$line-height: 1.5;
+
+// Colors
+
+// Cool
+$aqua: #00b9f7;
+$blue: #0074d9;
+$whisper: #f0f0f7;
+$melrose: #a3a1fb;
+$bali: #8288ac;
+$navy: #4b00ce;
+$green: #34c360;
+$lime: #39f8bb;
+
+// Warn
+$yellow: #ffb713;
+$orange: #ff9d00;
+$salmon: #ff8474;
+$red: #fa5252;
+$maroon: #ae0057;
+
+// Gray Scale
+$white: #fff;
+$lightgray: #f0f0f0;
+$gray: #bcbccb;
+$darkgray: #777;
+$black: #2a2d31;
+
+// Emotive
+$positive-color: $green;
+$negative-color: $red;
+$info-color: $blue;
+$warning-color: $yellow;
+
+// Header
+$header-font-family: $font-family;
+$header-font-weight: bold;
+$header-line-height: 1.25;
+
+// Theme
+$primary-color: $melrose;
+$secondary-color: $whisper;
+
+// Page
+$background-color: $whisper;
+$text-color: $bali;
+
+// Radius
+$radius: 11px;
+$circular-radius: 500rem;
+
+// Shadow
+$shadow: 0 2px 5px rgba($black, 0.15);
