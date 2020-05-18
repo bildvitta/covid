@@ -6,6 +6,14 @@ if Hospital.none?
     cities = cities.to_a + [City.find_by_slug('ribeirao-preto')]
   end
 
+  bed_block = -> (bed = nil) {
+    {
+      status: Bed.statuses.values.sample,
+      bed_type: Bed::TYPES.sample.last,
+      using_ventilator: rand(2).zero?
+    }
+  }
+
   cities.each do |city|
     rand(2..7).times do
       Hospital.create!(
@@ -14,13 +22,17 @@ if Hospital.none?
         name: Faker::Company.name,
         latitude: city.latitude + rand_geocoded.(),
         longitude: city.longitude + rand_geocoded.(),
-        beds_attributes: (1..15).map do
-          {
-            status: Bed.statuses.values.sample,
-            bed_type: Bed::TYPES.sample.last,
-            using_ventilator: rand(2).zero?
-          }
-        end
+        beds_attributes: (1..15).map(&bed_block)
+      )
+    end
+  end
+
+  Bed.all.each do |bed|
+    15.times do |i|
+      bed.update(
+        bed_block.().merge(
+          updated_at: (15 - i).days.ago
+        )
       )
     end
   end

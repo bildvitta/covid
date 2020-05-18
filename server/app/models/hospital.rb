@@ -3,7 +3,7 @@ class Hospital < ApplicationRecord
 
   belongs_to :city
 
-  has_many :beds
+  has_many :beds, dependent: :destroy
 
   accepts_nested_attributes_for :beds
 

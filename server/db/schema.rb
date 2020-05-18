@@ -10,10 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_14_221406) do
+ActiveRecord::Schema.define(version: 2020_05_17_002648) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "bed_states", force: :cascade do |t|
+    t.integer "bed_id"
+    t.integer "status", default: 1
+    t.integer "bed_type", default: 1
+    t.boolean "using_ventilator", default: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["bed_id"], name: "index_bed_states_on_bed_id"
+  end
 
   create_table "beds", force: :cascade do |t|
     t.integer "hospital_id"
@@ -23,6 +33,7 @@ ActiveRecord::Schema.define(version: 2020_05_14_221406) do
     t.boolean "using_ventilator", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["hospital_id"], name: "index_beds_on_hospital_id"
     t.index ["slug"], name: "index_beds_on_slug"
   end
 
