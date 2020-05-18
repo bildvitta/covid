@@ -6,6 +6,13 @@
           <cov-grid-cell>
             <form action="">
               Formulário
+              <CovSelect v-model="model" map-options :options="[{ label: 'teste', value: 1 }, { label: 'teste2', value: 2 }]">
+                <!-- <template v-slot:option-teste="{ option }">
+                  <div>
+                    {{ option }} Testando slot
+                  </div>
+                </template> -->
+              </CovSelect>
             </form>
 
             <div>
@@ -78,8 +85,9 @@ import CovGrid from '~/components/CovGrid'
 import CovGridCell from '~/components/CovGridCell'
 import CovHeatmap from '~/components/CovHeatmap'
 import CovLineChart from '~/components/CovLineChart'
-import CovSection from '~/components/CovSection'
 import CovLoading from '~/components/CovLoading'
+import CovSection from '~/components/CovSection'
+import CovSelect from '~/components/CovSelect'
 
 export default {
   components: {
@@ -92,7 +100,8 @@ export default {
     CovHeatmap,
     CovLineChart,
     CovLoading,
-    CovSection
+    CovSection,
+    CovSelect
   },
 
   data () {
