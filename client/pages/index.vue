@@ -7,7 +7,7 @@
             <form action="">
               <div>
                 <h3 class="typography typography--title">Cidade</h3>
-                <cov-select v-model="city" :options="dashboard.cities" @input="filter" />
+                <cov-select v-model="city" :options="dashboard.cities" @input="filterCity" />
               </div>
 
               <div>
@@ -20,7 +20,7 @@
               <h3 class="typography typography--title">Leitos</h3>
               <div class="typography typography--subtitle">Atualizado há 10 min</div>
 
-              <cov-grid class="cov-grid--with-gutter">
+              <cov-grid gutter>
                 <cov-grid-cell :breakpoints="{ col: '1-of-2', sm: '1-of-2', md: '1-of-3', lg: '1-of-3' }">
                   <cov-card class="typography">
                     <template v-slot:header>
@@ -153,7 +153,6 @@ export default {
     return {
       showLoading: false,
       city: '',
-      cachedCity: '',
       hospital: ''
     }
   },
@@ -195,10 +194,6 @@ export default {
   },
 
   watch: {
-    city (newValue) {
-      this.cachedCity = newValue
-    },
-
     $route () {
       this.fetch()
     }
@@ -226,9 +221,13 @@ export default {
       }
     },
 
-    filter () {
-      this.city !== this.cachedCity && this.clearHospital()
+    filterCity () {
+      this.clearHospital()
 
+      this.filter()
+    },
+
+    filter () {
       const query = omitBy({ ...this.$route.query, city: this.city, hospital: this.hospital }, isEmpty)
 
       this.$router.push({ query })
