@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="position position--relative">
     <cov-section>
       <div class="container">
         <cov-grid>
@@ -16,8 +16,8 @@
             </form>
 
             <div>
-              <h3 class="typography--title">Leitos</h3>
-              <div class="typography--subtitle">Atualizado há 10 min</div>
+              <h3 class="typography typography--title">Leitos</h3>
+              <div class="typography typography--subtitle">Atualizado há 10 min</div>
 
               <CovBadge>100%</CovBadge>
               <CovBadge color="negative">12,5%</CovBadge>
@@ -26,8 +26,8 @@
             </div>
 
             <div>
-              <h3 class="typography--title">Casos em Ribeirão Preto</h3>
-              <div class="typography--subtitle">Atualizado há 10 min</div>
+              <h3 class="typography typography--title">Casos em Ribeirão Preto</h3>
+              <div class="typography typography--subtitle">Atualizado há 10 min</div>
 
               <cov-card>
                 Card
@@ -68,7 +68,8 @@
         </cov-grid>
       </div>
     </cov-section>
-    <cov-loading :show="showLoading" />
+
+    <cov-loading :showing="showLoading" />
   </div>
 </template>
 

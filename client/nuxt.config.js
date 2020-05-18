@@ -19,10 +19,11 @@ export default {
   loading: { color: '#fff' },
 
   css: [
+    '~/assets/styles/components/_keyframes.scss',
     '~/assets/styles/styles.scss',
     '~/assets/styles/components/_container.scss',
-    '~/assets/styles/components/_keyframes.scss',
-    '~/assets/styles/components/_typography.scss',
+    '~/assets/styles/components/_position.scss',
+    '~/assets/styles/components/_typography.scss'
   ],
 
   styleResources: {
