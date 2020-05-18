@@ -22,43 +22,45 @@
               <h3 class="typography typography--title">Leitos</h3>
               <div class="typography typography--subtitle">Atualizado há 10 min</div>
 
-              <div>
-                <cov-card class="typography">
-                  <template v-slot:header>
-                    <span>UTI</span>
-                    <cov-badge color="negative">12,5%</cov-badge>
-                  </template>
+              <cov-grid class="cov-grid--with-gutter">
+                <cov-grid-cell :breakpoints="{col: '1of2', sm: '1of2', md: '1of3', lg: '1of3'}">
+                  <cov-card class="typography">
+                    <template v-slot:header>
+                      <span>UTI</span>
+                      <cov-badge color="negative">12,5%</cov-badge>
+                    </template>
 
-                  <div>
-                    <div class="typography--caption">Covid-19</div>
-                    <cov-grid>
-                      <span>Total</span>
-                      <cov-grid-cell :breakpoints="{col: 'Fit', sm: 'Fit', md: 'Fit', lg: 'Fit'}">
-                        <span class="typography--weight-bold typography--primary-color">150</span>
-                      </cov-grid-cell>
-                    </cov-grid>
-                    <cov-grid>
-                      <span>Ocupados</span>
-                      <cov-grid-cell :breakpoints="{col: 'Fit', sm: 'Fit', md: 'Fit', lg: 'Fit'}">
-                        <span class="typography--weight-bold typography--primary-color">150</span>
-                      </cov-grid-cell>
-                    </cov-grid>
-                    <div class="typography--caption">Não Covid-19</div>
-                    <cov-grid>
-                      <span>Total</span>
-                      <cov-grid-cell :breakpoints="{col: 'Fit', sm: 'Fit', md: 'Fit', lg: 'Fit'}">
-                        <span class="typography--weight-bold typography--primary-color">150</span>
-                      </cov-grid-cell>
-                    </cov-grid>
-                    <cov-grid>
-                      <span>Ocupados</span>
-                      <cov-grid-cell :breakpoints="{col: 'Fit', sm: 'Fit', md: 'Fit', lg: 'Fit'}">
-                        <span class="typography--weight-bold typography--primary-color">150</span>
-                      </cov-grid-cell>
-                    </cov-grid>
-                  </div>
-                </cov-card>
-              </div>
+                    <div>
+                      <div class="typography--caption">Covid-19</div>
+                      <cov-grid class="cov-grid--justify-between">
+                        <cov-grid-cell><span>Total</span></cov-grid-cell>
+                        <cov-grid-cell :breakpoints="{col: 'Fit', sm: 'Fit', md: 'Fit', lg: 'Fit'}">
+                          <span class="typography--weight-bold typography--primary-color">150</span>
+                        </cov-grid-cell>
+                      </cov-grid>
+                      <cov-grid class="cov-grid--justify-between">
+                        <cov-grid-cell><span>Ocupados</span></cov-grid-cell>
+                        <cov-grid-cell :breakpoints="{col: 'Fit', sm: 'Fit', md: 'Fit', lg: 'Fit'}">
+                          <span class="typography--weight-bold typography--primary-color">150</span>
+                        </cov-grid-cell>
+                      </cov-grid>
+                      <div class="typography--caption">Não Covid-19</div>
+                      <cov-grid class="cov-grid--justify-between">
+                        <cov-grid-cell><span>Total</span></cov-grid-cell>
+                        <cov-grid-cell :breakpoints="{col: 'Fit', sm: 'Fit', md: 'Fit', lg: 'Fit'}">
+                          <span class="typography--weight-bold typography--primary-color">150</span>
+                        </cov-grid-cell>
+                      </cov-grid>
+                      <cov-grid class="cov-grid--justify-between">
+                        <cov-grid-cell><span>Ocupados</span></cov-grid-cell>
+                        <cov-grid-cell :breakpoints="{col: 'Fit', sm: 'Fit', md: 'Fit', lg: 'Fit'}">
+                          <span class="typography--weight-bold typography--primary-color">150</span>
+                        </cov-grid-cell>
+                      </cov-grid>
+                    </div>
+                  </cov-card>
+                </cov-grid-cell>
+              </cov-grid>
 
               <cov-badge>100%</cov-badge>
               <cov-badge color="negative">12,5%</cov-badge>
