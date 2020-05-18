@@ -2,16 +2,20 @@
   <transition :name="transition">
     <div v-if="showing" class="cov-loading">
       <slot>
-        <div class="cov-loading__icon">
-          loading...
-        </div>
+        <cov-icon class="cov-loading__icon" name="cached" size="48px" />
       </slot>
     </div>
   </transition>
 </template>
 
 <script>
+import CovIcon from '~/components/CovIcon'
+
 export default {
+  components: {
+    CovIcon
+  },
+
   props: {
     showing: {
       type: Boolean
@@ -28,7 +32,7 @@ export default {
 <style lang="scss">
 .cov-loading {
   backdrop-filter: blur(5px);
-  background-color: rgba($primary-color, 0.5);
+  background-color: rgba($primary-color, 0.25);
   bottom: 0;
   left: 0;
   position: absolute;
@@ -37,11 +41,12 @@ export default {
   z-index: 99999;
 
   &__icon {
-    animation: spninner 2s linear infinite;
-    left: 50%;
+    animation: spinner 2s linear infinite;
+    color: $text-color;
+    left: calc(50% - 24px);
     position: absolute;
-    top: 50%;
-    transform: translate(-50%, -50%);
+    top: calc(50% - 24px);
+    transform-origin: center;
   }
 }
 </style>

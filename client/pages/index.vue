@@ -5,17 +5,71 @@
         <cov-grid>
           <cov-grid-cell>
             <form action="">
-              Formulário
+              <div>
+                <h3 class="typography typography--title">Cidade</h3>
+                <cov-select v-model="model" map-options :options="[{ label: 'Ribeirão Preto', value: 1 }, { label: 'Campinas', value: 2 }]">
+                </cov-select>
+              </div>
+
+              <div>
+                <h3 class="typography typography--title">Hospitais</h3>
+                <cov-select v-model="model" map-options :options="[{ label: 'Todos', value: 1 }, { label: 'Hospital São Lucas', value: 2 }]">
+                </cov-select>
+              </div>
             </form>
 
             <div>
               <h3 class="typography typography--title">Leitos</h3>
               <div class="typography typography--subtitle">Atualizado há 10 min</div>
 
-              <CovBadge>100%</CovBadge>
-              <CovBadge color="negative">12,5%</CovBadge>
-              <CovBadge color="positive">89,14%</CovBadge>
-              <CovBadge color="warning">67,5%</CovBadge>
+              <cov-grid class="cov-grid--with-gutter">
+                <cov-grid-cell :breakpoints="{col: '1of2', sm: '1of2', md: '1of3', lg: '1of3'}">
+                  <cov-card class="typography">
+                    <template v-slot:header>
+                      <span>UTI</span>
+                      <cov-badge color="negative">12,5%</cov-badge>
+                    </template>
+
+                    <div>
+                      <cov-grid class="cov-grid--justify-between">
+                        <div class="typography--caption">Covid-19</div>
+
+                        <cov-grid-cell><span>Total</span></cov-grid-cell>
+
+                        <cov-grid-cell :breakpoints="{col: 'Fit', sm: 'Fit', md: 'Fit', lg: 'Fit'}">
+                          <span class="typography--weight-bold typography--primary-color" >150</span>
+                        </cov-grid-cell>
+
+                        <cov-grid-cell><span>Ocupados</span></cov-grid-cell>
+
+                        <cov-grid-cell :breakpoints="{col: 'Fit', sm: 'Fit', md: 'Fit', lg: 'Fit'}">
+                          <span class="typography--weight-bold typography--primary-color" >150</span>
+                        </cov-grid-cell>
+
+                        <div class="typography--caption">Não Covid-19</div>
+
+                        <cov-grid-cell><span>Total</span></cov-grid-cell>
+
+                        <cov-grid-cell :breakpoints="{col: 'Fit', sm: 'Fit', md: 'Fit', lg: 'Fit'}">
+                          <span class="typography--weight-bold typography--primary-color" >150</span>
+                        </cov-grid-cell>
+
+                        <cov-grid-cell><span>Ocupados</span></cov-grid-cell>
+
+                        <cov-grid-cell :breakpoints="{col: 'Fit', sm: 'Fit', md: 'Fit', lg: 'Fit'}">
+                          <span class="typography--weight-bold typography--primary-color" >150</span>
+                        </cov-grid-cell>
+                      </cov-grid>
+                    </div>
+
+                  </cov-card>
+                </cov-grid-cell>
+              </cov-grid>
+
+              <cov-badge>100%</cov-badge>
+              <cov-badge color="negative">12,5%</cov-badge>
+              <cov-badge color="positive">89,14%</cov-badge>
+              <cov-badge color="warning">67,5%</cov-badge>
             </div>
 
             <div>
@@ -28,7 +82,8 @@
             </div>
 
             <div>
-              Botões
+              <cov-button href="#" icon="table_chart" label="Baixar planilha" />
+              <cov-button href="#" icon="code" label="Acesso a API" />
             </div>
           </cov-grid-cell>
           <cov-grid-cell>
@@ -70,26 +125,30 @@
 import { mapGetters, mapActions } from 'vuex'
 
 import CovBadge from '~/components/CovBadge'
+import CovButton from '~/components/CovButton'
 import CovBox from '~/components/CovBox'
 import CovCard from '~/components/CovCard'
 import CovGrid from '~/components/CovGrid'
 import CovGridCell from '~/components/CovGridCell'
 import CovHeatmap from '~/components/CovHeatmap'
 import CovLineChart from '~/components/CovLineChart'
-import CovSection from '~/components/CovSection'
 import CovLoading from '~/components/CovLoading'
+import CovSection from '~/components/CovSection'
+import CovSelect from '~/components/CovSelect'
 
 export default {
   components: {
     CovBadge,
     CovBox,
+    CovButton,
     CovCard,
     CovGrid,
     CovGridCell,
     CovHeatmap,
     CovLineChart,
     CovLoading,
-    CovSection
+    CovSection,
+    CovSelect
   },
 
   data () {

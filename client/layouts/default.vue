@@ -18,7 +18,7 @@
 
     <footer class="footer">
       <div class="container">
-        Este é um projeto Open Source. Tenha acesso ao código-fonte na íntegra <a href="?" target="_blank">aqui</a>.
+        Este é um projeto <em>open source</em>. Tenha acesso ao código-fonte na íntegra <a href="?" target="_blank">aqui</a>.
       </div>
     </footer>
   </div>
@@ -32,6 +32,7 @@
 }
 
 .header {
+  background-color: $white;
   box-shadow: $shadow;
   padding: 20px 0;
 
