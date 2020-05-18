@@ -2,8 +2,8 @@
   <div class="position position--relative">
     <cov-section>
       <div class="container">
-        <cov-grid>
-          <cov-grid-cell>
+        <cov-grid class="cov-grid--justify-between">
+          <cov-grid-cell :breakpoints="{ col: '1-of-2', sm: '1-of-', md: '1-of-3', lg: '1-of-3' }">
             <form action="">
               <div>
                 <h3 class="typography typography--title">Cidade</h3>
@@ -83,6 +83,7 @@
               <cov-button href="#" icon="code" label="Acesso a API" />
             </div>
           </cov-grid-cell>
+
           <cov-grid-cell>
             <cov-heatmap />
           </cov-grid-cell>

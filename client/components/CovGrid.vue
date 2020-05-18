@@ -12,7 +12,6 @@ $grid-gutter: 25px !default;
 
   box-sizing: border-box;
   display: flex;
-  flex-direction: row;
   flex-wrap: wrap;
   margin: 0;
   padding: 0;
