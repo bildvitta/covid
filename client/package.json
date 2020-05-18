@@ -15,8 +15,10 @@
     "@nuxtjs/axios": "^5.3.6",
     "@nuxtjs/dotenv": "^1.4.0",
     "@nuxtjs/pwa": "^3.0.0-0",
+    "chart.js": "^2.9.3",
     "nuxt": "^2.0.0",
-    "nuxt-leaflet": "0.0.21"
+    "nuxt-leaflet": "0.0.21",
+    "vue-chartjs": "^3.5.0"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^2.0.0",

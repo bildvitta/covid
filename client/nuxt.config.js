@@ -21,6 +21,7 @@ export default {
   css: [
     '~/assets/styles/styles.scss',
     '~/assets/styles/components/_container.scss',
+    '~/assets/styles/components/_keyframes.scss',
     '~/assets/styles/components/_typography.scss',
   ],
 
@@ -31,7 +32,9 @@ export default {
     ]
   },
 
-  // plugins: [],
+  plugins: [
+    '~/plugins/axios'
+  ],
 
   buildModules: [
     '@nuxtjs/eslint-module',
