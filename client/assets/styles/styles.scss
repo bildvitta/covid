@@ -10,5 +10,22 @@
 }
 
 body {
+  background-color: $background-color;
+  color: $text-color;
   font: $font-weight $font-size $font-family;
+}
+
+a {
+  color: inherit;
+}
+
+// Vue Transitions
+.fade-leave-to,
+.fade-enter {
+  opacity: 0;
+}
+
+.fade-leave-active,
+.fade-enter-active {
+  transition: opacity 300ms ease-in-out;
 }

@@ -3,7 +3,7 @@
     <header class="header">
       <div class="container">
         <div class="header__brand">
-          Covid-19
+          COVID-19
         </div>
 
         <div class="header__title">
@@ -13,14 +13,12 @@
     </header>
 
     <main class="main">
-      <div class="container">
-        <nuxt />
-      </div>
+      <nuxt />
     </main>
 
     <footer class="footer">
       <div class="container">
-        Este é um projeto Open Source. Tenha acesso ao código-fonte na íntegra <a href="?" target="_blank">aqui</a>.
+        Este é um projeto <em>open source</em>. Tenha acesso ao código-fonte na íntegra <a href="?" target="_blank">aqui</a>.
       </div>
     </footer>
   </div>
@@ -34,6 +32,7 @@
 }
 
 .header {
+  background-color: $white;
   box-shadow: $shadow;
   padding: 20px 0;
 
@@ -45,24 +44,24 @@
 
   &__brand,
   &__title {
-    font-weight: bold;
     text-transform: uppercase;
   }
 
   &__brand {
     color: $text-color;
-    font-size: 40px;
+    font-size: 32px;
+    font-weight: bold;
   }
 
   &__title {
     color: $primary-color;
-    font-size: 32px;
+    font-size: 28px;
   }
 }
 
 .main {
-  flex: 1 0 auto;
   background-color: $secondary-color;
+  flex: 1 0 auto;
 }
 
 .footer {

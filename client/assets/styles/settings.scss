@@ -9,10 +9,12 @@ $maximum-page-width: 1080px;
 
 // Fonts
 $font-size: 16px;
+$font-size-large: 20px;
 $font-size-small: 11px;
 
 $font-family: 'Source Sans Pro', sans-serif;
 $font-weight: normal;
+$font-weight-bold: bold;
 
 $line-height: 1.5;
 
@@ -56,6 +58,7 @@ $header-line-height: 1.25;
 // Theme
 $primary-color: $melrose;
 $secondary-color: $whisper;
+$tertiary-color: $gray;
 
 // Page
 $background-color: $whisper;
@@ -65,5 +68,8 @@ $text-color: $bali;
 $radius: 11px;
 $circular-radius: 500rem;
 
+// Animation
+$animation-time: 250ms;
+
 // Shadow
-$shadow: 0 2px 6px rgba($black, 0.15);
+$shadow: 0 2px 5px rgba($black, 0.15);

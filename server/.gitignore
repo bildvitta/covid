@@ -36,6 +36,8 @@ build/config/buildinfo.properties
 # Ignore the default SQLite database.
 /db/*.sqlite3
 
+/config/credentials.yml.enc
+
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp

@@ -2,7 +2,7 @@ export default {
   mode: 'universal',
 
   head: {
-    title: process.env.npm_package_name || '',
+    title: 'COVID-19 | Ocupação de leitos hospitalares',
 
     meta: [
       { charset: 'utf-8' },
@@ -12,24 +12,30 @@ export default {
 
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,700;1,400;1,700&display=swap' }
+      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,700;1,400;1,700&family=Material+Icons+Outlined&display=swap' }
     ]
   },
 
   loading: { color: '#fff' },
 
-  css: [],
+  css: [
+    '~/assets/styles/components/_keyframes.scss',
+    '~/assets/styles/styles.scss',
+    '~/assets/styles/components/_container.scss',
+    '~/assets/styles/components/_position.scss',
+    '~/assets/styles/components/_typography.scss'
+  ],
 
   styleResources: {
     scss: [
       'breakpoint-sass',
-      '~/assets/styles/settings.scss',
-      '~/assets/styles/styles.scss',
-      '~/assets/styles/components/*'
+      '~/assets/styles/settings.scss'
     ]
   },
 
-  // plugins: [],
+  plugins: [
+    '~/plugins/axios'
+  ],
 
   buildModules: [
     '@nuxtjs/eslint-module',
@@ -40,7 +46,8 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/dotenv',
     '@nuxtjs/pwa',
-    '@nuxtjs/style-resources'
+    '@nuxtjs/style-resources',
+    'nuxt-leaflet'
   ],
 
   // axios: {

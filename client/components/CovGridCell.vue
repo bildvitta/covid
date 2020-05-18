@@ -25,7 +25,6 @@ export default {
 
       for (const key in this.defaultBreakpoint) {
         const breakpoint = ignore.includes(key) ? '' : `${key}-`
-
         classes.push(`${breakpoint}size${this.defaultBreakpoint[key]}`)
       }
 
@@ -187,15 +186,15 @@ export default {
 
 @include cov-grid-cell;
 
-@include breakpoint($small-screen) {
+@include breakpoint(max-width $small-screen) {
   @include cov-grid-cell('sm-');
 }
 
-@include breakpoint($small-screen) {
+@include breakpoint($small-screen $medium-screen) {
   @include cov-grid-cell('md-');
 }
 
-@include breakpoint($large-screen) {
+@include breakpoint($medium-screen) {
   @include cov-grid-cell('lg-');
 }
 </style>
