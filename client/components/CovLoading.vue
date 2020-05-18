@@ -1,9 +1,11 @@
 <template>
-  <transition name="fade">
-    <div v-if="show" class="cov-loading">
-      <div class="cov-loading__icon">
-        loading...
-      </div>
+  <transition :name="transition">
+    <div v-if="showing" class="cov-loading">
+      <slot>
+        <div class="cov-loading__icon">
+          loading...
+        </div>
+      </slot>
     </div>
   </transition>
 </template>
@@ -11,8 +13,13 @@
 <script>
 export default {
   props: {
-    show: {
+    showing: {
       type: Boolean
+    },
+
+    transition: {
+      default: 'fade',
+      type: String
     }
   }
 }
@@ -20,13 +27,14 @@ export default {
 
 <style lang="scss">
 .cov-loading {
+  backdrop-filter: blur(5px);
   background-color: rgba($primary-color, 0.5);
   bottom: 0;
   left: 0;
-  position: fixed;
+  position: absolute;
   right: 0;
   top: 0;
-  z-index: 9999;
+  z-index: 99999;
 
   &__icon {
     animation: spninner 2s linear infinite;
@@ -35,16 +43,5 @@ export default {
     top: 50%;
     transform: translate(-50%, -50%);
   }
-}
-
-// transition
-.fade-leave-to,
-.fade-enter {
-  opacity: 0;
-}
-
-.fade-leave-active,
-.fade-enter-active {
-  transition: opacity 300ms ease-in-out;
 }
 </style>
