@@ -10,7 +10,13 @@
 }
 
 body {
+  background-color: $background-color;
+  color: $text-color;
   font: $font-weight $font-size $font-family;
+}
+
+a {
+  color: inherit;
 }
 
 // Vue Transitions

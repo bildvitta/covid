@@ -28,7 +28,8 @@
             </div>
 
             <div>
-              Botões
+              <cov-button href="#" icon="table_chart" label="Baixar planilha" />
+              <cov-button href="#" icon="code" label="Acesso a API" />
             </div>
           </cov-grid-cell>
           <cov-grid-cell>
@@ -70,6 +71,7 @@
 import { mapGetters, mapActions } from 'vuex'
 
 import CovBadge from '~/components/CovBadge'
+import CovButton from '~/components/CovButton'
 import CovBox from '~/components/CovBox'
 import CovCard from '~/components/CovCard'
 import CovGrid from '~/components/CovGrid'
@@ -83,6 +85,7 @@ export default {
   components: {
     CovBadge,
     CovBox,
+    CovButton,
     CovCard,
     CovGrid,
     CovGridCell,
