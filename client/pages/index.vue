@@ -2,8 +2,8 @@
   <div class="position position--relative">
     <cov-section>
       <div class="container">
-        <cov-grid justifyBetween>
-          <cov-grid-cell :breakpoints="{ col: '1-of-2', sm: '1-of-2', md: '1-of-3', lg: '6-of-12' }">
+        <cov-grid gutter justifyBetween>
+          <cov-grid-cell :breakpoints="{ col: 'full', sm: 'full', md: 'full', lg: '6-of-12' }">
             <form action="">
               <div>
                 <h3 class="typography typography--title">Cidade</h3>
@@ -21,7 +21,7 @@
               <div class="typography typography--subtitle">Atualizado há 10 min</div>
 
               <cov-grid gutter>
-                <cov-grid-cell :breakpoints="{ col: '1-of-2', sm: '1-of-2', md: '1-of-3', lg: '1-of-3' }">
+                <cov-grid-cell :breakpoints="{ col: 'full', sm: 'full', md: '1-of-3', lg: '1-of-3' }">
                   <cov-card class="typography">
                     <template v-slot:header>
                       <span>UTI</span>
