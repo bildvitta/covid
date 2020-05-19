@@ -20,7 +20,7 @@
 
             <div class="beds">
               <h3 class="typography typography--title">Leitos</h3>
-              <div class="typography typography--subtitle">Atualizado há 10 min</div>
+              <div class="typography typography--subtitle">{{ bedsUpdatedAt }}</div>
 
               <cov-grid gutter>
                 <cov-grid-cell v-for="(item, key) in beds" :key="key" :breakpoints="{ col: 'full', sm: 'full', md: '1-of-3', lg: '1-of-3' }">
@@ -60,7 +60,7 @@
 
             <div>
               <h3 class="typography typography--title">Casos em Ribeirão Preto</h3>
-              <div class="typography typography--subtitle">Atualizado há 10 min</div>
+              <div class="typography typography--subtitle">{{ bedsUpdatedAt }}</div>
 
               <cov-card>
                 Card
@@ -111,6 +111,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import { isEmpty, omitBy } from 'lodash-es'
+import { differenceInMinutes, parseISO } from 'date-fns'
 
 import CovBadge from '~/components/CovBadge'
 import CovButton from '~/components/CovButton'
@@ -192,6 +193,15 @@ export default {
       return {}
     },
 
+    bedsUpdatedAt () {
+      if (!this.dashboard.beds) {
+        return ''
+      }
+
+      const time = differenceInMinutes(new Date(), parseISO(this.dashboard.beds.updated_at))
+      return time > 0 ? `Atualizado há ${time} min` : 'Atualizado agora'
+    },
+
     bedsTitle () {
       return {
         intensive_care_unit: 'UTI',
@@ -213,6 +223,7 @@ export default {
   },
 
   methods: {
+    differenceInMinutes,
     ...mapActions({
       fetchDashboard: 'dashboard/fetch'
     }),
