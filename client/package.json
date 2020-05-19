@@ -16,6 +16,7 @@
     "@nuxtjs/dotenv": "^1.4.0",
     "@nuxtjs/pwa": "^3.0.0-0",
     "chart.js": "^2.9.3",
+    "date-fns": "^2.14.0",
     "lodash-es": "^4.17.15",
     "nuxt": "^2.0.0",
     "nuxt-leaflet": "0.0.21",
