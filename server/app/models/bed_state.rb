@@ -1,3 +1,3 @@
 class BedState < ApplicationRecord
-  enum status: { free: 1, busy: 2, unavailable: 3 }
+  has_many :details, class_name: 'BedStateDetail', foreign_key: :bed_state_id
 end
