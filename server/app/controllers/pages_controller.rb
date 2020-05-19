@@ -17,8 +17,6 @@ class PagesController < ApplicationController
 
   def beds_data
     cached_data :beds_data do
-      beds = @beds.to_a
-
       block = -> (bed) {
         {
           free: bed.count(&:free?),
@@ -29,18 +27,20 @@ class PagesController < ApplicationController
 
       {
         updated_at: Time.zone.now.iso8601,
-        intensive_care_unit: bed_json(beds, 1, 2, &block),
-        nursing: bed_json(beds, 3, 4, &block),
-        ventilator: bed_json(beds.select(&:using_ventilator), Bed.covid_types, Bed.normal_types, &block)
+        intensive_care_unit: bed_json(@beds.icus.to_a, &block),
+        nursing: bed_json(@beds.nursings.to_a, &block),
+        ventilator: bed_json(@beds.using_ventilator.to_a, &block)
       }
     end
   end
 
   def cases_data
     cached_data :cases_data do
+      covid_case = @city.covid_cases.order(created_at: :desc).first
+
       {
-        updated_at: Time.zone.now.iso8601,
-        cases: @city.covid_cases.order(created_at: :desc).first.to_json
+        updated_at: covid_case.updated_at.iso8601,
+        cases: covid_case.to_json
       }
     end
   end
@@ -51,12 +51,14 @@ class PagesController < ApplicationController
     end
   end
 
-  def bed_json details, covid_beds, normal_beds, &block
-    covid_beds = normal_beds = ventilators = []
+  def bed_json details, &block
+    covid_beds = []
+    normal_beds = []
+    ventilators = []
 
     details.each do |detail|
-      covid_beds << detail if detail.bed_type == covid_beds
-      normal_beds << detail if detail.bed_type == normal_beds
+      covid_beds << detail if detail.covid?
+      normal_beds << detail if detail.normal?
       ventilators << detail if detail.using_ventilator
     end
 
@@ -101,15 +103,19 @@ class PagesController < ApplicationController
           beds: @city.hospitals.map do |hospital|
             details = hospital.bed_states.to_a.find_by(:date, date)&.details.to_a
 
-            intensive_care_unit = bed_json(details.select { |detail| [1, 2].include?(detail.bed_type) }, 1, 2)
-            nursing = bed_json(details.select { |detail| [3, 4].include?(detail.bed_type) }, 3, 4)
+            intensive_care_unit = []
+            nursing = []
+
+            details.each do |detail|
+              detail.icu? ? intensive_care_unit << detail : nursing << detail
+            end
 
             {
               name: hospital.name,
               latitude: hospital.latitude,
               longitude: hospital.longitude,
-              intensive_care_unit: intensive_care_unit,
-              nursing: nursing
+              intensive_care_unit: bed_json(intensive_care_unit),
+              nursing: bed_json(nursing)
             }
           end
         }

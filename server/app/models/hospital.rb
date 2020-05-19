@@ -27,11 +27,12 @@ class Hospital < ApplicationRecord
 
     {
       name: name,
+      value: slug,
       type: get_type,
       latitude: latitude,
       longitude: longitude,
       total: total,
-      budy: busy
+      busy: busy
     }
   end
 end
