@@ -96,7 +96,7 @@
             </div>
           </cov-grid-cell>
 
-          <cov-grid-cell :breakpoints="{ col: '1-of-2', sm: '2-of-5', md: '1-of-2', lg: '6-of-12' }">
+          <cov-grid-cell :breakpoints="{ col: 'full', sm: 'full', md: 'full', lg: '6-of-12' }">
             <cov-heatmap />
           </cov-grid-cell>
         </cov-grid>
