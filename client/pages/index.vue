@@ -310,8 +310,6 @@ export default {
 
 <style lang="scss">
 .beds {
-  margin-top: 20px;
-
   &__title {
     font-size: 16px;
   }
