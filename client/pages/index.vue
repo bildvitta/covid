@@ -2,61 +2,56 @@
   <div class="position position--relative">
     <cov-section>
       <div class="container">
-        <cov-grid justifyBetween>
-          <cov-grid-cell :breakpoints="{ col: '1-of-2', sm: '1-of-2', md: '1-of-3', lg: '6-of-12' }">
-            <form action="">
-              <div>
-                <h3 class="typography typography--title">Cidade</h3>
-                <cov-select v-model="city" :options="dashboard.cities" @input="filterCity" />
-              </div>
+        <cov-grid gutter>
+          <cov-grid-cell :breakpoints="{ sm: 'full', md: 'full', lg: '6-of-12' }">
+            <form>
+              <cov-grid gutter>
+                <cov-grid-cell :breakpoints="{ sm: 'full', md: '1-of-3', lg: '1-of-3' }">
+                  <h3 class="typography typography--title">Cidade</h3>
+                  <cov-select v-model="city" :options="dashboard.cities" @input="filterCity" />
+                </cov-grid-cell>
 
-              <div>
-                <h3 class="typography typography--title">Hospitais</h3>
-                <cov-select v-model="hospital" :options="hospitalOptions" @input="filter" />
-              </div>
+                <cov-grid-cell :breakpoints="{ sm: 'fill', md: 'fill', lg: 'fill' }">
+                  <h3 class="typography typography--title">Hospitais</h3>
+                  <cov-select v-model="hospital" :options="hospitalOptions" @input="filter" />
+                </cov-grid-cell>
+              </cov-grid>
             </form>
 
-            <div>
+            <div class="beds">
               <h3 class="typography typography--title">Leitos</h3>
               <div class="typography typography--subtitle">Atualizado há 10 min</div>
 
               <cov-grid gutter>
-                <cov-grid-cell :breakpoints="{ col: '1-of-2', sm: '1-of-2', md: '1-of-3', lg: '1-of-3' }">
+                <cov-grid-cell v-for="(item, key) in beds" :key="key" :breakpoints="{ col: '1-of-2', sm: 'full', md: '1-of-2', lg: '1-of-3' }">
                   <cov-card class="typography">
                     <template v-slot:header>
-                      <span>UTI</span>
+                      <span class="beds__title">{{ bedsTitle[key] }}</span>
                       <cov-badge color="negative">12,5%</cov-badge>
                     </template>
 
                     <div>
-                      <cov-grid justifyBetween>
+                      <cov-grid justify-between>
                         <div class="typography--caption">Covid-19</div>
+                        <div class="beds__box">
+                          <span>Total</span>
+                          <span class="typography--weight-bold typography--primary-color">{{ totalBeds(item.covid) }}</span>
+                        </div>
+                        <div class="beds__box">
+                          <span>Ocupados</span>
+                          <span class="typography--weight-bold typography--primary-color">{{ item.covid.busy }}</span>
+                        </div>
 
-                        <cov-grid-cell><span>Total</span></cov-grid-cell>
+                        <div class="typography--caption beds__spacing-top">Não Covid-19</div>
 
-                        <cov-grid-cell :breakpoints="{col: 'Fit', sm: 'Fit', md: 'Fit', lg: 'Fit'}">
-                          <span class="typography--weight-bold typography--primary-color">150</span>
-                        </cov-grid-cell>
-
-                        <cov-grid-cell><span>Ocupados</span></cov-grid-cell>
-
-                        <cov-grid-cell :breakpoints="{col: 'Fit', sm: 'Fit', md: 'Fit', lg: 'Fit'}">
-                          <span class="typography--weight-bold typography--primary-color">150</span>
-                        </cov-grid-cell>
-
-                        <div class="typography--caption">Não Covid-19</div>
-
-                        <cov-grid-cell><span>Total</span></cov-grid-cell>
-
-                        <cov-grid-cell :breakpoints="{col: 'Fit', sm: 'Fit', md: 'Fit', lg: 'Fit'}">
-                          <span class="typography--weight-bold typography--primary-color">150</span>
-                        </cov-grid-cell>
-
-                        <cov-grid-cell><span>Ocupados</span></cov-grid-cell>
-
-                        <cov-grid-cell :breakpoints="{col: 'Fit', sm: 'Fit', md: 'Fit', lg: 'Fit'}">
-                          <span class="typography--weight-bold typography--primary-color">150</span>
-                        </cov-grid-cell>
+                        <div class="beds__box">
+                          <span>Total</span>
+                          <span class="typography--weight-bold typography--primary-color">{{ totalBeds(item.normal) }}</span>
+                        </div>
+                        <div class="beds__box">
+                          <span>Ocupados</span>
+                          <span class="typography--weight-bold typography--primary-color">{{ item.normal.busy }}</span>
+                        </div>
                       </cov-grid>
                     </div>
                   </cov-card>
@@ -88,7 +83,7 @@
 
     <cov-section color="melrose">
       <div class="container">
-        <cov-grid gutter justifyBetween>
+        <cov-grid gutter justify-between>
           <cov-grid-cell>
             <h3 class="typography typography--title">Dashboard 1</h3>
             <cov-box>
@@ -186,6 +181,24 @@ export default {
 
     hospitalOptions () {
       return this.dashboard.cities ? this.dashboard.cities.find(item => item.value === this.city).hospitals : []
+    },
+
+    beds () {
+      if (this.dashboard.beds) {
+        const { updated_at: updatedAt, ...beds } = this.dashboard.beds
+
+        return beds
+      }
+
+      return {}
+    },
+
+    bedsTitle () {
+      return {
+        intensive_care_unit: 'UTI',
+        nursing: 'Efernmagem',
+        ventilator: 'Respiradores'
+      }
     }
   },
 
@@ -236,7 +249,30 @@ export default {
 
     clearHospital () {
       this.hospital = ''
+    },
+
+    totalBeds ({ busy, free }) {
+      return busy + free
     }
   }
 }
 </script>
+
+<style lang="scss">
+.beds {
+  margin-top: 20px;
+
+  &__title {
+    font-size: 16px;
+  }
+
+  &__box {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__spacing-top {
+    margin-top: 10px;
+  }
+}
+</style>
