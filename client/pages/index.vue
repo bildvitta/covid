@@ -293,7 +293,7 @@ export default {
       }
 
       const time = differenceInMinutes(new Date(), parseISO(this.dashboard[model].updated_at))
-      return time > 0 ? `Atualizado há ${time} min` : 'Atualizado agora'
+      return time > 0 ? `Atualizado há ${time} min` : 'Atualizado há menos de 1 min'
     },
 
     download () {
