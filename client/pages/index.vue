@@ -23,13 +23,12 @@
               <div class="typography typography--subtitle">Atualizado há 10 min</div>
 
               <cov-grid gutter>
-                <cov-grid-cell v-for="(item, key) in beds" :key="key" :breakpoints="{ col: '1-of-2', sm: 'full', md: '1-of-2', lg: '1-of-3' }">
+                <cov-grid-cell v-for="(item, key) in beds" :key="key" :breakpoints="{ col: 'full', sm: 'full', md: '1-of-3', lg: '1-of-3' }">
                   <cov-card class="typography">
                     <template v-slot:header>
                       <span class="beds__title">{{ bedsTitle[key] }}</span>
                       <cov-badge color="negative">12,5%</cov-badge>
                     </template>
-
                     <div>
                       <cov-grid justify-between>
                         <div class="typography--caption">Covid-19</div>
@@ -74,7 +73,7 @@
             </div>
           </cov-grid-cell>
 
-          <cov-grid-cell :breakpoints="{ col: '1-of-2', sm: '2-of-5', md: '1-of-2', lg: '6-of-12' }">
+          <cov-grid-cell :breakpoints="{ col: 'full', sm: 'full', md: 'full', lg: '6-of-12' }">
             <cov-heatmap />
           </cov-grid-cell>
         </cov-grid>
