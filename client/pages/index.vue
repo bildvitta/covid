@@ -20,18 +20,20 @@
 
             <div class="beds">
               <h3 class="typography typography--title">Leitos</h3>
-              <div class="typography typography--subtitle">{{ bedsUpdatedAt }}</div>
+              <div class="typography typography--subtitle">{{ updatedAt('beds') }}</div>
 
               <cov-grid gutter>
                 <cov-grid-cell v-for="(item, key) in beds" :key="key" :breakpoints="{ col: 'full', sm: 'full', md: '1-of-3', lg: '1-of-3' }">
                   <cov-card class="typography">
                     <template v-slot:header>
                       <span class="beds__title">{{ bedsTitle[key] }}</span>
-                      <cov-badge color="negative">12,5%</cov-badge>
                     </template>
                     <div>
                       <cov-grid justify-between>
-                        <div class="typography--caption">Covid-19</div>
+                        <div class="beds__box">
+                          <div class="typography--caption">Covid-19</div>
+                          <cov-badge>{{ badgesPercent(item.covid) }}</cov-badge>
+                        </div>
                         <div class="beds__box">
                           <span>Total</span>
                           <span class="typography--weight-bold typography--primary-color">{{ totalBeds(item.covid) }}</span>
@@ -60,7 +62,7 @@
 
             <div>
               <h3 class="typography typography--title">Casos em Ribeirão Preto</h3>
-              <div class="typography typography--subtitle">{{ bedsUpdatedAt }}</div>
+              <div class="typography typography--subtitle">{{ updatedAt('covid_cases') }}</div>
 
               <cov-card>
                 Card
@@ -83,7 +85,7 @@
     <cov-section color="melrose">
       <div class="container">
         <cov-grid gutter justify-between>
-          <cov-grid-cell>
+          <cov-grid-cell :breakpoints="{ sm: 'full', md: 'full' }">
             <h3 class="typography typography--title">Dashboard 1</h3>
             <cov-box>
               <client-only>
@@ -92,7 +94,7 @@
             </cov-box>
           </cov-grid-cell>
 
-          <cov-grid-cell>
+          <cov-grid-cell :breakpoints="{ sm: 'full', md: 'full' }">
             <h3 class="typography typography--title">Dashboard 2</h3>
             <cov-box>
               <client-only>
@@ -193,15 +195,6 @@ export default {
       return {}
     },
 
-    bedsUpdatedAt () {
-      if (!this.dashboard.beds) {
-        return ''
-      }
-
-      const time = differenceInMinutes(new Date(), parseISO(this.dashboard.beds.updated_at))
-      return time > 0 ? `Atualizado há ${time} min` : 'Atualizado agora'
-    },
-
     bedsTitle () {
       return {
         intensive_care_unit: 'UTI',
@@ -263,6 +256,23 @@ export default {
 
     totalBeds ({ busy, free }) {
       return busy + free
+    },
+
+    badgesPercent ({ busy, free }) {
+      const total = busy + free
+
+      const percent = ((100 * busy) / total).toFixed('2')
+
+      return `${percent}%`
+    },
+
+    updatedAt (model) {
+      if (!this.dashboard[model]) {
+        return ''
+      }
+
+      const time = differenceInMinutes(new Date(), parseISO(this.dashboard[model].updated_at))
+      return time > 0 ? `Atualizado há ${time} min` : 'Atualizado agora'
     }
   }
 }
