@@ -63,10 +63,17 @@
             <div>
               <h3 class="typography typography--title">Casos em Ribeirão Preto</h3>
               <div class="typography typography--subtitle">{{ updatedAt('covid_cases') }}</div>
-
-              <cov-card>
-                Card
-              </cov-card>
+              <cov-grid gutter>
+                <cov-grid-cell :breakpoints="{ col: 'full', sm: 'full', md: '1-of-3', lg: '1-of-3' }">
+                   <cov-card>
+                    <div>Casos totais</div>
+                    <div class="typography--heavy-text typography--primary-color">412</div>
+                    <client-only>
+                      <cov-line-chart :chart-data="historyChartData" />
+                    </client-only>
+                  </cov-card>
+                </cov-grid-cell>
+              </cov-grid>
             </div>
 
             <div>
