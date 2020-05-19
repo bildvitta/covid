@@ -53,7 +53,10 @@ export default {
   // axios: {
   // },
 
-  // build: {
-  //   extend (config, context) {}
-  // }
+  build: {
+    transpile: [
+      'lodash-es'
+    ]
+    // extend (config, context) {}
+  }
 }
