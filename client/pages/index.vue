@@ -61,7 +61,7 @@
             </div>
 
             <div>
-              <h3 class="typography typography--title">Casos em Ribeirão Preto</h3>
+              <h3 class="typography typography--title">Casos em {{ currentCity }}</h3>
               <div class="typography typography--subtitle">{{ updatedAt('covid_cases') }}</div>
               <cov-grid v-if="dashboard.covid_cases" gutter>
                 <cov-grid-cell v-for="(item, key) in dashboard.covid_cases.cases" :key="key" :breakpoints="{ sm: 'full', md: '1-of-2', lg: '1-of-3' }">
@@ -216,6 +216,10 @@ export default {
         deaths: { text: 'Mortes', color: 'text-negative' },
         cureds: { text: 'Recuperados', color: 'text-positive' }
       }
+    },
+
+    currentCity () {
+      return this.dashboard.cities ? this.dashboard.cities.find(city => city.value === this.city).label : ''
     }
   },
 
