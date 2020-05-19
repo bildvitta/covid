@@ -16,6 +16,11 @@
     text-transform: uppercase;
   }
 
+  &--heavy-text {
+    font-size: $font-size-extra-large;
+    font-weight: bold;
+  }
+
   &--primary-color {
     color: $primary-color;
   }
