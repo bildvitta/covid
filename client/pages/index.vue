@@ -63,11 +63,11 @@
             <div>
               <h3 class="typography typography--title">Casos em Ribeirão Preto</h3>
               <div class="typography typography--subtitle">{{ updatedAt('covid_cases') }}</div>
-              <cov-grid gutter>
-                <cov-grid-cell :breakpoints="{ col: 'full', sm: 'full', md: '1-of-3', lg: '1-of-3' }">
+              <cov-grid v-if="dashboard.covid_cases" gutter>
+                <cov-grid-cell v-for="(item, key) in dashboard.covid_cases.cases" :key="key" :breakpoints="{ sm: 'full', md: '1-of-2', lg: '1-of-3' }">
                    <cov-card>
-                    <div>Casos totais</div>
-                    <div class="typography--heavy-text typography--primary-color">412</div>
+                    <div>{{ covidCases[key].text }}</div>
+                    <div class="typography--heavy-text" :class="covidCases[key].color">{{ item }}</div>
                     <client-only>
                       <cov-line-chart :chart-data="historyChartData" />
                     </client-only>
@@ -205,8 +205,16 @@ export default {
     bedsTitle () {
       return {
         intensive_care_unit: 'UTI',
-        nursing: 'Efernmagem',
+        nursing: 'Enfernmagem',
         ventilator: 'Respiradores'
+      }
+    },
+
+    covidCases () {
+      return {
+        total: { text: 'Casos totais', color: 'text-primary' },
+        deaths: { text: 'Mortes', color: 'text-negative' },
+        cureds: { text: 'Recuperados', color: 'text-positive' }
       }
     }
   },
