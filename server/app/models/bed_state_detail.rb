@@ -1,0 +1,2 @@
+class BedStateDetail < ApplicationRecord
+end
