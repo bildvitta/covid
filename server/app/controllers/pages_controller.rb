@@ -26,7 +26,7 @@ class PagesController < ApplicationController
       }
 
       {
-        updated_at: Time.zone.now.iso8601,
+        updated_at: @beds.order(updated_at: :desc).last.updated_at.iso8601,
         intensive_care_unit: bed_json(@beds.icus.to_a, &block),
         nursing: bed_json(@beds.nursings.to_a, &block),
         ventilator: bed_json(@beds.using_ventilator.to_a, &block)
@@ -36,7 +36,7 @@ class PagesController < ApplicationController
 
   def cases_data
     cached_data :cases_data do
-      covid_case = @city.covid_cases.order(created_at: :desc).first
+      covid_case = @city.covid_cases.order(updated_at: :desc).first
 
       {
         updated_at: covid_case.updated_at.iso8601,
