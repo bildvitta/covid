@@ -85,7 +85,7 @@
     <cov-section color="melrose">
       <div class="container">
         <cov-grid gutter justify-between>
-          <cov-grid-cell :breakpoints="{ sm: 'full', md: 'full' }">
+          <cov-grid-cell :breakpoints="{ sm: 'full', md: 'full', lg: '1-of-2' }">
             <h3 class="typography typography--title">Dashboard 1</h3>
             <cov-box>
               <client-only>
@@ -94,7 +94,7 @@
             </cov-box>
           </cov-grid-cell>
 
-          <cov-grid-cell :breakpoints="{ sm: 'full', md: 'full' }">
+          <cov-grid-cell :breakpoints="{ sm: 'full', md: 'full', lg: '1-of-2' }">
             <h3 class="typography typography--title">Dashboard 2</h3>
             <cov-box>
               <client-only>
@@ -299,6 +299,7 @@ export default {
 
   &__box {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
   }
 
