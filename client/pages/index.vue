@@ -23,7 +23,7 @@
               <div class="typography typography--subtitle">{{ updatedAt('beds') }}</div>
 
               <cov-grid gutter>
-                <cov-grid-cell v-for="(item, key) in beds" :key="key" :breakpoints="{ col: 'full', sm: 'full', md: '1-of-3', lg: '1-of-3' }">
+                <cov-grid-cell v-for="(item, key) in beds" :key="key" :breakpoints="{ sm: 'full', md: '1-of-2', lg: '1-of-3' }">
                   <cov-card class="typography">
                     <template v-slot:header>
                       <span class="beds__title">{{ bedsTitle[key] }}</span>
