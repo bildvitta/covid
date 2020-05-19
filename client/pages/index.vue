@@ -4,82 +4,84 @@
       <div class="container">
         <cov-grid gutter-medium>
           <cov-grid-cell :breakpoints="{ sm: 'full', md: 'full', lg: '6-of-12' }">
-            <form>
-              <cov-grid gutter>
-                <cov-grid-cell :breakpoints="{ sm: 'full', md: '1-of-3', lg: '1-of-3' }">
-                  <h3 class="typography typography--title">Cidade</h3>
-                  <cov-select v-model="city" :options="dashboard.cities" @input="filterCity" />
-                </cov-grid-cell>
+            <cov-grid gutter>
+              <form>
+                <cov-grid gutter>
+                  <cov-grid-cell :breakpoints="{ sm: 'full', md: '1-of-3', lg: '1-of-3' }">
+                    <h3 class="typography typography--title">Cidade</h3>
+                    <cov-select v-model="city" :options="dashboard.cities" @input="filterCity" />
+                  </cov-grid-cell>
 
-                <cov-grid-cell :breakpoints="{ sm: 'fill', md: 'fill', lg: 'fill' }">
-                  <h3 class="typography typography--title">Hospitais</h3>
-                  <cov-select v-model="hospital" :options="hospitalOptions" @input="filter" />
-                </cov-grid-cell>
-              </cov-grid>
-            </form>
+                  <cov-grid-cell :breakpoints="{ sm: 'fill', md: 'fill', lg: 'fill' }">
+                    <h3 class="typography typography--title">Hospitais</h3>
+                    <cov-select v-model="hospital" :options="hospitalOptions" @input="filter" />
+                  </cov-grid-cell>
+                </cov-grid>
+              </form>
 
-            <div class="beds">
-              <h3 class="typography typography--title">Leitos</h3>
-              <div class="typography typography--subtitle">{{ updatedAt('beds') }}</div>
+              <div class="beds">
+                <h3 class="typography typography--title">Leitos</h3>
+                <div class="typography typography--subtitle">{{ updatedAt('beds') }}</div>
 
-              <cov-grid gutter>
-                <cov-grid-cell v-for="(item, key) in beds" :key="key" :breakpoints="{ sm: 'full', md: '1-of-2', lg: '1-of-3' }">
-                  <cov-card class="typography">
-                    <template v-slot:header>
-                      <span class="beds__title">{{ bedsTitle[key] }}</span>
-                    </template>
-                    <div>
-                      <cov-grid justify-between>
-                        <div class="beds__box">
-                          <div class="typography--caption">Covid-19</div>
-                          <cov-badge>{{ badgesPercent(item.covid) }}</cov-badge>
-                        </div>
-                        <div class="beds__box">
-                          <span>Total</span>
-                          <span class="typography--weight-bold typography--primary-color">{{ totalBeds(item.covid) }}</span>
-                        </div>
-                        <div class="beds__box">
-                          <span>Ocupados</span>
-                          <span class="typography--weight-bold typography--primary-color">{{ item.covid.busy }}</span>
-                        </div>
+                <cov-grid gutter>
+                  <cov-grid-cell v-for="(item, key) in beds" :key="key" :breakpoints="{ sm: 'full', md: '1-of-2', lg: '1-of-3' }">
+                    <cov-card class="typography">
+                      <template v-slot:header>
+                        <span class="beds__title">{{ bedsTitle[key] }}</span>
+                      </template>
+                      <div>
+                        <cov-grid justify-between>
+                          <div class="beds__box">
+                            <div class="typography--caption">Covid-19</div>
+                            <cov-badge>{{ badgesPercent(item.covid) }}</cov-badge>
+                          </div>
+                          <div class="beds__box">
+                            <span>Total</span>
+                            <span class="typography--weight-bold typography--primary-color">{{ totalBeds(item.covid) }}</span>
+                          </div>
+                          <div class="beds__box">
+                            <span>Ocupados</span>
+                            <span class="typography--weight-bold typography--primary-color">{{ item.covid.busy }}</span>
+                          </div>
 
-                        <div class="typography--caption beds__spacing-top">Não Covid-19</div>
+                          <div class="typography--caption beds__spacing-top">Não Covid-19</div>
 
-                        <div class="beds__box">
-                          <span>Total</span>
-                          <span class="typography--weight-bold typography--primary-color">{{ totalBeds(item.normal) }}</span>
-                        </div>
-                        <div class="beds__box">
-                          <span>Ocupados</span>
-                          <span class="typography--weight-bold typography--primary-color">{{ item.normal.busy }}</span>
-                        </div>
-                      </cov-grid>
-                    </div>
-                  </cov-card>
-                </cov-grid-cell>
-              </cov-grid>
-            </div>
+                          <div class="beds__box">
+                            <span>Total</span>
+                            <span class="typography--weight-bold typography--primary-color">{{ totalBeds(item.normal) }}</span>
+                          </div>
+                          <div class="beds__box">
+                            <span>Ocupados</span>
+                            <span class="typography--weight-bold typography--primary-color">{{ item.normal.busy }}</span>
+                          </div>
+                        </cov-grid>
+                      </div>
+                    </cov-card>
+                  </cov-grid-cell>
+                </cov-grid>
+              </div>
 
-            <div>
-              <h3 class="typography typography--title">Casos em Ribeirão Preto</h3>
-              <div class="typography typography--subtitle">{{ updatedAt('covid_cases') }}</div>
-              <cov-grid gutter>
-                <cov-grid-cell :breakpoints="{ col: 'full', sm: 'full', md: '1-of-3', lg: '1-of-3' }">
-                   <cov-card>
-                    <div>Casos totais</div>
-                    <div class="typography--heavy-text typography--primary-color">412</div>
-                    <client-only>
-                      <cov-line-chart :chart-data="historyChartData" />
-                    </client-only>
-                  </cov-card>
-                </cov-grid-cell>
-              </cov-grid>
-            </div>
+              <div>
+                <h3 class="typography typography--title">Casos em Ribeirão Preto</h3>
+                <div class="typography typography--subtitle">{{ updatedAt('covid_cases') }}</div>
+                <cov-grid gutter>
+                  <cov-grid-cell :breakpoints="{ col: 'full', sm: 'full', md: '1-of-3', lg: '1-of-3' }">
+                    <cov-card>
+                      <div>Casos totais</div>
+                      <div class="typography--heavy-text typography--primary-color">412</div>
+                      <client-only>
+                        <cov-line-chart :chart-data="historyChartData" />
+                      </client-only>
+                    </cov-card>
+                  </cov-grid-cell>
+                </cov-grid>
+              </div>
 
-            <div>
-              <cov-button icon="table_chart" label="Baixar planilha" @click="download" />
-              <cov-button href="#" icon="code" label="Acesso a API" />
-            </div>
+              <div>
+                <cov-button icon="table_chart" label="Baixar planilha" @click="download" />
+                <cov-button href="#" icon="code" label="Acesso a API" />
+              </div>
+            </cov-grid>
           </cov-grid-cell>
 
           <cov-grid-cell :breakpoints="{ col: 'full', sm: 'full', md: 'full', lg: '6-of-12' }">
@@ -298,8 +300,6 @@ export default {
 
 <style lang="scss">
 .beds {
-  margin-top: 20px;
-
   &__title {
     font-size: 16px;
   }
