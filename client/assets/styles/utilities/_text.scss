@@ -1,5 +1,14 @@
+<<<<<<< HEAD:client/assets/styles/utilities/_text.scss
 // color
+=======
+
+// text color
+>>>>>>> 383e7268bcb80d27102da819ae9eb84528d9e84d:client/assets/styles/utilities/text.scss
 .text-primary {
+  color: $primary-color;
+}
+
+.text-secondary {
   color: $primary-color;
 }
 
@@ -13,4 +22,30 @@
 
 .text-warning {
   color: $warning-color;
+}
+
+// text weight
+.text-bold {
+  font-weight: $font-weight-bold;
+}
+
+//text type
+.text-caption {
+  font-weight: bold;
+}
+
+.text-heavy {
+  font-size: $font-size-extra-large;
+  font-weight: bold;
+}
+
+.text-subtitle {
+  color: $tertiary-color;
+}
+
+.text-title {
+  color: $primary-color;
+  font-size: 18px;
+  font-weight: bold;
+  text-transform: uppercase;
 }
