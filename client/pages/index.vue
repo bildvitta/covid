@@ -4,96 +4,100 @@
       <div class="container">
         <cov-grid gutter justifyBetween>
           <cov-grid-cell :breakpoints="{ col: 'full', sm: 'full', md: 'full', lg: '6-of-12' }">
-            <form action="">
+            <cov-grid gutter>
+              <form action="">
+                <cov-grid gutter>
+                  <cov-grid-cell :breakpoints="{ col: 'full', sm: 'full', md: '5-of-12', lg: '5-of-12' }">
+                    <h3 class="typography typography--title">Cidade</h3>
+                    <cov-select v-model="city" :options="dashboard.cities" @input="filterCity" />
+                  </cov-grid-cell>
+
+                  <cov-grid-cell :breakpoints="{ col: 'full', sm: 'full', md: '7-of-12', lg: '7-of-12' }">
+                    <h3 class="typography typography--title">Hospitais</h3>
+                    <cov-select v-model="hospital" :options="hospitalOptions" @input="filter" />
+                  </cov-grid-cell>
+                </cov-grid>
+              </form>
+
               <div>
-                <h3 class="typography typography--title">Cidade</h3>
-                <cov-select v-model="city" :options="dashboard.cities" @input="filterCity" />
+                <h3 class="typography typography--title">Leitos</h3>
+                <div class="typography typography--subtitle">Atualizado há 10 min</div>
+
+                <cov-grid gutter>
+                  <cov-grid-cell :breakpoints="{ col: 'full', sm: 'full', md: '1-of-3', lg: '1-of-3' }">
+                    <cov-card class="typography">
+                      <template v-slot:header>
+                        <span>UTI</span>
+                        <cov-badge color="negative">12,5%</cov-badge>
+                      </template>
+                      <div>
+                        <cov-grid gutter>
+                          <div>
+                            <div class="typography--caption">Covid-19</div>
+                            <cov-grid justifyBetween>
+                              <cov-grid-cell :breakpoints="{col: 'fit', sm: 'fit', md: 'fit', lg: 'fit'}">
+                                <span>Total</span>
+                              </cov-grid-cell>
+
+                              <cov-grid-cell :breakpoints="{col: 'fit', sm: 'fit', md: 'fit', lg: 'fit'}">
+                                <span class="typography--weight-bold typography--primary-color">150</span>
+                              </cov-grid-cell>
+                            </cov-grid>
+
+                            <cov-grid justifyBetween>
+                              <cov-grid-cell :breakpoints="{col: 'fit', sm: 'fit', md: 'fit', lg: 'fit'}">
+                                <span>Ocupados</span>
+                              </cov-grid-cell>
+
+                              <cov-grid-cell :breakpoints="{col: 'fit', sm: 'fit', md: 'fit', lg: 'fit'}">
+                                <span class="typography--weight-bold typography--primary-color">150</span>
+                              </cov-grid-cell>
+                            </cov-grid>
+                          </div>
+
+                          <div>
+                            <div class="typography--caption">Não Covid-19</div>
+                            <cov-grid justifyBetween>
+                              <cov-grid-cell :breakpoints="{col: 'fit', sm: 'fit', md: 'fit', lg: 'fit'}">
+                                <span>Total</span>
+                              </cov-grid-cell>
+
+                              <cov-grid-cell :breakpoints="{col: 'fit', sm: 'fit', md: 'fit', lg: 'fit'}">
+                                <span class="typography--weight-bold typography--primary-color">150</span>
+                              </cov-grid-cell>
+                            </cov-grid>
+
+                            <cov-grid justifyBetween>
+                              <cov-grid-cell :breakpoints="{col: 'fit', sm: 'fit', md: 'fit', lg: 'fit'}">
+                                <span>Ocupados</span>
+                              </cov-grid-cell>
+
+                              <cov-grid-cell :breakpoints="{col: 'fit', sm: 'fit', md: 'fit', lg: 'fit'}">
+                                <span class="typography--weight-bold typography--primary-color">150</span>
+                              </cov-grid-cell>
+                            </cov-grid>
+                          </div>
+                        </cov-grid>
+                      </div>
+                    </cov-card>
+                  </cov-grid-cell>
+                </cov-grid>
               </div>
 
               <div>
-                <h3 class="typography typography--title">Hospitais</h3>
-                <cov-select v-model="hospital" :options="hospitalOptions" @input="filter" />
+                <h3 class="typography typography--title">Casos em Ribeirão Preto</h3>
+                <div class="typography typography--subtitle">Atualizado há 10 min</div>
+
+                <cov-card>
+                  Card
+                </cov-card>
               </div>
-            </form>
 
-            <div>
-              <h3 class="typography typography--title">Leitos</h3>
-              <div class="typography typography--subtitle">Atualizado há 10 min</div>
-
-              <cov-grid gutter>
-                <cov-grid-cell :breakpoints="{ col: 'full', sm: 'full', md: '1-of-3', lg: '1-of-3' }">
-                  <cov-card class="typography">
-                    <template v-slot:header>
-                      <span>UTI</span>
-                      <cov-badge color="negative">12,5%</cov-badge>
-                    </template>
-                    <div>
-                      <cov-grid gutter>
-                        <div>
-                          <div class="typography--caption">Covid-19</div>
-                          <cov-grid justifyBetween>
-                            <cov-grid-cell :breakpoints="{col: 'fit', sm: 'fit', md: 'fit', lg: 'fit'}">
-                              <span>Total</span>
-                            </cov-grid-cell>
-
-                            <cov-grid-cell :breakpoints="{col: 'fit', sm: 'fit', md: 'fit', lg: 'fit'}">
-                              <span class="typography--weight-bold typography--primary-color">150</span>
-                            </cov-grid-cell>
-                          </cov-grid>
-
-                          <cov-grid justifyBetween>
-                            <cov-grid-cell :breakpoints="{col: 'fit', sm: 'fit', md: 'fit', lg: 'fit'}">
-                              <span>Ocupados</span>
-                            </cov-grid-cell>
-
-                            <cov-grid-cell :breakpoints="{col: 'fit', sm: 'fit', md: 'fit', lg: 'fit'}">
-                              <span class="typography--weight-bold typography--primary-color">150</span>
-                            </cov-grid-cell>
-                          </cov-grid>
-                        </div>
-
-                        <div>
-                          <div class="typography--caption">Não Covid-19</div>
-                          <cov-grid justifyBetween>
-                            <cov-grid-cell :breakpoints="{col: 'fit', sm: 'fit', md: 'fit', lg: 'fit'}">
-                              <span>Total</span>
-                            </cov-grid-cell>
-
-                            <cov-grid-cell :breakpoints="{col: 'fit', sm: 'fit', md: 'fit', lg: 'fit'}">
-                              <span class="typography--weight-bold typography--primary-color">150</span>
-                            </cov-grid-cell>
-                          </cov-grid>
-
-                          <cov-grid justifyBetween>
-                            <cov-grid-cell :breakpoints="{col: 'fit', sm: 'fit', md: 'fit', lg: 'fit'}">
-                              <span>Ocupados</span>
-                            </cov-grid-cell>
-
-                            <cov-grid-cell :breakpoints="{col: 'fit', sm: 'fit', md: 'fit', lg: 'fit'}">
-                              <span class="typography--weight-bold typography--primary-color">150</span>
-                            </cov-grid-cell>
-                          </cov-grid>
-                        </div>
-                      </cov-grid>
-                    </div>
-                  </cov-card>
-                </cov-grid-cell>
-              </cov-grid>
-            </div>
-
-            <div>
-              <h3 class="typography typography--title">Casos em Ribeirão Preto</h3>
-              <div class="typography typography--subtitle">Atualizado há 10 min</div>
-
-              <cov-card>
-                Card
-              </cov-card>
-            </div>
-
-            <div>
-              <cov-button href="#" icon="table_chart" label="Baixar planilha" />
-              <cov-button href="#" icon="code" label="Acesso a API" />
-            </div>
+              <div>
+                <cov-button href="#" icon="table_chart" label="Baixar planilha" />
+                <cov-button href="#" icon="code" label="Acesso a API" />
+              </div>
+            </cov-grid>
           </cov-grid-cell>
 
           <cov-grid-cell :breakpoints="{ col: 'full', sm: 'full', md: 'full', lg: '6-of-12' }">
