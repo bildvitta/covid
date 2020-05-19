@@ -2,8 +2,8 @@
   <div class="position position--relative">
     <cov-section>
       <div class="container">
-        <cov-grid class="cov-grid--justify-between">
-          <cov-grid-cell :breakpoints="{ col: '1-of-2', sm: '1-of-', md: '1-of-3', lg: '1-of-3' }">
+        <cov-grid justifyBetween>
+          <cov-grid-cell :breakpoints="{ col: '1-of-2', sm: '1-of-2', md: '1-of-3', lg: '6-of-12' }">
             <form action="">
               <div>
                 <h3 class="typography typography--title">Cidade</h3>
@@ -29,7 +29,7 @@
                     </template>
 
                     <div>
-                      <cov-grid class="cov-grid--justify-between">
+                      <cov-grid justifyBetween>
                         <div class="typography--caption">Covid-19</div>
 
                         <cov-grid-cell><span>Total</span></cov-grid-cell>
@@ -62,11 +62,6 @@
                   </cov-card>
                 </cov-grid-cell>
               </cov-grid>
-
-              <cov-badge>100%</cov-badge>
-              <cov-badge color="negative">12,5%</cov-badge>
-              <cov-badge color="positive">89,14%</cov-badge>
-              <cov-badge color="warning">67,5%</cov-badge>
             </div>
 
             <div>
@@ -84,7 +79,7 @@
             </div>
           </cov-grid-cell>
 
-          <cov-grid-cell>
+          <cov-grid-cell :breakpoints="{ col: '1-of-2', sm: '2-of-5', md: '1-of-2', lg: '6-of-12' }">
             <cov-heatmap />
           </cov-grid-cell>
         </cov-grid>
@@ -93,7 +88,7 @@
 
     <cov-section color="melrose">
       <div class="container">
-        <cov-grid>
+        <cov-grid gutter justifyBetween>
           <cov-grid-cell>
             <h3 class="typography typography--title">Dashboard 1</h3>
             <cov-box>
