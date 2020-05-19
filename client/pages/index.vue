@@ -2,7 +2,7 @@
   <div class="position position--relative">
     <cov-section>
       <div class="container">
-        <cov-grid gutter-medium>
+        <cov-grid equalHeight gutter-large>
           <cov-grid-cell :breakpoints="{ sm: 'full', md: 'full', lg: '6-of-12' }">
             <cov-grid gutter>
               <form>
