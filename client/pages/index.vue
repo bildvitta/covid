@@ -2,7 +2,7 @@
   <div class="position position--relative">
     <cov-section>
       <div class="container">
-        <cov-grid gutter>
+        <cov-grid gutter-medium>
           <cov-grid-cell :breakpoints="{ sm: 'full', md: 'full', lg: '6-of-12' }">
             <form>
               <cov-grid gutter>
@@ -70,7 +70,7 @@
             </div>
 
             <div>
-              <cov-button href="#" icon="table_chart" label="Baixar planilha" />
+              <cov-button icon="table_chart" label="Baixar planilha" @click="download" />
               <cov-button href="#" icon="code" label="Acesso a API" />
             </div>
           </cov-grid-cell>
@@ -273,6 +273,17 @@ export default {
 
       const time = differenceInMinutes(new Date(), parseISO(this.dashboard[model].updated_at))
       return time > 0 ? `Atualizado há ${time} min` : 'Atualizado agora'
+    },
+
+    download () {
+      const url = 'https://media.sproutsocial.com/uploads/2017/02/10x-featured-social-media-image-size.png'
+      const link = document.createElement('a')
+      link.setAttribute('href', url)
+      link.setAttribute('download', '')
+      link.style.visibility = 'hidden'
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
     }
   }
 }
