@@ -133,18 +133,18 @@ $grid-gutter-lg: 25px !default;
   }
 
   &--with-gutter-md {
-    margin: #{ -0.8 * $grid-gutter-md} #{ -0.8 * $grid-gutter-md};
+    margin: #{ -0.5 * $grid-gutter-md} #{ -0.5 * $grid-gutter-md};
 
     > * {
-      padding: #{ 0.8 * $grid-gutter-md} #{0.8 * $grid-gutter-md};
+      padding: #{ 0.5 * $grid-gutter-md} #{0.5 * $grid-gutter-md};
     }
   }
 
   &--with-gutter-lg {
-    margin: #{ -1.5 * $grid-gutter-lg} #{ -1.5 * $grid-gutter-lg};
+    margin: #{ -0.5 * $grid-gutter-lg} #{ -0.5 * $grid-gutter-lg};
 
     > * {
-      padding: #{ 1.5 * $grid-gutter-lg} #{1.5 * $grid-gutter-lg};
+      padding: #{ 0.5 * $grid-gutter-lg} #{0.5 * $grid-gutter-lg};
     }
   }
 }
