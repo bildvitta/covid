@@ -43,7 +43,6 @@ ActiveRecord::Schema.define(version: 2020_05_18_213942) do
     t.boolean "using_ventilator", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["hospital_id"], name: "index_beds_on_hospital_id"
     t.index ["slug"], name: "index_beds_on_slug"
   end
 
