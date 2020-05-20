@@ -35,7 +35,7 @@ export default {
   background-color: rgba($primary-color, 0.25);
   bottom: 0;
   left: 0;
-  position: fixed;
+  position: absolute;
   right: 0;
   top: 0;
   z-index: 1000;

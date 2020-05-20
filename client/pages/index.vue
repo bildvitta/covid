@@ -15,10 +15,10 @@
               <cov-grid v-if="dashboard.covid_cases" gutter>
                 <cov-grid-cell v-for="(item, key) in dashboard.covid_cases.cases" :key="key" :breakpoints="{ sm: 'full', md: '1-of-2', lg: '1-of-3' }">
                   <cov-card>
-                    <div>{{ casesLabels[key].text }}</div>
-                    <div class="typography--heavy-text" :class="casesLabels[key].color">{{ item }}</div>
+                    <div>{{ casesTypes[key].label }}</div>
+                    <div class="typography--heavy-text" :class="casesTypes[key].classes">{{ item }}</div>
                     <client-only>
-                      <cov-bar-chart :chart-data="historyChartData" :options="casesChartOptions" />
+                      <cov-bar-chart :chart-data="casesChartData[key]" :options="casesChartOptions" style="height: 150px;" />
                     </client-only>
                   </cov-card>
                 </cov-grid-cell>
@@ -49,7 +49,7 @@
               <cov-grid-cell v-for="(item, key) in beds" :key="key" :breakpoints="{ sm: 'full', md: '1-of-2', lg: '1-of-3' }">
                 <cov-card class="typography">
                   <template v-slot:header>
-                    <span class="beds__title">{{ bedsTitles[key] }}</span>
+                    <span class="beds__title">{{ bedsTypes[key].label }}</span>
                   </template>
                   <div>
                     <cov-grid justify-between>
@@ -85,8 +85,8 @@
         </cov-grid>
 
         <div>
-          <cov-button icon="table_chart" label="Baixar planilha" @click="download" />
-          <cov-button href="#" icon="code" label="Acesso a API" />
+          <cov-button href="https://placehold.it/100x100" icon="table_chart" label="Baixar planilha" target="_blank" />
+          <cov-button href="https://placehold.it/100x100" icon="code" label="Acesso a API" target="_blank" />
         </div>
       </div>
     </cov-section>
@@ -94,8 +94,9 @@
     <cov-section color="melrose">
       <div class="container">
         <cov-grid gutter justify-between>
-          <cov-grid-cell :breakpoints="{ sm: 'full', md: 'full', lg: '1-of-2' }">
+          <cov-grid-cell :breakpoints="{ sm: 'full' }">
             <h3 class="typography typography--title">Dashboard 1</h3>
+
             <cov-box>
               <client-only>
                 <cov-line-chart :chart-data="historyChartData" />
@@ -104,7 +105,8 @@
           </cov-grid-cell>
 
           <cov-grid-cell :breakpoints="{ sm: 'full', md: 'full', lg: '1-of-2' }">
-            <h3 class="typography typography--title">Dashboard 2</h3>
+            <h3 class="typography typography--title">Casos ativos</h3>
+
             <cov-box>
               <client-only>
                 <cov-line-chart :chart-data="historyChartData" />
@@ -126,7 +128,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import { isEmpty, omitBy } from 'lodash-es'
-import { differenceInMinutes, parseISO } from 'date-fns'
+import { differenceInMinutes, format, parseISO } from 'date-fns'
 
 import CovBadge from '~/components/CovBadge'
 import CovBarChart from '~/components/CovBarChart'
@@ -171,8 +173,123 @@ export default {
       error: 'dashboard/error'
     }),
 
+    beds () {
+      if (this.dashboard.beds) {
+        const { updated_at: updatedAt, ...beds } = this.dashboard.beds
+        return beds
+      }
+
+      return {}
+    },
+
+    bedsTypes () {
+      return {
+        intensive_care_unit: { label: 'UTI' },
+        nursing: { label: 'Enfermagem' },
+        ventilator: { label: 'Respiradores' }
+      }
+    },
+
+    casesChartData () {
+      if (!this.historyCases) {
+        return null
+      }
+
+      const limit = 15
+
+      const datasets = {}
+      const labels = this.historyDates.slice(0, limit)
+      const total = this.historyCases.total.slice(0, limit)
+
+      for (const key of Object.keys(this.historyCases)) {
+        const { label, color } = this.casesTypes[key]
+        const data = this.historyCases[key].slice(0, limit)
+
+        datasets[key] = {
+          labels,
+          datasets: [
+            {
+              label,
+              backgroundColor: color,
+              maxBarThickness: 3,
+              data
+            },
+            {
+              backgroundColor: '#e5e5e5',
+              maxBarThickness: 3,
+              data: total.map((day, index) => day - data[index])
+            }
+          ]
+        }
+      }
+
+      return datasets
+    },
+
+    casesChartOptions () {
+      const scale = [{
+        ticks: { beginAtZero: true, display: false },
+        gridLines: { display: false, drawTicks: false },
+        stacked: true
+      }]
+
+      return {
+        legend: { display: false },
+        scales: { yAxes: scale, xAxes: scale }
+      }
+    },
+
+    casesTypes () {
+      return {
+        total: {
+          label: 'Total',
+          classes: 'text-primary',
+          color: '#a3a1fb'
+        },
+
+        deaths: {
+          label: 'Mortes',
+          classes: 'text-negative',
+          color: '#fA5252'
+        },
+
+        cureds: {
+          label: 'Recuperados',
+          classes: 'text-positive',
+          color: '#34c360'
+        }
+      }
+    },
+
     hasError () {
       return !!this.error
+    },
+
+    historyCases () {
+      const { historical } = this.dashboard
+
+      const cases = {}
+
+      for (const date of this.historyKeys) {
+        const data = historical[date].covid_cases
+
+        for (const key of Object.keys(data)) {
+          cases[key] ? cases[key].push(data[key]) : cases[key] = [data[key]]
+        }
+      }
+
+      return cases
+    },
+
+    historyDates () {
+      return this.historyKeys.map(
+        date => format(new Date(date), 'dd/MM/yyyy')
+      )
+    },
+
+    historyKeys () {
+      const { historical } = this.dashboard
+      return historical ? Object.keys(historical) : []
     },
 
     historyChartData () {
@@ -187,7 +304,8 @@ export default {
             label: 'Primeira linha',
             backgroundColor: '#f87979',
             data: [getRandomInt(), getRandomInt()]
-          }, {
+          },
+          {
             label: 'Segunda linha',
             backgroundColor: '#f87979',
             data: [getRandomInt(), getRandomInt()]
@@ -197,49 +315,11 @@ export default {
     },
 
     hospitalOptions () {
-      return this.dashboard.cities ? this.dashboard.cities.find(item => item.value === this.city).hospitals : []
-    },
+      const { cities } = this.dashboard
 
-    beds () {
-      if (this.dashboard.beds) {
-        const { updated_at: updatedAt, ...beds } = this.dashboard.beds
-
-        return beds
-      }
-
-      return {}
-    },
-
-    bedsTitles () {
-      return {
-        intensive_care_unit: 'UTI',
-        nursing: 'Enfernmagem',
-        ventilator: 'Respiradores'
-      }
-    },
-
-    casesChartOptions () {
-      return {
-        legend: { display: false },
-        scales: {
-          yAxes: [{
-            ticks: { display: false },
-            gridLines: { display: false }
-          }],
-          xAxes: [{
-            ticks: { display: false },
-            gridLines: { display: false }
-          }]
-        }
-      }
-    },
-
-    casesLabels () {
-      return {
-        total: { text: 'Casos totais', color: 'text-primary' },
-        deaths: { text: 'Mortes', color: 'text-negative' },
-        cureds: { text: 'Recuperados', color: 'text-positive' }
-      }
+      return cities
+        ? cities.find(option => option.value === this.city).hospitals
+        : []
     }
   },
 
@@ -310,17 +390,6 @@ export default {
 
       const time = differenceInMinutes(new Date(), parseISO(this.dashboard[model].updated_at))
       return time > 0 ? `Atualizado há ${time} min` : 'Atualizado há menos de 1 min'
-    },
-
-    download () {
-      const url = 'https://media.sproutsocial.com/uploads/2017/02/10x-featured-social-media-image-size.png'
-      const link = document.createElement('a')
-      link.setAttribute('href', url)
-      link.setAttribute('download', '')
-      link.style.visibility = 'hidden'
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
     }
   }
 }
