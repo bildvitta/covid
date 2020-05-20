@@ -2,7 +2,7 @@
   <div class="position position--relative">
     <cov-section>
       <div class="container">
-        <cov-grid gutter>
+        <cov-grid v-if="fetchSuccess" gutter>
           <cov-grid-cell :breakpoints="{ sm: 'full', md: 'full', lg: '1-of-2' }">
             <div ref="cases">
               <form>
@@ -30,7 +30,7 @@
           </cov-grid-cell>
 
           <cov-grid-cell v-if="fetchSuccess" :breakpoints="{ sm: 'full', lg: '1-of-2' }">
-            <cov-heatmap :height="mapHeight" />
+            <cov-heatmap />
           </cov-grid-cell>
         </cov-grid>
 
@@ -126,7 +126,7 @@
       </div>
     </cov-section>
 
-    <cov-loading :showing="showLoading" />
+    <cov-loading :showing="isFetching" />
   </div>
 </template>
 
@@ -175,15 +175,17 @@ export default {
       showLoading: false,
       city: '',
       hospital: '',
-      mapHeight: null,
-      fetchSuccess: false
+      mapHeight: null
+      // fetchSuccess: false
     }
   },
 
   computed: {
     ...mapGetters({
       dashboard: 'dashboard/dashboard',
-      error: 'dashboard/error'
+      error: 'dashboard/error',
+      fetchSuccess: 'dashboard/fetchSuccess',
+      isFetching: 'dashboard/isFetching'
     }),
 
     beds () {
@@ -347,10 +349,6 @@ export default {
     this.setSelect()
   },
 
-  destroyed () {
-    window.removeEventListener('resize', this.setHeight)
-  },
-
   methods: {
     ...mapActions({
       fetchDashboard: 'dashboard/fetch'
@@ -367,19 +365,8 @@ export default {
       this.hospital = ''
     },
 
-    async fetch () {
-      this.showLoading = true
-
-      try {
-        await this.fetchDashboard({ ...this.$route.query, city: this.$route.params.index })
-        this.setMapHeight()
-        this.fetchSuccess = true
-      } catch (error) {
-        this.fetchSuccess = false
-        throw new Error('Error fetching "dashboard" data.', error)
-      } finally {
-        this.showLoading = false
-      }
+    fetch () {
+      return this.fetchDashboard({ ...this.$route.query, city: this.$route.params.index })
     },
 
     filter (isCity) {

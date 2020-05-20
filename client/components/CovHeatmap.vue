@@ -11,10 +11,9 @@
 
 <script>
 export default {
-  props: {
-    height: {
-      type: String,
-      default: '300px'
+  data () {
+    return {
+      height: '300px'
     }
   },
 
@@ -26,6 +25,29 @@ export default {
       ]
 
       return points
+    }
+  },
+
+  mounted () {
+    this.setMapHeight()
+  },
+
+  destroyed () {
+    window.removeEventListener('resize', this.setHeight)
+  },
+
+  methods: {
+    setMapHeight () {
+      this.setHeight()
+
+      window.addEventListener('resize', this.setHeight)
+    },
+
+    setHeight () {
+      const height = window.screen.width
+      const parent = this.$el.parentElement
+
+      this.height = height < 768 ? '300px' : `${parent.offsetHeight - 16}px`
     }
   }
 }
