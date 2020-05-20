@@ -33,11 +33,12 @@ export default {
 
 <style lang="scss">
 .badge {
+  align-items: center;
   background-color: $primary-color;
   border-radius: $radius;
   color: $white;
-  display: inline;
-  font-size: $font-size-small;
+  display: flex;
+  font-size: $font-size-medium;
   font-weight: bold;
   padding: 3px 6px;
 
