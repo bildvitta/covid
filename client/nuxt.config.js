@@ -16,6 +16,14 @@ export default {
     ]
   },
 
+  router: {
+    middleware: ['redirect']
+  },
+
+  env: {
+    baseUrl: process.env.BASE_URL || 'http://localhost:3000'
+  },
+
   loading: { color: '#fff' },
 
   css: [
