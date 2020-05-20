@@ -3,32 +3,34 @@
     <cov-section>
       <div class="container">
         <cov-grid gutter>
-          <cov-grid-cell ref="cases" :breakpoints="{ sm: 'full', md: 'full', lg: '1-of-2' }">
-            <form>
-              <h3 class="typography typography--title m-b-md" download>Cidade</h3>
-              <cov-select v-model="city" :options="dashboard.cities" @input="filterCity" />
-            </form>
+          <cov-grid-cell :breakpoints="{ sm: 'full', md: 'full', lg: '1-of-2' }">
+            <div ref="cases">
+              <form>
+                <h3 class="typography typography--title m-b-md" download>Cidade</h3>
+                <cov-select v-model="city" :options="dashboard.cities" @input="filterCity" />
+              </form>
 
-            <div class="m-t-lg">
-              <h3 class="typography typography--title">Casos</h3>
-              <div class="typography typography--subtitle m-b-md">{{ updatedDistance('covid_cases') }}</div>
+              <div class="m-t-lg">
+                <h3 class="typography typography--title">Casos</h3>
+                <div class="typography typography--subtitle m-b-md">{{ updatedDistance('covid_cases') }}</div>
 
-              <cov-grid v-if="dashboard.covid_cases" gutter>
-                <cov-grid-cell v-for="(item, key) in dashboard.covid_cases.cases" :key="key" :breakpoints="{ sm: 'full', md: '1-of-2', lg: '1-of-3' }">
-                  <cov-card>
-                    <div>{{ casesTypes[key].label }}</div>
-                    <div class="typography--heavy-text" :class="casesTypes[key].classes">{{ item }}</div>
-                    <client-only>
-                      <cov-bar-chart :chart-data="casesChartData[key]" :options="casesChartOptions" style="height: 150px;" />
-                    </client-only>
-                  </cov-card>
-                </cov-grid-cell>
-              </cov-grid>
+                <cov-grid v-if="dashboard.covid_cases" gutter>
+                  <cov-grid-cell v-for="(item, key) in dashboard.covid_cases.cases" :key="key" :breakpoints="{ sm: 'full', md: '1-of-2', lg: '1-of-3' }">
+                    <cov-card>
+                      <div>{{ casesTypes[key].label }}</div>
+                      <div class="typography--heavy-text" :class="casesTypes[key].classes">{{ item }}</div>
+                      <client-only>
+                        <cov-bar-chart :chart-data="casesChartData[key]" :options="casesChartOptions" style="height: 150px;" />
+                      </client-only>
+                    </cov-card>
+                  </cov-grid-cell>
+                </cov-grid>
+              </div>
             </div>
           </cov-grid-cell>
 
           <cov-grid-cell v-if="fetchSuccess" :breakpoints="{ sm: 'full', lg: '1-of-2' }">
-            <cov-heatmap :height="casesHeight" />
+            <cov-heatmap :height="mapHeight" />
           </cov-grid-cell>
         </cov-grid>
 
@@ -124,8 +126,6 @@
       </div>
     </cov-section>
 
-    <pre>{{ dashboard }}</pre>
-
     <cov-loading :showing="showLoading" />
   </div>
 </template>
@@ -175,7 +175,7 @@ export default {
       showLoading: false,
       city: '',
       hospital: '',
-      casesHeight: null,
+      mapHeight: null,
       fetchSuccess: false
     }
   },
@@ -347,6 +347,10 @@ export default {
     this.setSelect()
   },
 
+  destroyed () {
+    window.removeEventListener('resize', this.setHeight)
+  },
+
   methods: {
     ...mapActions({
       fetchDashboard: 'dashboard/fetch'
@@ -368,7 +372,7 @@ export default {
 
       try {
         await this.fetchDashboard({ ...this.$route.query, city: this.$route.params.index })
-        this.casesHeight = `${this.$refs.cases.$el.clientHeight - 16}px`
+        this.setMapHeight()
         this.fetchSuccess = true
       } catch (error) {
         throw new Error('Error fetching "dashboard" data.', error)
@@ -422,6 +426,18 @@ export default {
       }
 
       return ''
+    },
+
+    setMapHeight (defaultHeight = 300) {
+      this.setHeight()
+
+      window.addEventListener('resize', this.setHeight)
+    },
+
+    setHeight (defaultHeight) {
+      const height = window.screen.width
+
+      this.mapHeight = height < 768 ? `${defaultHeight}px` : `${this.$refs.cases.clientHeight}px`
     }
   }
 }
