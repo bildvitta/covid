@@ -19,6 +19,11 @@ a {
   color: inherit;
 }
 
+abbr {
+  cursor: help;
+  text-decoration: none;
+}
+
 // Vue Transitions
 .fade-leave-to,
 .fade-enter {

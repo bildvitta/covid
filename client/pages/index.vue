@@ -11,7 +11,8 @@
 
             <div class="m-t-lg">
               <h3 class="typography typography--title">Casos</h3>
-              <div class="typography typography--subtitle m-b-md">{{ updatedAt('covid_cases') }}</div>
+              <div class="typography typography--subtitle m-b-md">{{ updatedDistance('covid_cases') }}</div>
+
               <cov-grid v-if="dashboard.covid_cases" gutter>
                 <cov-grid-cell v-for="(item, key) in dashboard.covid_cases.cases" :key="key" :breakpoints="{ sm: 'full', md: '1-of-2', lg: '1-of-3' }">
                   <cov-card>
@@ -26,25 +27,28 @@
             </div>
           </cov-grid-cell>
 
-          <cov-grid-cell :breakpoints="{ sm: 'full', md: 'full', lg: '1-of-2' }">
+          <cov-grid-cell :breakpoints="{ sm: 'full', lg: '1-of-2' }">
             <cov-heatmap />
           </cov-grid-cell>
         </cov-grid>
 
         <cov-grid align-bottom justify-between>
-          <cov-grid-cell :breakpoints="{ sm: 'full', md: 'full', lg: '4-of-12' }" class="m-t-lg">
+          <cov-grid-cell :breakpoints="{ sm: 'full', lg: '4-of-12' }" class="m-t-lg">
             <h3 class="typography typography--title">Leitos</h3>
-            <div class="typography typography--subtitle m-b-md">{{ updatedAt('beds') }}</div>
+
+            <div class="typography typography--subtitle m-b-md">
+              <abbr :title="updatedDate('beds')">{{ updatedDistance('beds') }}</abbr>
+            </div>
           </cov-grid-cell>
 
-          <cov-grid-cell :breakpoints="{ sm: 'full', md: 'full', lg: 'fill' }" class="m-t-lg m-b-lg">
+          <cov-grid-cell :breakpoints="{ sm: 'full', lg: 'fill' }" class="m-t-lg m-b-lg">
             <form>
               <cov-grid align-middle align-right>
-                <cov-grid-cell :breakpoints="{ col: 'fit', sm: 'asd', md: 'as', lg: 'fit' }">
+                <cov-grid-cell :breakpoints="{ col: 'fit' }">
                   <h3 class="typography typography--title m-r-md">Hospitais</h3>
                 </cov-grid-cell>
 
-                <cov-grid-cell :breakpoints="{ col: 'fit', sm: 'asd', md: 'as', lg: '9-of-12' }">
+                <cov-grid-cell :breakpoints="{ sm: 'fit', lg: '9-of-12' }">
                   <cov-select v-model="hospital" :options="hospitalOptions" @input="filter" />
                 </cov-grid-cell>
               </cov-grid>
@@ -88,7 +92,6 @@
                           <span>Ocupados</span>
                           <span class="typography--weight-bold typography--primary-color">{{ item.normal.busy }}</span>
                         </div>
-                        </cov-grid->
                       </cov-grid-cell>
                     </cov-grid>
                   </div>
@@ -108,18 +111,8 @@
     <cov-section color="melrose">
       <div class="container">
         <cov-grid gutter justify-between>
-          <cov-grid-cell :breakpoints="{ sm: 'full' }">
-            <h3 class="typography typography--title">Dashboard 1</h3>
-
-            <cov-box>
-              <client-only>
-                <cov-line-chart :chart-data="historyChartData" />
-              </client-only>
-            </cov-box>
-          </cov-grid-cell>
-
-          <cov-grid-cell :breakpoints="{ sm: 'full', md: 'full', lg: '1-of-2' }">
-            <h3 class="typography typography--title">Casos ativos</h3>
+          <cov-grid-cell :breakpoints="{ col: 'full' }">
+            <h3 class="typography typography--title">Histórico</h3>
 
             <cov-box>
               <client-only>
@@ -131,6 +124,8 @@
       </div>
     </cov-section>
 
+    <pre>{{ dashboard }}</pre>
+
     <cov-loading :showing="showLoading" />
   </div>
 </template>
@@ -138,7 +133,9 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import { isEmpty, omitBy } from 'lodash-es'
-import { differenceInMinutes, format, parseISO } from 'date-fns'
+
+import { format, formatDistanceToNow } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
 
 import CovBadge from '~/components/CovBadge'
 import CovBarChart from '~/components/CovBarChart'
@@ -349,7 +346,16 @@ export default {
       fetchDashboard: 'dashboard/fetch'
     }),
 
-    differenceInMinutes,
+    badgesPercent ({ busy, free }) {
+      const total = busy + free
+      const percent = ((100 * busy) / total).toFixed('2')
+
+      return `${percent}%`
+    },
+
+    clearHospital () {
+      this.hospital = ''
+    },
 
     async fetch () {
       this.showLoading = true
@@ -363,14 +369,18 @@ export default {
       }
     },
 
+    filter () {
+      const query = omitBy({ ...this.$route.query, city: this.city, hospital: this.hospital }, isEmpty)
+      this.$router.push({ query })
+    },
+
     filterCity () {
       this.clearHospital()
       this.filter()
     },
 
-    filter () {
-      const query = omitBy({ ...this.$route.query, city: this.city, hospital: this.hospital }, isEmpty)
-      this.$router.push({ query })
+    formatDateTime (value, token = 'dd/MM/yyyy HH:mm:ss', options) {
+      return format(value, token, { locale: ptBR, ...options })
     },
 
     setSelect () {
@@ -378,28 +388,28 @@ export default {
       this.hospital = this.$route.query.hospital || ''
     },
 
-    clearHospital () {
-      this.hospital = ''
-    },
-
     totalBeds ({ busy, free }) {
       return busy + free
     },
 
-    badgesPercent ({ busy, free }) {
-      const total = busy + free
-      const percent = ((100 * busy) / total).toFixed('2')
-
-      return `${percent}%`
+    updatedDate (model) {
+      model = this.dashboard[model]
+      return model ? this.formatDateTime(new Date(model.updated_at)) : ''
     },
 
-    updatedAt (model) {
-      if (!this.dashboard[model]) {
-        return ''
+    updatedDistance (model) {
+      model = this.dashboard[model]
+
+      if (model) {
+        const distance = formatDistanceToNow(
+          new Date(model.updated_at),
+          { locale: ptBR }
+        )
+
+        return `Atualizado há ${distance}`
       }
 
-      const time = differenceInMinutes(new Date(), parseISO(this.dashboard[model].updated_at))
-      return time > 0 ? `Atualizado há ${time} min` : 'Atualizado há menos de 1 min'
+      return ''
     }
   }
 }
