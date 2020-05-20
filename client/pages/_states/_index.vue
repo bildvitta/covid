@@ -116,9 +116,9 @@
           <cov-grid-cell :breakpoints="{ col: 'full' }">
             <h3 class="typography typography--title">Histórico</h3>
 
-            <cov-box>
+            <cov-box class="m-t-md">
               <client-only>
-                <cov-line-chart :chart-data="historyChartData" />
+                <cov-line-chart :chart-data="historyChartData" :options="historyChartOptions" />
               </client-only>
             </cov-box>
           </cov-grid-cell>
@@ -126,6 +126,7 @@
       </div>
     </cov-section>
 
+    <!-- <pre>{{ historyBeds }}</pre> -->
     <cov-loading :showing="showLoading" />
   </div>
 </template>
@@ -255,13 +256,13 @@ export default {
     casesTypes () {
       return {
         total: {
-          label: 'Total',
+          label: 'Confirmados',
           classes: 'text-primary',
           color: '#a3a1fb'
         },
 
         deaths: {
-          label: 'Mortes',
+          label: 'Óbitos',
           classes: 'text-negative',
           color: '#fA5252'
         },
@@ -278,20 +279,76 @@ export default {
       return !!this.error
     },
 
+    historyBeds () {
+      const { historical } = this.dashboard
+
+      const types = {
+        intensive_care_unit: {},
+        nursing: {}
+      }
+
+      for (const date of this.historyKeys) {
+        // const hospitals = historical[date].beds
+        // const self = {}
+        // for (const type in types) {
+        //   self[type] = {}
+        // }
+        // for (const hospital of hospitals) {
+        // }
+        types[date] = historical[date].beds
+      }
+
+      return types
+    },
+
     historyCases () {
       const { historical } = this.dashboard
 
-      const cases = {}
+      const types = {}
 
       for (const date of this.historyKeys) {
         const data = historical[date].covid_cases
 
         for (const key of Object.keys(data)) {
-          cases[key] ? cases[key].push(data[key]) : cases[key] = [data[key]]
+          types[key] ? types[key].push(data[key]) : types[key] = [data[key]]
         }
       }
 
-      return cases
+      return types
+    },
+
+    historyChartData () {
+      return {
+        labels: this.historyDates,
+
+        datasets: [
+          {
+            label: 'Casos confirmados (na cidade)',
+            fill: false,
+            borderColor: '#e7e7fe',
+            data: this.historyCases.total
+          },
+          {
+            label: 'Óbitos (na cidade)',
+            fill: false,
+            borderColor: '#fdd3d3',
+            data: this.historyCases.deaths
+          },
+          {
+            label: 'Recuperados (na cidade)',
+            fill: false,
+            borderColor: '#cbf1d6',
+            data: this.historyCases.cureds
+          }
+        ]
+      }
+    },
+
+    historyChartOptions () {
+      return {
+        legend: { position: 'bottom' },
+        tooltips: { mode: 'index', intersect: false }
+      }
     },
 
     historyDates () {
@@ -303,28 +360,6 @@ export default {
     historyKeys () {
       const { historical } = this.dashboard
       return historical ? Object.keys(historical) : []
-    },
-
-    historyChartData () {
-      function getRandomInt () {
-        return Math.floor(Math.random() * (50 - 5 + 1)) + 5
-      }
-
-      return {
-        labels: [getRandomInt(), getRandomInt()],
-        datasets: [
-          {
-            label: 'Primeira linha',
-            backgroundColor: '#f87979',
-            data: [getRandomInt(), getRandomInt()]
-          },
-          {
-            label: 'Segunda linha',
-            backgroundColor: '#f87979',
-            data: [getRandomInt(), getRandomInt()]
-          }
-        ]
-      }
     },
 
     hospitalOptions () {
