@@ -97,17 +97,6 @@ class PagesController < ApplicationController
     }
   end
 
-  def load_beds
-    @hospital = nil
-    @city = params[:city].present? ? params[:city] : 'ribeirao-preto'
-    @city = City.cached_for(@city)
-
-    return @beds = @city.beds if params[:hospital].blank?
-
-    @hospital = @city.hospitals.find { |hospital| hospital.slug == params[:hospital] }
-    @beds = @hospital.beds
-  end
-
   def historical_data
     cached_data :historical_data do
       (30.days.ago.to_date..Date.today).map do |date|
@@ -136,9 +125,20 @@ class PagesController < ApplicationController
           end
         }
 
-        [date, data]
+        [date.to_time.iso8601, data]
       end.to_h
     end
+  end
+
+  def load_beds
+    @hospital = nil
+    @city = params[:city].present? ? params[:city] : 'ribeirao-preto'
+    @city = City.cached_for(@city)
+
+    return @beds = @city.beds if params[:hospital].blank?
+
+    @hospital = @city.hospitals.find { |hospital| hospital.slug == params[:hospital] }
+    @beds = @hospital.beds
   end
 
   def cached_data name, &block

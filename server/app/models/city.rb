@@ -23,7 +23,7 @@ class City < ApplicationRecord
   end
 
   def self.cached_for(slug)
-    Rails.cache.fetch([name, "cached_city_#{slug}"]) do
+    Rails.cache.fetch([name, "cached_city_#{slug}"], expires_in: rand(10..17).minutes) do
       City.includes(:state, :covid_cases, :hospitals).is_active.find_by_slug(slug)
     end
   end
