@@ -17,6 +17,9 @@ if Hospital.none?
     )
   end
 
+
+  DataBridge::Unimed.new.get_data.save!
+
   cities.each do |city|
     rand(2..7).times do
       hospital = Hospital.create!(
@@ -55,6 +58,7 @@ if Hospital.none?
       end
     end
   end
+
 end
 
 if CovidCase.none?
