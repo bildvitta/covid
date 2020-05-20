@@ -30,14 +30,12 @@ export default {
   .card {
     &__header {
       align-items: center;
-      border-bottom: 1px solid $tertiary-color;
       display: flex;
       font-size: 14px;
       justify-content: space-between;
-      padding-bottom: 15px;
 
       & + * {
-        margin-top: 15px;
+        margin-top: $space-sm;
       }
     }
   }

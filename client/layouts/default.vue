@@ -35,7 +35,6 @@
   background-color: $white;
   box-shadow: $shadow;
   padding: 20px 0;
-  z-index: 999999;
 
   .container {
     align-items: center;
