@@ -24,7 +24,7 @@ class City < ApplicationRecord
 
   def self.cached_for(slug)
     Rails.cache.fetch([name, "cached_city_#{slug}"]) do
-      City.includes(:state, :covid_cases, hospitals: { bed_states: :details }).is_active.find_by_slug(slug)
+      City.includes(:state, :covid_cases, :hospitals).is_active.find_by_slug(slug)
     end
   end
 
