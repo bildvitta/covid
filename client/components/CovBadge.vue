@@ -14,17 +14,22 @@ export default {
 
     outlined: {
       type: Boolean
+    },
+
+    percent: {
+      type: [String, Number],
+      default: ''
     }
   },
 
   computed: {
     classes () {
-      const value = parseFloat(this.$slots.default[0].text)
+      const percent = parseFloat(this.percent)
 
       return {
-        'badge--negative': value >= 90,
-        'badge--warning': value >= 60 && value < 90,
-        'badge--positive': value < 50
+        'badge--negative': percent >= 90,
+        'badge--warning': percent >= 60 && percent < 90,
+        'badge--positive': percent < 60
       }
     }
   }

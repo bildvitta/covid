@@ -72,6 +72,11 @@ export default {
 
     &__display {
       align-items: center;
+      appearance: none;
+      background-image: url('~assets/images/field-arrow.svg');
+      background-position: right 15px center;
+      background-repeat: no-repeat;
+      background-size: 15px;
       border-radius: $radius;
       border-width: 0;
       color: $text-color;

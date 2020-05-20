@@ -3,32 +3,34 @@
     <cov-section>
       <div class="container">
         <cov-grid gutter>
-          <cov-grid-cell ref="cases" :breakpoints="{ sm: 'full', md: 'full', lg: '1-of-2' }">
-            <form>
-              <h3 class="typography typography--title m-b-md" download>Cidade</h3>
-              <cov-select v-model="city" :options="dashboard.cities" @input="filterCity" />
-            </form>
+          <cov-grid-cell :breakpoints="{ sm: 'full', md: 'full', lg: '1-of-2' }">
+            <div ref="cases">
+              <form>
+                <h3 class="typography typography--title m-b-md" download>Cidade</h3>
+                <cov-select v-model="city" :options="dashboard.cities" @input="filterCity" />
+              </form>
 
-            <div class="m-t-lg">
-              <h3 class="typography typography--title">Casos</h3>
-              <div class="typography typography--subtitle m-b-md">{{ updatedDistance('covid_cases') }}</div>
+              <div class="m-t-lg">
+                <h3 class="typography typography--title">Casos</h3>
+                <div class="typography typography--subtitle m-b-md">{{ updatedDistance('covid_cases') }}</div>
 
-              <cov-grid v-if="dashboard.covid_cases" gutter>
-                <cov-grid-cell v-for="(item, key) in dashboard.covid_cases.cases" :key="key" :breakpoints="{ sm: 'full', md: '1-of-2', lg: '1-of-3' }">
-                  <cov-card>
-                    <div>{{ casesTypes[key].label }}</div>
-                    <div class="typography--heavy-text" :class="casesTypes[key].classes">{{ item }}</div>
-                    <client-only>
-                      <cov-bar-chart :chart-data="casesChartData[key]" :options="casesChartOptions" style="height: 150px;" />
-                    </client-only>
-                  </cov-card>
-                </cov-grid-cell>
-              </cov-grid>
+                <cov-grid v-if="dashboard.covid_cases" gutter>
+                  <cov-grid-cell v-for="(item, key) in dashboard.covid_cases.cases" :key="key" :breakpoints="{ sm: 'full', md: '1-of-2', lg: '1-of-3' }">
+                    <cov-card>
+                      <div>{{ casesTypes[key].label }}</div>
+                      <div class="typography--heavy-text" :class="casesTypes[key].classes">{{ item }}</div>
+                      <client-only>
+                        <cov-bar-chart :chart-data="casesChartData[key]" :options="casesChartOptions" style="height: 150px;" />
+                      </client-only>
+                    </cov-card>
+                  </cov-grid-cell>
+                </cov-grid>
+              </div>
             </div>
           </cov-grid-cell>
 
-          <cov-grid-cell v-if="fetchFinished" :breakpoints="{ sm: 'full', lg: '1-of-2' }">
-            <cov-heatmap :height="casesHeight" />
+          <cov-grid-cell v-if="fetchSuccess" :breakpoints="{ sm: 'full', lg: '1-of-2' }">
+            <cov-heatmap :height="mapHeight" />
           </cov-grid-cell>
         </cov-grid>
 
@@ -63,14 +65,14 @@
                     <span class="beds__title">{{ bedsTypes[key].label }}</span>
                   </template>
                   <div>
-                    <cov-grid justify-between>
+                    <cov-grid align-bottom justify-between>
                       <cov-grid-cell :breakpoints="{ col: '1-of-2'}" class="beds__content p-r-md">
                         <div class="beds__box">
                           <div class="typography--caption">
                             COVID-19
                             <div>Ocupação</div>
                           </div>
-                          <cov-badge>{{ badgesPercent(item.covid) }}</cov-badge>
+                          <cov-badge :percent="badgesPercent(item.covid)">{{ badgesPercent(item.covid) }}</cov-badge>
                         </div>
                         <div class="beds__box m-t-md">
                           <span>Total</span>
@@ -114,17 +116,15 @@
           <cov-grid-cell :breakpoints="{ col: 'full' }">
             <h3 class="typography typography--title">Histórico</h3>
 
-            <cov-box class="m-t-md">
+            <cov-box>
               <client-only>
-                <cov-line-chart :chart-data="historyChartData" :options="historyChartOptions" />
+                <cov-line-chart :chart-data="historyChartData" />
               </client-only>
             </cov-box>
           </cov-grid-cell>
         </cov-grid>
       </div>
     </cov-section>
-
-    <!-- <pre>{{ historyBeds }}</pre> -->
 
     <cov-loading :showing="showLoading" />
   </div>
@@ -166,13 +166,17 @@ export default {
     CovSelect
   },
 
+  validate ({ params }) {
+    return params.states === 'sp'
+  },
+
   data () {
     return {
       showLoading: false,
       city: '',
       hospital: '',
-      casesHeight: null,
-      fetchFinished: false
+      mapHeight: null,
+      fetchSuccess: false
     }
   },
 
@@ -194,7 +198,7 @@ export default {
     bedsTypes () {
       return {
         intensive_care_unit: { label: 'UTI' },
-        nursing: { label: 'Enfermagem' },
+        nursing: { label: 'Enfermaria' },
         ventilator: { label: 'Respiradores' }
       }
     },
@@ -251,13 +255,13 @@ export default {
     casesTypes () {
       return {
         total: {
-          label: 'Confirmados',
+          label: 'Total',
           classes: 'text-primary',
           color: '#a3a1fb'
         },
 
         deaths: {
-          label: 'Óbitos',
+          label: 'Mortes',
           classes: 'text-negative',
           color: '#fA5252'
         },
@@ -274,45 +278,20 @@ export default {
       return !!this.error
     },
 
-    historyBeds () {
-      const { historical } = this.dashboard
-
-      const types = {
-        intensive_care_unit: {},
-        nursing: {}
-      }
-
-      for (const date of this.historyKeys) {
-        // const hospitals = historical[date].beds
-        // const self = {}
-
-        // for (const type in types) {
-        //   self[type] = {}
-        // }
-
-        // for (const hospital of hospitals) {
-
-        // }
-
-        types[date] = historical[date].beds
-      }
-
-      return types
-    },
-
     historyCases () {
       const { historical } = this.dashboard
-      const types = {}
+
+      const cases = {}
 
       for (const date of this.historyKeys) {
         const data = historical[date].covid_cases
 
-        for (const key in data) {
-          types[key] ? types[key].push(data[key]) : types[key] = [data[key]]
+        for (const key of Object.keys(data)) {
+          cases[key] ? cases[key].push(data[key]) : cases[key] = [data[key]]
         }
       }
 
-      return types
+      return cases
     },
 
     historyDates () {
@@ -327,36 +306,24 @@ export default {
     },
 
     historyChartData () {
-      return {
-        labels: this.historyDates,
+      function getRandomInt () {
+        return Math.floor(Math.random() * (50 - 5 + 1)) + 5
+      }
 
+      return {
+        labels: [getRandomInt(), getRandomInt()],
         datasets: [
           {
-            label: 'Casos confirmados (na cidade)',
-            fill: false,
-            borderColor: '#e7e7fe',
-            data: this.historyCases.total
+            label: 'Primeira linha',
+            backgroundColor: '#f87979',
+            data: [getRandomInt(), getRandomInt()]
           },
           {
-            label: 'Óbitos (na cidade)',
-            fill: false,
-            borderColor: '#fdd3d3',
-            data: this.historyCases.deaths
-          },
-          {
-            label: 'Recuperados (na cidade)',
-            fill: false,
-            borderColor: '#cbf1d6',
-            data: this.historyCases.cureds
+            label: 'Segunda linha',
+            backgroundColor: '#f87979',
+            data: [getRandomInt(), getRandomInt()]
           }
         ]
-      }
-    },
-
-    historyChartOptions () {
-      return {
-        legend: { position: 'bottom' },
-        tooltips: { mode: 'index', intersect: false }
       }
     },
 
@@ -380,6 +347,10 @@ export default {
     this.setSelect()
   },
 
+  destroyed () {
+    window.removeEventListener('resize', this.setHeight)
+  },
+
   methods: {
     ...mapActions({
       fetchDashboard: 'dashboard/fetch'
@@ -387,7 +358,7 @@ export default {
 
     badgesPercent ({ busy, free }) {
       const total = busy + free
-      const percent = ((100 * busy) / total).toFixed('2')
+      const percent = (((100 * busy) / total) || 0).toFixed('2')
 
       return `${percent}%`
     },
@@ -400,9 +371,9 @@ export default {
       this.showLoading = true
 
       try {
-        await this.fetchDashboard(this.$route.query)
-        this.casesHeight = `${this.$refs.cases.$el.clientHeight - 16}px`
-        this.fetchFinished = true
+        await this.fetchDashboard({ ...this.$route.query, city: this.$route.params.index })
+        this.setMapHeight()
+        this.fetchSuccess = true
       } catch (error) {
         throw new Error('Error fetching "dashboard" data.', error)
       } finally {
@@ -410,14 +381,18 @@ export default {
       }
     },
 
-    filter () {
-      const query = omitBy({ ...this.$route.query, city: this.city, hospital: this.hospital }, isEmpty)
+    filter (isCity) {
+      if (isCity && typeof isCity === 'boolean') {
+        return this.$router.push({ params: { index: this.city } })
+      }
+
+      const query = omitBy({ ...this.$route.query, hospital: this.hospital }, isEmpty)
       this.$router.push({ query })
     },
 
     filterCity () {
       this.clearHospital()
-      this.filter()
+      this.filter(true)
     },
 
     formatDateTime (value, token = 'dd/MM/yyyy HH:mm:ss', options) {
@@ -425,7 +400,7 @@ export default {
     },
 
     setSelect () {
-      this.city = this.$route.query.city || 'ribeirao-preto'
+      this.city = this.$route.params.index || 'ribeirao-preto'
       this.hospital = this.$route.query.hospital || ''
     },
 
@@ -451,6 +426,18 @@ export default {
       }
 
       return ''
+    },
+
+    setMapHeight (defaultHeight = 300) {
+      this.setHeight()
+
+      window.addEventListener('resize', this.setHeight)
+    },
+
+    setHeight (defaultHeight) {
+      const height = window.screen.width
+
+      this.mapHeight = height < 768 ? `${defaultHeight}px` : `${this.$refs.cases.clientHeight}px`
     }
   }
 }

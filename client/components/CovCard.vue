@@ -33,10 +33,9 @@ export default {
       display: flex;
       font-size: 14px;
       justify-content: space-between;
-      padding-bottom: 15px;
 
       & + * {
-        margin-top: 15px;
+        margin-top: $space-sm;
       }
     }
   }
