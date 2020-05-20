@@ -198,7 +198,7 @@ export default {
     bedsTypes () {
       return {
         intensive_care_unit: { label: 'UTI' },
-        nursing: { label: 'Enfermagem' },
+        nursing: { label: 'Enfermaria' },
         ventilator: { label: 'Respiradores' }
       }
     },
