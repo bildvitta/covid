@@ -27,7 +27,7 @@
             </div>
           </cov-grid-cell>
 
-          <cov-grid-cell v-if="fetchFinished" :breakpoints="{ sm: 'full', lg: '1-of-2' }">
+          <cov-grid-cell v-if="fetchSuccess" :breakpoints="{ sm: 'full', lg: '1-of-2' }">
             <cov-heatmap :height="casesHeight" />
           </cov-grid-cell>
         </cov-grid>
@@ -166,13 +166,17 @@ export default {
     CovSelect
   },
 
+  validate ({ params }) {
+    return params.states === 'sp'
+  },
+
   data () {
     return {
       showLoading: false,
       city: '',
       hospital: '',
       casesHeight: null,
-      fetchFinished: false
+      fetchSuccess: false
     }
   },
 
@@ -363,9 +367,9 @@ export default {
       this.showLoading = true
 
       try {
-        await this.fetchDashboard(this.$route.query)
+        await this.fetchDashboard({ ...this.$route.query, city: this.$route.params.index })
         this.casesHeight = `${this.$refs.cases.$el.clientHeight - 16}px`
-        this.fetchFinished = true
+        this.fetchSuccess = true
       } catch (error) {
         throw new Error('Error fetching "dashboard" data.', error)
       } finally {
@@ -373,14 +377,18 @@ export default {
       }
     },
 
-    filter () {
-      const query = omitBy({ ...this.$route.query, city: this.city, hospital: this.hospital }, isEmpty)
+    filter (isCity) {
+      if (isCity && typeof isCity === 'boolean') {
+        return this.$router.push({ params: { index: this.city } })
+      }
+
+      const query = omitBy({ ...this.$route.query, hospital: this.hospital }, isEmpty)
       this.$router.push({ query })
     },
 
     filterCity () {
       this.clearHospital()
-      this.filter()
+      this.filter(true)
     },
 
     formatDateTime (value, token = 'dd/MM/yyyy HH:mm:ss', options) {
@@ -388,7 +396,7 @@ export default {
     },
 
     setSelect () {
-      this.city = this.$route.query.city || 'ribeirao-preto'
+      this.city = this.$route.params.index || 'ribeirao-preto'
       this.hospital = this.$route.query.hospital || ''
     },
 
