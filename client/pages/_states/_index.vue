@@ -72,7 +72,7 @@
                             COVID-19
                             <div>Ocupação</div>
                           </div>
-                          <cov-badge>{{ badgesPercent(item.covid) }}</cov-badge>
+                          <cov-badge :percent="badgesPercent(item.covid)">{{ badgesPercent(item.covid) }}</cov-badge>
                         </div>
                         <div class="beds__box m-t-md">
                           <span>Total</span>
@@ -358,7 +358,7 @@ export default {
 
     badgesPercent ({ busy, free }) {
       const total = busy + free
-      const percent = ((100 * busy) / total).toFixed('2')
+      const percent = (((100 * busy) / total) || 0).toFixed('2')
 
       return `${percent}%`
     },
