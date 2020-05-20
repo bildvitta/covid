@@ -39,7 +39,7 @@ if Hospital.none?
 
       30.times do |i|
         bed_state = BedState.create!(
-          date: (30 - i).days.ago, hospital_id: hospital.id
+          date: (30 - i).days.ago, hospital: hospital
         )
 
         [true, false].each do |using_ventilator|

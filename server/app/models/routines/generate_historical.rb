@@ -13,7 +13,7 @@ class Routines::GenerateHistorical
 
   def create_bed_state! hospital
     bed_count = hospital.beds.group(:using_ventilator, :status, :bed_type).count
-    bed_state = BedState.find_or_create_by(date: date.to_s, hospital_id: hospital.id)
+    bed_state = BedState.find_or_create_by(date: date, hospital: hospital)
 
     bed_state.details.destroy_all
 
