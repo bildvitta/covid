@@ -5,13 +5,13 @@
         <cov-grid gutter>
           <cov-grid-cell :breakpoints="{ sm: 'full', md: 'full', lg: '1-of-2' }">
             <form>
-              <h3 class="typography typography--title" download>Cidade</h3>
+              <h3 class="typography typography--title m-b-md" download>Cidade</h3>
               <cov-select v-model="city" :options="dashboard.cities" @input="filterCity" />
             </form>
 
-            <div>
+            <div class="m-t-lg">
               <h3 class="typography typography--title">Casos</h3>
-              <div class="typography typography--subtitle">{{ updatedAt('covid_cases') }}</div>
+              <div class="typography typography--subtitle m-b-md">{{ updatedAt('covid_cases') }}</div>
               <cov-grid v-if="dashboard.covid_cases" gutter>
                 <cov-grid-cell v-for="(item, key) in dashboard.covid_cases.cases" :key="key" :breakpoints="{ sm: 'full', md: '1-of-2', lg: '1-of-3' }">
                   <cov-card>
@@ -32,15 +32,22 @@
         </cov-grid>
 
         <cov-grid align-bottom justify-between>
-          <cov-grid-cell :breakpoints="{ sm: 'full', md: 'full', lg: '4-of-12' }">
+          <cov-grid-cell :breakpoints="{ sm: 'full', md: 'full', lg: '4-of-12' }" class="m-t-lg">
             <h3 class="typography typography--title">Leitos</h3>
-            <div class="typography typography--subtitle">{{ updatedAt('beds') }}</div>
+            <div class="typography typography--subtitle m-b-md">{{ updatedAt('beds') }}</div>
           </cov-grid-cell>
 
-          <cov-grid-cell :breakpoints="{ sm: 'full', md: 'full', lg: '7-of-12' }">
+          <cov-grid-cell :breakpoints="{ sm: 'full', md: 'full', lg: 'fill' }" class="m-t-lg m-b-lg">
             <form>
-              <h3 class="typography typography--title">Hospitais</h3>
-              <cov-select v-model="hospital" :options="hospitalOptions" @input="filter" />
+              <cov-grid align-middle align-right>
+                <cov-grid-cell :breakpoints="{ col: 'fit', sm: 'asd', md: 'as', lg: 'fit' }">
+                  <h3 class="typography typography--title m-r-md">Hospitais</h3>
+                </cov-grid-cell>
+
+                <cov-grid-cell :breakpoints="{ col: 'fit', sm: 'asd', md: 'as', lg: '9-of-12' }">
+                  <cov-select v-model="hospital" :options="hospitalOptions" @input="filter" />
+                </cov-grid-cell>
+              </cov-grid>
             </form>
           </cov-grid-cell>
 
@@ -53,29 +60,36 @@
                   </template>
                   <div>
                     <cov-grid justify-between>
-                      <div class="beds__box">
-                        <div class="typography--caption">Covid-19</div>
-                        <cov-badge>{{ badgesPercent(item.covid) }}</cov-badge>
-                      </div>
-                      <div class="beds__box">
-                        <span>Total</span>
-                        <span class="typography--weight-bold typography--primary-color">{{ totalBeds(item.covid) }}</span>
-                      </div>
-                      <div class="beds__box">
-                        <span>Ocupados</span>
-                        <span class="typography--weight-bold typography--primary-color">{{ item.covid.busy }}</span>
-                      </div>
+                      <cov-grid-cell :breakpoints="{ col: '1-of-2'}" class="beds__content p-r-md">
+                        <div class="beds__box">
+                          <div class="typography--caption">
+                            COVID-19
+                            <div>Ocupação</div>
+                          </div>
+                          <cov-badge>{{ badgesPercent(item.covid) }}</cov-badge>
+                        </div>
+                        <div class="beds__box m-t-md">
+                          <span>Total</span>
+                          <span class="typography--weight-bold typography--primary-color">{{ totalBeds(item.covid) }}</span>
+                        </div>
+                        <div class="beds__box">
+                          <span>Ocupados</span>
+                          <span class="typography--weight-bold typography--primary-color">{{ item.covid.busy }}</span>
+                        </div>
+                      </cov-grid-cell>
 
-                      <div class="typography--caption beds__spacing-top">Não Covid-19</div>
-
-                      <div class="beds__box">
-                        <span>Total</span>
-                        <span class="typography--weight-bold typography--primary-color">{{ totalBeds(item.normal) }}</span>
-                      </div>
-                      <div class="beds__box">
-                        <span>Ocupados</span>
-                        <span class="typography--weight-bold typography--primary-color">{{ item.normal.busy }}</span>
-                      </div>
+                      <cov-grid-cell :breakpoints="{ col: '1-of-2'}" class="beds__content p-l-md">
+                        <div class="typography--caption beds__spacing-top">Não Covid-19</div>
+                        <div class="beds__box m-t-md">
+                          <span>Total</span>
+                          <span class="typography--weight-bold typography--primary-color">{{ totalBeds(item.normal) }}</span>
+                        </div>
+                        <div class="beds__box">
+                          <span>Ocupados</span>
+                          <span class="typography--weight-bold typography--primary-color">{{ item.normal.busy }}</span>
+                        </div>
+                        </cov-grid->
+                      </cov-grid-cell>
                     </cov-grid>
                   </div>
                 </cov-card>
@@ -84,7 +98,7 @@
           </div>
         </cov-grid>
 
-        <div>
+        <div class="m-t-md">
           <cov-button icon="table_chart" label="Baixar planilha" @click="download" />
           <cov-button href="#" icon="code" label="Acesso a API" />
         </div>
@@ -114,10 +128,6 @@
         </cov-grid>
       </div>
     </cov-section>
-
-    <pre>
-      {{ dashboard }}
-    </pre>
 
     <cov-loading :showing="showLoading" />
   </div>
@@ -338,8 +348,10 @@ export default {
     justify-content: space-between;
   }
 
-  &__spacing-top {
-    margin-top: 10px;
+  &__content {
+    & + & {
+      border-left: 1px solid $tertiary-color;
+    }
   }
 }
 </style>
