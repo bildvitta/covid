@@ -10,15 +10,15 @@
             </form>
 
             <div>
-              <h3 class="typography typography--title">Casos em {{ currentCity }}</h3>
+              <h3 class="typography typography--title">Casos</h3>
               <div class="typography typography--subtitle">{{ updatedAt('covid_cases') }}</div>
               <cov-grid v-if="dashboard.covid_cases" gutter>
                 <cov-grid-cell v-for="(item, key) in dashboard.covid_cases.cases" :key="key" :breakpoints="{ sm: 'full', md: '1-of-2', lg: '1-of-3' }">
                   <cov-card>
-                    <div>{{ covidCases[key].text }}</div>
-                    <div class="typography--heavy-text" :class="covidCases[key].color">{{ item }}</div>
+                    <div>{{ casesLabels[key].text }}</div>
+                    <div class="typography--heavy-text" :class="casesLabels[key].color">{{ item }}</div>
                     <client-only>
-                      <cov-line-chart :chart-data="historyChartData" />
+                      <cov-bar-chart :chart-data="historyChartData" :options="casesChartOptions" />
                     </client-only>
                   </cov-card>
                 </cov-grid-cell>
@@ -49,7 +49,7 @@
               <cov-grid-cell v-for="(item, key) in beds" :key="key" :breakpoints="{ sm: 'full', md: '1-of-2', lg: '1-of-3' }">
                 <cov-card class="typography">
                   <template v-slot:header>
-                    <span class="beds__title">{{ bedsTitle[key] }}</span>
+                    <span class="beds__title">{{ bedsTitles[key] }}</span>
                   </template>
                   <div>
                     <cov-grid justify-between>
@@ -115,6 +115,10 @@
       </div>
     </cov-section>
 
+    <pre>
+      {{ dashboard }}
+    </pre>
+
     <cov-loading :showing="showLoading" />
   </div>
 </template>
@@ -125,6 +129,7 @@ import { isEmpty, omitBy } from 'lodash-es'
 import { differenceInMinutes, parseISO } from 'date-fns'
 
 import CovBadge from '~/components/CovBadge'
+import CovBarChart from '~/components/CovBarChart'
 import CovButton from '~/components/CovButton'
 import CovBox from '~/components/CovBox'
 import CovCard from '~/components/CovCard'
@@ -139,6 +144,7 @@ import CovSelect from '~/components/CovSelect'
 export default {
   components: {
     CovBadge,
+    CovBarChart,
     CovBox,
     CovButton,
     CovCard,
@@ -204,7 +210,7 @@ export default {
       return {}
     },
 
-    bedsTitle () {
+    bedsTitles () {
       return {
         intensive_care_unit: 'UTI',
         nursing: 'Enfernmagem',
@@ -212,16 +218,28 @@ export default {
       }
     },
 
-    covidCases () {
+    casesChartOptions () {
+      return {
+        legend: { display: false },
+        scales: {
+          yAxes: [{
+            ticks: { display: false },
+            gridLines: { display: false }
+          }],
+          xAxes: [{
+            ticks: { display: false },
+            gridLines: { display: false }
+          }]
+        }
+      }
+    },
+
+    casesLabels () {
       return {
         total: { text: 'Casos totais', color: 'text-primary' },
         deaths: { text: 'Mortes', color: 'text-negative' },
         cureds: { text: 'Recuperados', color: 'text-positive' }
       }
-    },
-
-    currentCity () {
-      return this.dashboard.cities ? this.dashboard.cities.find(city => city.value === this.city).label : ''
     }
   },
 
@@ -237,10 +255,11 @@ export default {
   },
 
   methods: {
-    differenceInMinutes,
     ...mapActions({
       fetchDashboard: 'dashboard/fetch'
     }),
+
+    differenceInMinutes,
 
     async fetch () {
       this.showLoading = true
@@ -256,13 +275,11 @@ export default {
 
     filterCity () {
       this.clearHospital()
-
       this.filter()
     },
 
     filter () {
       const query = omitBy({ ...this.$route.query, city: this.city, hospital: this.hospital }, isEmpty)
-
       this.$router.push({ query })
     },
 
@@ -281,7 +298,6 @@ export default {
 
     badgesPercent ({ busy, free }) {
       const total = busy + free
-
       const percent = ((100 * busy) / total).toFixed('2')
 
       return `${percent}%`

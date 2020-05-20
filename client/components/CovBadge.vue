@@ -21,11 +21,11 @@ export default {
     classes () {
       const value = parseFloat(this.$slots.default[0].text)
 
-      if (value < 60) {
-        return 'badge--positive'
+      return {
+        'badge--negative': value >= 90,
+        'badge--warning': value >= 60 && value < 90,
+        'badge--positive': value < 50
       }
-
-      return value >= 60 && value < 90 ? 'badge--warning' : 'badge--negative'
     }
   }
 }
