@@ -31,7 +31,7 @@
             </div>
           </cov-grid-cell>
 
-          <cov-grid-cell v-if="fetchSuccess" :breakpoints="{ sm: 'full', lg: '1-of-2' }">
+          <cov-grid-cell :breakpoints="{ sm: 'full', lg: '1-of-2' }">
             <cov-heatmap />
           </cov-grid-cell>
         </cov-grid>

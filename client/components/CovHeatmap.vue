@@ -32,6 +32,10 @@ export default {
     this.setMapHeight()
   },
 
+  updated () {
+    this.setMapHeight()
+  },
+
   destroyed () {
     window.removeEventListener('resize', this.setHeight)
   },
