@@ -1,5 +1,5 @@
 <template>
-  <div class="cov-heatmap" style="height: 300px;">
+  <div class="cov-heatmap" :style="{ height }">
     <client-only>
       <l-map :center="[-21.1775, -47.81028]" :options="{ attributionControl: false }" :zoom="12">
         <l-tile-layer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png" />
@@ -11,6 +11,13 @@
 
 <script>
 export default {
+  props: {
+    height: {
+      type: String,
+      default: '300px'
+    }
+  },
+
   computed: {
     heatmapPoints () {
       // https://github.com/Leaflet/Leaflet.heat

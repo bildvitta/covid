@@ -16,6 +16,10 @@ export default {
     ]
   },
 
+  router: {
+    middleware: ['redirect']
+  },
+
   loading: { color: '#fff' },
 
   css: [
