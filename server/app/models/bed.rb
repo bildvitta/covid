@@ -12,8 +12,6 @@ class Bed < ApplicationRecord
 
   belongs_to :hospital
 
-  has_many :bed_states, dependent: :destroy
-
   extend FriendlyId
   friendly_id :generate_slug, use: :slugged
 

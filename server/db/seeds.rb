@@ -29,9 +29,9 @@ if Hospital.none?
         )
   
         [true, false].each do |using_ventilator|
-          Bed::TYPES.each do |label, value|
+          Bed::TYPES.each do |_label, value|
             BedStateDetail.create!(
-              using_ventilator: rand(1000),
+              using_ventilator: using_ventilator,
   
               bed_state_id: bed_state.id,
               bed_type: value,
