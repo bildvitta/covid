@@ -17,6 +17,8 @@ class Bed < ApplicationRecord
 
   scope :using_ventilator, -> { where(using_ventilator: true) }
 
+  validates_uniqueness_of :slug, scope: :hospital_id
+
   def generate_slug
     [hospital.name, bed_type].join(' ')
   end
