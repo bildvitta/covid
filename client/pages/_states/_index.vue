@@ -63,7 +63,7 @@
                     <span class="beds__title">{{ bedsTypes[key].label }}</span>
                   </template>
                   <div>
-                    <cov-grid justify-between>
+                    <cov-grid align-bottom justify-between>
                       <cov-grid-cell :breakpoints="{ col: '1-of-2'}" class="beds__content p-r-md">
                         <div class="beds__box">
                           <div class="typography--caption">
