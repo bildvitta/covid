@@ -1,6 +1,6 @@
 <template>
   <cov-box>
-    <div class="card__header">
+    <div v-if="hasHeader" class="card__header">
       <slot name="header" />
     </div>
 
@@ -16,6 +16,12 @@ import CovBox from '~/components/CovBox'
 export default {
   components: {
     CovBox
+  },
+
+  computed: {
+    hasHeader () {
+      return !!(this.$slots.header || this.$scopedSlots.header)
+    }
   }
 }
 </script>
@@ -26,7 +32,7 @@ export default {
       align-items: center;
       border-bottom: 1px solid $tertiary-color;
       display: flex;
-      font-size: $font-size-large;
+      font-size: 14px;
       justify-content: space-between;
       padding-bottom: 15px;
 

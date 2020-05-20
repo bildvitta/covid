@@ -8,9 +8,10 @@ $minimum-page-width: 320px;
 $maximum-page-width: 1080px;
 
 // Fonts
+$font-size-small: 11px;
 $font-size: 16px;
 $font-size-large: 20px;
-$font-size-small: 11px;
+$font-size-extra-large: 32px;
 
 $font-family: 'Source Sans Pro', sans-serif;
 $font-weight: normal;
@@ -45,9 +46,9 @@ $darkgray: #777;
 $black: #2a2d31;
 
 // Emotive
-$positive-color: $green;
-$negative-color: $red;
 $info-color: $blue;
+$negative-color: $red;
+$positive-color: $green;
 $warning-color: $yellow;
 
 // Header

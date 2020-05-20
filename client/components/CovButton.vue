@@ -1,5 +1,5 @@
 <template>
-  <component :is="tag" class="cov-button" :href="href" :type="type">
+  <component :is="tag" v-bind="$attrs" class="cov-button" :href="href" :type="type" v-on="$listeners">
     <cov-icon class="cov-button__icon" :name="icon" size="1.5em" />
 
     <span>

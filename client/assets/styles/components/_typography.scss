@@ -16,12 +16,25 @@
     text-transform: uppercase;
   }
 
+  &--heavy-text {
+    font-size: $font-size-extra-large;
+    font-weight: bold;
+  }
+
   &--primary-color {
     color: $primary-color;
   }
 
   &--secondary-color {
     color: $secondary-color;
+  }
+
+  &--negative-color {
+    color: $negative-color;
+  }
+
+  &--positive-color {
+    color: $positive-color;
   }
 
   &--weight-bold {

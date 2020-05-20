@@ -17,7 +17,7 @@ export default {
 
   computed: {
     defaultBreakpoint () {
-      return { col: 'full', sm: '1-of-2', md: '1-of-2', lg: '1-of-2', ...this.breakpoints }
+      return { col: 'full', sm: '1-of-2', ...this.breakpoints }
     },
 
     classes () {

@@ -41,6 +41,14 @@ export default {
 
     gutter: {
       type: Boolean
+    },
+
+    gutterMedium: {
+      type: Boolean
+    },
+
+    gutterLarge: {
+      type: Boolean
     }
   },
 
@@ -55,7 +63,9 @@ export default {
         'cov-grid--fill': this.fill,
         'cov-grid--fit': this.fit,
         'cov-grid--equal-height': this.equalHeight,
-        'cov-grid--with-gutter': this.gutter
+        'cov-grid--with-gutter': this.gutter,
+        'cov-grid--with-gutter-md': this.gutterMedium,
+        'cov-grid--with-gutter-lg': this.gutterLarge
       }
     }
   }
@@ -63,7 +73,9 @@ export default {
 </script>
 
 <style lang="scss">
-$grid-gutter: 25px !default;
+$grid-gutter: 16px !default;
+$grid-gutter-md: 20px !default;
+$grid-gutter-lg: 25px !default;
 
 .cov-grid {
   $root: &;
@@ -117,6 +129,22 @@ $grid-gutter: 25px !default;
 
     > * {
       padding: #{ 0.5 * $grid-gutter} #{0.5 * $grid-gutter};
+    }
+  }
+
+  &--with-gutter-md {
+    margin: #{ -0.5 * $grid-gutter-md} #{ -0.5 * $grid-gutter-md};
+
+    > * {
+      padding: #{ 0.5 * $grid-gutter-md} #{0.5 * $grid-gutter-md};
+    }
+  }
+
+  &--with-gutter-lg {
+    margin: #{ -0.5 * $grid-gutter-lg} #{ -0.5 * $grid-gutter-lg};
+
+    > * {
+      padding: #{ 0.5 * $grid-gutter-lg} #{0.5 * $grid-gutter-lg};
     }
   }
 }

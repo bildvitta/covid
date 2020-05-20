@@ -1,0 +1,46 @@
+// text color
+.text-primary {
+  color: $primary-color;
+}
+
+.text-secondary {
+  color: $primary-color;
+}
+
+.text-negative {
+  color: $negative-color;
+}
+
+.text-positive {
+  color: $positive-color;
+}
+
+.text-warning {
+  color: $warning-color;
+}
+
+// text weight
+.text-bold {
+  font-weight: $font-weight-bold;
+}
+
+//text type
+.text-caption {
+  font-weight: bold;
+}
+
+.text-heavy {
+  font-size: $font-size-extra-large;
+  font-weight: bold;
+}
+
+.text-subtitle {
+  color: $tertiary-color;
+}
+
+.text-title {
+  color: $primary-color;
+  font-size: 18px;
+  font-weight: bold;
+  text-transform: uppercase;
+}

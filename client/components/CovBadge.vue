@@ -19,7 +19,13 @@ export default {
 
   computed: {
     classes () {
-      return `badge--${this.color}`
+      const value = parseFloat(this.$slots.default[0].text)
+
+      if (value < 60) {
+        return 'badge--positive'
+      }
+
+      return value >= 60 && value < 90 ? 'badge--warning' : 'badge--negative'
     }
   }
 }
