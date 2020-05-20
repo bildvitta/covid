@@ -13,6 +13,7 @@ class Bed < ApplicationRecord
   belongs_to :hospital
 
   has_many :bed_states, dependent: :destroy
+  # validar unico por slug / hospital_id
 
   extend FriendlyId
   friendly_id :generate_slug, use: :slugged

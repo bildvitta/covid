@@ -6,6 +6,20 @@ if Hospital.none?
     cities = cities.to_a + [City.find_by_slug('ribeirao-preto')]
   end
 
+  city = City.where(slug: 'ribeirao-preto').last
+  unless city.nil?
+    Hospital.create!(
+      city: city,
+      hospital_type: 2,
+      name: 'Hospital Unimed',
+      latitude: -21.225617,
+      longitude: -47.816327
+    )
+  end
+
+
+  DataBridge::Unimed.new.get_data.save!
+
   cities.each do |city|
     rand(2..7).times do
       hospital = Hospital.create!(
@@ -27,12 +41,12 @@ if Hospital.none?
         bed_state = BedState.create!(
           date: (30 - i).days.ago, hospital_id: hospital.id
         )
-  
+
         [true, false].each do |using_ventilator|
           Bed::TYPES.each do |label, value|
             BedStateDetail.create!(
               using_ventilator: rand(1000),
-  
+
               bed_state_id: bed_state.id,
               bed_type: value,
               status_free: rand(1000),
@@ -44,6 +58,7 @@ if Hospital.none?
       end
     end
   end
+
 end
 
 if CovidCase.none?
