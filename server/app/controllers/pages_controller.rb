@@ -17,19 +17,28 @@ class PagesController < ApplicationController
 
   def beds_data
     cached_data :beds_data do
-      block = -> (bed) {
+      block = -> (beds) {
+        free = busy = unavailable = 0
+
+        beds.each do |bed|
+          free += 1 if bed.free?
+          busy += 1 if bed.busy?
+          unavailable += 1 if bed.unavailable?
+        end
+
         {
-          free: bed.count(&:free?),
-          busy: bed.count(&:busy?),
-          unavailable: bed.count(&:unavailable?)
+          total: free + busy + unavailable,
+          free: free,
+          busy: busy,
+          unavailable: unavailable
         }
       }
 
       {
         updated_at: @beds.order(updated_at: :desc).last.updated_at.iso8601,
-        intensive_care_unit: bed_json(@beds.icus.to_a, &block),
-        nursing: bed_json(@beds.nursings.to_a, &block),
-        ventilator: bed_json(@beds.using_ventilator.to_a, &block)
+        intensive_care_unit: bed_json(@beds.icus, &block),
+        nursing: bed_json(@beds.nursings, &block),
+        ventilator: bed_json(@beds.using_ventilator, &block)
       }
     end
   end
@@ -64,10 +73,19 @@ class PagesController < ApplicationController
 
     unless block
       block = -> (bed_details) {
+        free = busy = unavailable = 0
+
+        bed_details.each do |detail|
+          free += detail.status_free
+          busy += detail.status_busy
+          unavailable += detail.status_unavailable
+        end
+
         {
-          free: bed_details.sum(&:status_free),
-          busy: bed_details.sum(&:status_busy),
-          unavailable: bed_details.sum(&:status_unavailable)
+          total: free + busy + unavailable,
+          free: free,
+          busy: busy,
+          unavailable: unavailable
         }
       }
     end
