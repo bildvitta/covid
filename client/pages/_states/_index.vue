@@ -6,7 +6,7 @@
           <cov-grid-cell :breakpoints="{ sm: 'full', md: 'full', lg: '1-of-2' }">
             <div ref="cases">
               <form>
-                <h3 class="typography typography--title m-b-md" download>Cidade</h3>
+                <h3 class="typography typography--title m-b-md">Cidade</h3>
                 <cov-select v-model="city" :options="dashboard.cities" @input="filterCity" />
               </form>
 
@@ -375,6 +375,7 @@ export default {
         this.setMapHeight()
         this.fetchSuccess = true
       } catch (error) {
+        this.fetchSuccess = false
         throw new Error('Error fetching "dashboard" data.', error)
       } finally {
         this.showLoading = false
