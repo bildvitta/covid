@@ -12,7 +12,9 @@
 
               <div class="m-t-lg">
                 <h3 class="typography typography--title">Casos</h3>
-                <div class="typography typography--subtitle m-b-md">{{ updatedDistance('covid_cases') }}</div>
+                <div class="typography typography--subtitle m-b-md">
+                  <abbr :title="updatedDate('covid_cases')">{{ updatedDistance('covid_cases') }}</abbr>
+                </div>
 
                 <cov-grid v-if="dashboard.covid_cases" gutter>
                   <cov-grid-cell v-for="(item, key) in dashboard.covid_cases.cases" :key="key" :breakpoints="{ sm: 'full', md: '1-of-2', lg: '1-of-3' }">
