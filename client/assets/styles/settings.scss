@@ -10,6 +10,7 @@ $maximum-page-width: 1080px;
 // Fonts
 $font-size-small: 11px;
 $font-size: 16px;
+$font-size-medium: 18px;
 $font-size-large: 20px;
 $font-size-extra-large: 32px;
 
@@ -74,3 +75,12 @@ $animation-time: 250ms;
 
 // Shadow
 $shadow: 0 2px 5px rgba($black, 0.15);
+
+// Spaces
+$space-base:  16px;
+$space-none: 0;
+$space-xs: ($space-base * 0.25);
+$space-sm: ($space-base * 0.5);
+$space-md: $space-base;
+$space-lg: ($space-base * 1.5);
+$space-xl: ($space-base * 2);
