@@ -43,7 +43,6 @@ export default {
   methods: {
     setMapHeight () {
       this.setHeight()
-
       window.addEventListener('resize', this.setHeight)
     },
 

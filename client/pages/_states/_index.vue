@@ -176,11 +176,8 @@ export default {
 
   data () {
     return {
-      showLoading: false,
       city: '',
-      hospital: '',
-      mapHeight: null
-      // fetchSuccess: false
+      hospital: ''
     }
   },
 
@@ -456,11 +453,8 @@ export default {
       fetchDashboard: 'dashboard/fetch'
     }),
 
-    badgesPercent ({ busy, free }) {
-      const total = busy + free
-      const percent = (((100 * busy) / total) || 0).toFixed('2')
-
-      return `${percent}%`
+    badgesPercent ({ busy, total }) {
+      return this.formatPercent(busy / total)
     },
 
     clearHospital () {
@@ -487,6 +481,16 @@ export default {
 
     formatDateTime (value, token = 'dd/MM/yyyy HH:mm:ss', options) {
       return format(value, token, { locale: ptBR, ...options })
+    },
+
+    formatPercent (number) {
+      const { format } = new Intl.NumberFormat('pt-BR', {
+        style: 'percent',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      })
+
+      return format(number)
     },
 
     setSelect () {
@@ -516,16 +520,6 @@ export default {
       }
 
       return ''
-    },
-
-    setMapHeight (defaultHeight = 300) {
-      this.setHeight()
-      window.addEventListener('resize', this.setHeight)
-    },
-
-    setHeight (defaultHeight) {
-      const height = window.screen.width
-      this.mapHeight = height < 768 ? `${defaultHeight}px` : `${this.$refs.cases.clientHeight}px`
     }
   }
 }
