@@ -1,8 +1,5 @@
 module DataBridge
   class WebServiceBase < DataBridge::Base
-    # include DataBridge
-
-    attr_accessor :raw_data, :data
 
     protected
     def request_api path, params = {}, payload = {}, headers = {}, options = {}

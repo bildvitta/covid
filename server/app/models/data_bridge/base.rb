@@ -1,6 +1,6 @@
 module DataBridge
   class Base
-    attr_accessor :raw_data, :data
+    attr_accessor :raw_data, :data, :results
 
     def save!
       hospitals = {}
@@ -39,7 +39,7 @@ module DataBridge
     end
 
     def get_status status
-      case status.to_s.strip.to_sym
+      case status.to_s.downcase.strip.to_sym
       when :livre
         return :free
       when :ocupado
