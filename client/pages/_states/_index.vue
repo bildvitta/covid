@@ -7,7 +7,7 @@
             <div ref="cases">
               <form>
                 <h3 class="typography typography--title m-b-md">Cidade</h3>
-                <cov-select v-model="city" :options="dashboard.cities" @input="filterCity" />
+                <cov-select v-model="city" :options="dashboard.cities" @input="filterCity()" />
               </form>
 
               <div class="m-t-lg">
@@ -46,7 +46,7 @@
                   </cov-grid-cell>
 
                   <cov-grid-cell :breakpoints="{ sm: 'fit', lg: 'full' }" class="hospitals-header__select m-t-sm">
-                    <cov-select v-model="hospital" :options="hospitalOptions" @input="filter" />
+                    <cov-select v-model="hospital" :options="hospitalOptions" @input="filter()" />
                   </cov-grid-cell>
                 </cov-grid>
               </form>
