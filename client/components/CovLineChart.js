@@ -9,6 +9,11 @@ export default {
     options: {
       default: () => ({}),
       type: Object
+    },
+
+    type: {
+      default: '',
+      type: String
     }
   },
 
