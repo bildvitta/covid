@@ -10,5 +10,6 @@
   border-radius: $radius;
   box-shadow: $shadow;
   padding: 15px;
+  width: 100%;
 }
 </style>
