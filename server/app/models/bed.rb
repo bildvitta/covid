@@ -1,6 +1,8 @@
 class Bed < ApplicationRecord
   enum status: { free: 1, busy: 2, unavailable: 3 }
 
+  include BedTypes
+
   TYPES = [
     ['UTI COVID', 1],
     ['UTI NÃO-COVID', 2],
@@ -13,9 +15,9 @@ class Bed < ApplicationRecord
   extend FriendlyId
   friendly_id :generate_slug, use: :slugged
 
-  scope :using_ventilator, -> { where(using_ventilator: false) }
-  scope :covids, -> { where(bed_type: [1, 3]) }
-  scope :no_covids, -> { where(bed_type: [2, 4]) }
+  scope :using_ventilator, -> { where(using_ventilator: true) }
+
+  validates_uniqueness_of :slug, scope: :hospital_id
 
   def generate_slug
     [hospital.name, bed_type].join(' ')

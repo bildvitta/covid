@@ -7,7 +7,6 @@
         </option>
       </select>
     </cov-box>
-
   </div>
 </template>
 
@@ -52,7 +51,7 @@ export default {
     formattedOptions () {
       return this.options.map((option) => {
         if (typeof option === 'object' && !Array.isArray(option)) {
-          if ((!option.label || !option.value)) {
+          if (!('label' in option || 'value' in option)) {
             throw new Error('Object option must have label and value')
           }
 
@@ -73,6 +72,11 @@ export default {
 
     &__display {
       align-items: center;
+      appearance: none;
+      background-image: url('~assets/images/field-arrow.svg');
+      background-position: right 15px center;
+      background-repeat: no-repeat;
+      background-size: 15px;
       border-radius: $radius;
       border-width: 0;
       color: $text-color;
@@ -84,17 +88,6 @@ export default {
       position: relative;
       transition: box-shadow $animation-time;
       width: 100%;
-
-      // &::after {
-      //   background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pgo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4iICJodHRwOi8vd3d3LnczLm9yZy9HcmFwaGljcy9TVkcvMS4xL0RURC9zdmcxMS5kdGQiPgo8c3ZnIGlkPSJTX0Ryb3Bkb3duXzEwX04iIHZpZXdCb3g9IjAgMCAxMCAxMCIgdmVyc2lvbj0iMS4xIgoJeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSIKCXg9IjBweCIgeT0iMHB4IiB3aWR0aD0iMTBweCIgaGVpZ2h0PSIxMHB4Igo+Cgk8ZyBpZD0iTGF5ZXIlMjAxIj4KCQk8ZyBpZD0iU19Ecm9wZG93bl8xMF9OX2x0Ij4KCQkJPHBhdGggZD0iTSA1LjUyNTkgNy40NzUzIEwgOC43MDggNC4yOTM1IEMgOS4wMDEgNC4wMDA1IDkuMDAxIDMuNTI1NiA4LjcwOCAzLjIzMjkgQyA4LjQxNSAyLjkzOTkgNy45NDAyIDIuOTM5OSA3LjY0NzIgMy4yMzI5IEwgNC45OTU2IDUuODg0NSBMIDIuMzQ0IDMuMjMyOSBDIDIuMDUxIDIuOTM5OSAxLjU3NjIgMi45Mzk5IDEuMjgzMiAzLjIzMjkgQyAwLjk5MDIgMy41MjU2IDAuOTkwMiA0LjAwMDUgMS4yODMyIDQuMjkzNSBMIDQuNDY1MyA3LjQ3NTMgQyA0Ljc1ODMgNy43NjgzIDUuMjMyOSA3Ljc2ODMgNS41MjU5IDcuNDc1MyBaIiBmaWxsPSIjNjY2NjY2Ii8+CgkJPC9nPgoJPC9nPgo8L3N2Zz4=);
-      //   background-position: center;
-      //   background-size: 100%;
-      //   content: "";
-      //   height: 7px;
-      //   position: absolute;
-      //   right: 15px;
-      //   width: 10px;
-      // }
     }
 
     &__text {

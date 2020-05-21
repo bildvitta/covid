@@ -57,6 +57,17 @@
     color: $primary-color;
     font-size: 28px;
   }
+
+  @include breakpoint (max-width $small-screen) {
+    .container {
+      flex-direction: column;
+    }
+
+    &__title {
+      font-size: 22px;
+      text-align: center;
+    }
+  }
 }
 
 .main {
@@ -68,6 +79,7 @@
   background-color: $secondary-color;
   color: $text-color;
   padding: 30px;
+  z-index: 999999;
 
   .container {
     text-align: center;

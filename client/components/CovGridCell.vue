@@ -17,15 +17,15 @@ export default {
 
   computed: {
     defaultBreakpoint () {
-      return { col: 'Full', sm: '1of2', md: '1of2', lg: '1of2', ...this.breakpoints }
+      return { col: 'full', sm: '1-of-2', ...this.breakpoints }
     },
 
     classes () {
       const classes = []
 
       for (const key in this.defaultBreakpoint) {
-        const breakpoint = ignore.includes(key) ? '' : `${key}-`
-        classes.push(`${breakpoint}size${this.defaultBreakpoint[key]}`)
+        const breakpoint = ignore.includes(key) ? '' : `-${key}`
+        classes.push(`cov-grid-cell-${breakpoint}-${this.defaultBreakpoint[key]}`)
       }
 
       return classes
@@ -36,150 +36,150 @@ export default {
 
 <style lang="scss">
 @mixin cov-grid-cell($prefix: '') {
-  .#{$prefix}size1of12 {
+  .cov-grid-cell--#{$prefix}1-of-12 {
     flex-basis: auto;
     width: calc(100% / 12);
   }
 
-  .#{$prefix}size1of10 {
+  .cov-grid-cell--#{$prefix}1-of-10 {
     flex-basis: auto;
     width: 10%;
   }
 
-  .#{$prefix}size1of8 {
+  .cov-grid-cell--#{$prefix}1-of-8 {
     flex-basis: auto;
     width: 12.5%;
   }
 
-  .#{$prefix}size1of6,
-  .#{$prefix}size2of12 {
+  .cov-grid-cell--#{$prefix}1-of-6,
+  .cov-grid-cell--#{$prefix}2-of-12 {
     flex-basis: auto;
     width: calc(100% / 6);
   }
 
-  .#{$prefix}size1of5,
-  .#{$prefix}size2of10 {
+  .cov-grid-cell--#{$prefix}1-of-5,
+  .cov-grid-cell--#{$prefix}2-of-10 {
     flex-basis: auto;
     width: 20%;
   }
 
-  .#{$prefix}size1of4,
-  .#{$prefix}size2of8,
-  .#{$prefix}size3of12 {
+  .cov-grid-cell--#{$prefix}1-of-4,
+  .cov-grid-cell--#{$prefix}2-of-8,
+  .cov-grid-cell--#{$prefix}3-of-12 {
     flex-basis: auto;
     width: 25%;
   }
 
-  .#{$prefix}size3of10 {
+  .cov-grid-cell--#{$prefix}3-of-10 {
     flex-basis: auto;
     width: 30%;
   }
 
-  .#{$prefix}size1of3,
-  .#{$prefix}size2of6,
-  .#{$prefix}size4of12 {
+  .cov-grid-cell--#{$prefix}1-of-3,
+  .cov-grid-cell--#{$prefix}2-of-6,
+  .cov-grid-cell--#{$prefix}4-of-12 {
     flex-basis: auto;
     width: calc(100% / 3);
   }
 
-  .#{$prefix}size3of8 {
+  .cov-grid-cell--#{$prefix}3-of-8 {
     flex-basis: auto;
     width: 37.5%;
   }
 
-  .#{$prefix}size2of5,
-  .#{$prefix}size4of10 {
+  .cov-grid-cell--#{$prefix}2-of-5,
+  .cov-grid-cell--#{$prefix}4-of-10 {
     flex-basis: auto;
     width: 40%;
   }
 
-  .#{$prefix}size5of12 {
+  .cov-grid-cell--#{$prefix}5-of-12 {
     flex-basis: auto;
     width: calc(100% * 5 / 12);
   }
 
-  .#{$prefix}size1of2,
-  .#{$prefix}size2of4,
-  .#{$prefix}size3of6,
-  .#{$prefix}size4of8,
-  .#{$prefix}size5of10,
-  .#{$prefix}size6of12 {
+  .cov-grid-cell--#{$prefix}1-of-2,
+  .cov-grid-cell--#{$prefix}2-of-4,
+  .cov-grid-cell--#{$prefix}3-of-6,
+  .cov-grid-cell--#{$prefix}4-of-8,
+  .cov-grid-cell--#{$prefix}5-of-10,
+  .cov-grid-cell--#{$prefix}6-of-12 {
     flex-basis: auto;
     width: 50%;
   }
 
-  .#{$prefix}size7of12 {
+  .cov-grid-cell--#{$prefix}7-of-12 {
     flex-basis: auto;
     width: calc(100% * 7 / 12);
   }
 
-  .#{$prefix}size3of5,
-  .#{$prefix}size6of10 {
+  .cov-grid-cell--#{$prefix}3-of-5,
+  .cov-grid-cell--#{$prefix}6-of-10 {
     flex-basis: auto;
     width: 60%;
   }
 
-  .#{$prefix}size5of8 {
+  .cov-grid-cell--#{$prefix}5-of-8 {
     flex-basis: auto;
     width: 62.5%;
   }
 
-  .#{$prefix}size2of3,
-  .#{$prefix}size4of6,
-  .#{$prefix}size8of12 {
+  .cov-grid-cell--#{$prefix}2-of-3,
+  .cov-grid-cell--#{$prefix}4-of-6,
+  .cov-grid-cell--#{$prefix}8-of-12 {
     flex-basis: auto;
     width: calc(100% * 2 / 3);
   }
 
-  .#{$prefix}size7of10 {
+  .cov-grid-cell--#{$prefix}7-of-10 {
     flex-basis: auto;
     width: 70%;
   }
 
-  .#{$prefix}size3of4,
-  .#{$prefix}size6of8,
-  .#{$prefix}size9of12 {
+  .cov-grid-cell--#{$prefix}3-of-4,
+  .cov-grid-cell--#{$prefix}6-of-8,
+  .cov-grid-cell--#{$prefix}9-of-12 {
     flex-basis: auto;
     width: 75%;
   }
 
-  .#{$prefix}size4of5,
-  .#{$prefix}size8of10 {
+  .cov-grid-cell--#{$prefix}4-of-5,
+  .cov-grid-cell--#{$prefix}8-of-10 {
     flex-basis: auto;
     width: 80%;
   }
 
-  .#{$prefix}size5of6,
-  .#{$prefix}size10of12 {
+  .cov-grid-cell--#{$prefix}5-of-6,
+  .cov-grid-cell--#{$prefix}10-of-12 {
     flex-basis: auto;
     width: calc(100% * 5 / 6);
   }
 
-  .#{$prefix}size7of8 {
+  .cov-grid-cell--#{$prefix}7-of-8 {
     flex-basis: auto;
     width: 87.5%;
   }
 
-  .#{$prefix}size9of10 {
+  .cov-grid-cell--#{$prefix}9-of-10 {
     flex-basis: auto;
     width: 90%;
   }
 
-  .#{$prefix}size11of12 {
+  .cov-grid-cell--#{$prefix}11-of-12 {
     flex-basis: auto;
     width: calc(100% * 11 / 12);
   }
 
-  .#{$prefix}sizeFit {
+  .cov-grid-cell--#{$prefix}fit {
     flex-basis: auto;
   }
 
-  .#{$prefix}sizeFill {
+  .cov-grid-cell--#{$prefix}fill {
     flex: 1 1 0%;
     flex-basis: 0%;
   }
 
-  .#{$prefix}sizeFull {
+  .cov-grid-cell--#{$prefix}full {
     width: 100%;
   }
 }

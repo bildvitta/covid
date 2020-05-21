@@ -14,12 +14,23 @@ export default {
 
     outlined: {
       type: Boolean
+    },
+
+    percent: {
+      type: [String, Number],
+      default: ''
     }
   },
 
   computed: {
     classes () {
-      return `badge--${this.color}`
+      const percent = parseFloat(this.percent)
+
+      return {
+        'badge--negative': percent >= 90,
+        'badge--warning': percent >= 60 && percent < 90,
+        'badge--positive': percent < 60
+      }
     }
   }
 }
@@ -27,11 +38,12 @@ export default {
 
 <style lang="scss">
 .badge {
+  align-items: center;
   background-color: $primary-color;
   border-radius: $radius;
   color: $white;
-  display: inline;
-  font-size: $font-size-small;
+  display: flex;
+  font-size: $font-size-medium;
   font-weight: bold;
   padding: 3px 6px;
 

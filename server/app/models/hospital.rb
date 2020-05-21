@@ -3,7 +3,8 @@ class Hospital < ApplicationRecord
 
   belongs_to :city
 
-  has_many :beds
+  has_many :beds, dependent: :destroy
+  has_many :bed_states, dependent: :destroy
 
   accepts_nested_attributes_for :beds
 
@@ -15,13 +16,23 @@ class Hospital < ApplicationRecord
   end
 
   def to_json
+    total = busy = 0
+
+    beds.each do |bed|
+      next unless Bed.covid_types.include?(bed.bed_type)
+
+      busy += 1 if bed.busy?
+      total += 1
+    end
+
     {
       name: name,
+      value: slug,
       type: get_type,
       latitude: latitude,
       longitude: longitude,
-      total: beds.covids.count,
-      budy: beds.covids.busy.count
+      total: total,
+      busy: busy
     }
   end
 end

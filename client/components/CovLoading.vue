@@ -38,7 +38,7 @@ export default {
   position: absolute;
   right: 0;
   top: 0;
-  z-index: 99999;
+  z-index: 1000;
 
   &__icon {
     animation: spinner 2s linear infinite;

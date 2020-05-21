@@ -16,14 +16,24 @@ export default {
     ]
   },
 
+  router: {
+    middleware: ['redirect']
+  },
+
+  env: {
+    baseUrl: process.env.BASE_URL || 'http://localhost:3000'
+  },
+
   loading: { color: '#fff' },
 
   css: [
-    '~/assets/styles/components/_keyframes.scss',
-    '~/assets/styles/styles.scss',
     '~/assets/styles/components/_container.scss',
     '~/assets/styles/components/_position.scss',
-    '~/assets/styles/components/_typography.scss'
+    '~/assets/styles/components/_typography.scss',
+    '~/assets/styles/styles.scss',
+    '~/assets/styles/utilities/_keyframes.scss',
+    '~/assets/styles/utilities/_spaces.scss',
+    '~/assets/styles/utilities/_text.scss'
   ],
 
   styleResources: {
@@ -53,7 +63,10 @@ export default {
   // axios: {
   // },
 
-  // build: {
-  //   extend (config, context) {}
-  // }
+  build: {
+    transpile: [
+      'lodash-es'
+    ]
+    // extend (config, context) {}
+  }
 }

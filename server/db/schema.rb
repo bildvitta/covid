@@ -10,10 +10,30 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_14_221406) do
+ActiveRecord::Schema.define(version: 2020_05_18_213942) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "bed_state_details", force: :cascade do |t|
+    t.boolean "using_ventilator", default: false
+    t.integer "bed_state_id"
+    t.integer "bed_type", default: 1
+    t.integer "status_free", default: 0
+    t.integer "status_busy", default: 0
+    t.integer "status_unavailable", default: 0
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["bed_state_id"], name: "index_bed_state_details_on_bed_state_id"
+  end
+
+  create_table "bed_states", force: :cascade do |t|
+    t.integer "hospital_id"
+    t.date "date"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["hospital_id"], name: "index_bed_states_on_hospital_id"
+  end
 
   create_table "beds", force: :cascade do |t|
     t.integer "hospital_id"
@@ -23,6 +43,7 @@ ActiveRecord::Schema.define(version: 2020_05_14_221406) do
     t.boolean "using_ventilator", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["hospital_id"], name: "index_beds_on_hospital_id"
     t.index ["slug"], name: "index_beds_on_slug"
   end
 
@@ -41,9 +62,9 @@ ActiveRecord::Schema.define(version: 2020_05_14_221406) do
 
   create_table "covid_cases", force: :cascade do |t|
     t.integer "city_id"
-    t.integer "total"
-    t.integer "deaths"
-    t.integer "cureds"
+    t.integer "total", default: 0
+    t.integer "deaths", default: 0
+    t.integer "cureds", default: 0
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["city_id"], name: "index_covid_cases_on_city_id"
