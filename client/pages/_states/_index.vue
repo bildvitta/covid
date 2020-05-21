@@ -108,7 +108,7 @@
         </div>
 
         <div class="m-t-xl">
-          <cov-button href="https://placehold.it/100x100" icon="table_chart" label="Baixar planilha" target="_blank" />
+          <!-- <cov-button href="https://placehold.it/100x100" icon="table_chart" label="Baixar planilha" target="_blank" /> -->
           <cov-button href="https://placehold.it/100x100" icon="code" label="Acesso a API" target="_blank" />
         </div>
       </div>
