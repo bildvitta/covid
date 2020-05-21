@@ -45,7 +45,7 @@ class PagesController < ApplicationController
 
   def cases_data
     cached_data :cases_data do
-      covid_case = @city.covid_cases.order(updated_at: :desc).first || CovidCase.new
+      covid_case = @city.covid_cases.order(reference_date: :desc).first || CovidCase.new
 
       {
         updated_at: covid_case.updated_at&.iso8601,
@@ -100,7 +100,7 @@ class PagesController < ApplicationController
   def historical_data
     cached_data :historical_data do
       (30.days.ago.to_date..Date.today).map do |date|
-        covid_cases = @city.covid_cases.find { |covid_case| covid_case.created_at.to_date == date }
+        covid_cases = @city.covid_cases.find { |covid_case| covid_case.reference_date == date }
         covid_cases ||= CovidCase.new
 
         data = {
