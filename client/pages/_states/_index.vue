@@ -117,7 +117,7 @@
     <cov-section color="melrose">
       <div class="container">
         <cov-grid gutter justify-between>
-          <cov-grid-cell :breakpoints="{ col: 'full' }">
+          <cov-grid-cell :breakpoints="{ col: 'full', sm: 'full', md: 'full' }">
             <h3 class="typography typography--title">Histórico</h3>
 
             <cov-box class="m-t-md">
