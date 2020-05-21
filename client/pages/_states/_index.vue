@@ -437,12 +437,15 @@ export default {
     },
 
     hospitals () {
-      return this.dashboard.hospitals
+      return this.dashboard.hospitals || []
     },
 
     hospitalsHeatmap () {
       return this.hospitals.reduce((hospitals, value) => {
-        hospitals.push([value.latitude, value.longitude, value.busy * 10])
+        for (let index = 0; index < value.busy; index++) {
+          hospitals.push([value.latitude, value.longitude, 1])
+        }
+
         return hospitals
       }, [])
     }
