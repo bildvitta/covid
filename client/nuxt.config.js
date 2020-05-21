@@ -67,6 +67,5 @@ export default {
     transpile: [
       'lodash-es'
     ]
-    // extend (config, context) {}
   }
 }

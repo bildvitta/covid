@@ -32,7 +32,7 @@
           </cov-grid-cell>
 
           <cov-grid-cell :breakpoints="{ sm: 'full', lg: '1-of-2' }">
-            <cov-heatmap />
+            <cov-heatmap :points="hospitalsHeatmap" />
           </cov-grid-cell>
         </cov-grid>
 
@@ -434,6 +434,17 @@ export default {
       return cities
         ? cities.find(option => option.value === this.city).hospitals
         : []
+    },
+
+    hospitals () {
+      return this.dashboard.hospitals
+    },
+
+    hospitalsHeatmap () {
+      return this.hospitals.reduce((hospitals, value) => {
+        hospitals.push([value.latitude, value.longitude, value.busy * 10])
+        return hospitals
+      }, [])
     }
   },
 

@@ -3,14 +3,27 @@
     <client-only>
       <l-map :center="[-21.1775, -47.81028]" :options="{ attributionControl: false }" :zoom="12">
         <l-tile-layer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png" />
-        <!-- <l-marker :lat-lng="[-21.1775, -47.81028]" /> -->
+        <l-heatmap :lat-lng="this.points" />
       </l-map>
     </client-only>
   </div>
 </template>
 
 <script>
+import LHeatmap from '~/components/LHeatmap'
+
 export default {
+  components: {
+    LHeatmap
+  },
+
+  props: {
+    points: {
+      default: () => [],
+      type: Array
+    }
+  },
+
   data () {
     return {
       height: '300px'
