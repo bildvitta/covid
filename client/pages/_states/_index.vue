@@ -468,7 +468,7 @@ export default {
     }),
 
     badgesPercent ({ busy, total }) {
-      return this.formatPercent(busy / total)
+      return this.formatPercent((busy / total) || 0)
     },
 
     clearHospital () {
@@ -524,7 +524,7 @@ export default {
     updatedDistance (model) {
       model = this.dashboard[model]
 
-      if (model) {
+      if (model && model.updated_at) {
         const distance = formatDistanceToNow(
           new Date(model.updated_at),
           { locale: ptBR }
@@ -533,7 +533,7 @@ export default {
         return `Atualizado há ${distance}`
       }
 
-      return ''
+      return 'Não há dados'
     }
   }
 }
