@@ -44,6 +44,7 @@ if Hospital.none?
       },
       {
         name: 'Ribeirânia (Hospital São Lucas Ribeirânia)',
+        slug: 'sao-lucas-ribeirania',
         hospital_type: 2,
         city: city,
         latitude: -21.200055,
@@ -58,6 +59,7 @@ if Hospital.none?
       },
       {
         name: 'Hospital Santa Casa de Misericórdia de Ribeirão Preto',
+        slug: 'santa-casa-ribeirao',
         hospital_type: 1,
         city: city,
         latitude: -21.167811,

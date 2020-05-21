@@ -8,8 +8,6 @@ module DataBridge
       }
     end
 
-    attr_accessor :results
-
     def get_data
       payload = { id: 'WSHURP', key: 'lrnHJQ8YkFy7S75X3efwFXU3csdmcoFo', type: 'A' }
       headers = { 'Content-Type' => 'application/x-www-form-urlencoded' }
