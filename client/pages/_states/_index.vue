@@ -2,7 +2,7 @@
   <div class="position position--relative">
     <cov-section>
       <div class="container">
-        <cov-grid gutter>
+        <cov-grid v-if="fetchSuccess" gutter>
           <cov-grid-cell :breakpoints="{ sm: 'full', md: 'full', lg: '1-of-2' }">
             <div ref="cases">
               <form>
@@ -12,7 +12,9 @@
 
               <div class="m-t-lg">
                 <h3 class="typography typography--title">Casos</h3>
-                <div class="typography typography--subtitle m-b-md">{{ updatedDistance('covid_cases') }}</div>
+                <div class="typography typography--subtitle m-b-md">
+                  <abbr :title="updatedDate('covid_cases')">{{ updatedDistance('covid_cases') }}</abbr>
+                </div>
 
                 <cov-grid v-if="dashboard.covid_cases" align-center gutter>
                   <cov-grid-cell v-for="(item, key) in dashboard.covid_cases.cases" :key="key" :breakpoints="{ sm: 'full', md: '1-of-2', lg: '1-of-3' }">
@@ -29,8 +31,8 @@
             </div>
           </cov-grid-cell>
 
-          <cov-grid-cell v-if="fetchSuccess" :breakpoints="{ sm: 'full', lg: '1-of-2' }">
-            <cov-heatmap :height="mapHeight" />
+          <cov-grid-cell :breakpoints="{ sm: 'full', lg: '1-of-2' }">
+            <cov-heatmap />
           </cov-grid-cell>
         </cov-grid>
 
@@ -105,7 +107,7 @@
           </cov-grid>
         </div>
 
-        <div class="m-t-md">
+        <div class="m-t-xl">
           <cov-button href="https://placehold.it/100x100" icon="table_chart" label="Baixar planilha" target="_blank" />
           <cov-button href="https://placehold.it/100x100" icon="code" label="Acesso a API" target="_blank" />
         </div>
@@ -128,8 +130,7 @@
       </div>
     </cov-section>
 
-    <!-- <pre>{{ historyBeds }}</pre> -->
-    <cov-loading :showing="showLoading" />
+    <cov-loading :showing="isFetching" />
   </div>
 </template>
 
@@ -178,15 +179,17 @@ export default {
       showLoading: false,
       city: '',
       hospital: '',
-      mapHeight: null,
-      fetchSuccess: false
+      mapHeight: null
+      // fetchSuccess: false
     }
   },
 
   computed: {
     ...mapGetters({
       dashboard: 'dashboard/dashboard',
-      error: 'dashboard/error'
+      error: 'dashboard/error',
+      fetchSuccess: 'dashboard/fetchSuccess',
+      isFetching: 'dashboard/isFetching'
     }),
 
     beds () {
@@ -384,10 +387,6 @@ export default {
     this.setSelect()
   },
 
-  destroyed () {
-    window.removeEventListener('resize', this.setHeight)
-  },
-
   methods: {
     ...mapActions({
       fetchDashboard: 'dashboard/fetch'
@@ -404,19 +403,8 @@ export default {
       this.hospital = ''
     },
 
-    async fetch () {
-      this.showLoading = true
-
-      try {
-        await this.fetchDashboard({ ...this.$route.query, city: this.$route.params.index })
-        this.setMapHeight()
-        this.fetchSuccess = true
-      } catch (error) {
-        this.fetchSuccess = false
-        throw new Error('Error fetching "dashboard" data.', error)
-      } finally {
-        this.showLoading = false
-      }
+    fetch () {
+      return this.fetchDashboard({ ...this.$route.query, city: this.$route.params.index })
     },
 
     filter (isCity) {
