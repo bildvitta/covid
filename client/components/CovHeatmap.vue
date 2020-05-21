@@ -59,7 +59,6 @@ export default {
 
 <style lang="scss">
 .cov-heatmap {
-  box-shadow: $shadow;
   width: 100%;
 }
 </style>

@@ -81,7 +81,7 @@
                       </div>
                       <div class="beds__box m-t-md">
                         <span>Total</span>
-                        <span class="typography--weight-bold typography--primary-color">{{ totalBeds(item.covid) }}</span>
+                        <span class="typography--weight-bold typography--primary-color">{{ item.covid.total }}</span>
                       </div>
                       <div class="beds__box">
                         <span>Ocupados</span>
@@ -90,10 +90,10 @@
                     </cov-grid-cell>
 
                     <cov-grid-cell :breakpoints="{ col: 'full', sm: 'full', md: '1-of-2', lg: '1-of-2' }" class="beds__content">
-                      <div class="typography--caption beds__spacing-top">Não Covid-19</div>
+                      <div class="typography--caption beds__spacing-top">Não COVID-19</div>
                       <div class="beds__box m-t-md">
                         <span>Total</span>
-                        <span class="typography--weight-bold typography--primary-color">{{ totalBeds(item.normal) }}</span>
+                        <span class="typography--weight-bold typography--primary-color">{{ item.normal.total }}</span>
                       </div>
                       <div class="beds__box">
                         <span>Ocupados</span>
@@ -130,15 +130,13 @@
       </div>
     </cov-section>
 
-    <pre>{{ historyBeds }}</pre>
-
     <cov-loading :showing="isFetching" />
   </div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import { isEmpty, omitBy } from 'lodash-es'
+import { isEmpty, isObject, mergeWith, omitBy } from 'lodash-es'
 
 import { format, formatDistanceToNow } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
@@ -289,36 +287,55 @@ export default {
     historyBeds () {
       const { historical } = this.dashboard
 
-      const types = {
-        intensive_care_unit: {},
-        nursing: {}
-      }
+      // Lista dos tipos que serão indexados.
+      const types = ['intensive_care_unit', 'nursing']
 
+      // Inicia o objeto que conterá os dados resultados.
+      const data = {}
+
+      // Laço de datas.
       for (const date of this.historyKeys) {
         const hospitals = historical[date].beds
-        // const self = {}
-        // for (const type in types) {
-        //   self[type] = {}
-        // }
 
+        // Laço de hospitais.
         for (const hospital of hospitals) {
-          for (const type in types) {
-            types[type] = this.mergeDeep(types[type], hospital[type])
+          const hospitalData = {}
+
+          // Filtra os dados do hospital para os tipos definidos.
+          for (const type of types) {
+            hospitalData[type] = hospital[type]
           }
+
+          // União e soma dos valores de forma recursiva.
+          data[date] = mergeWith(
+            {},
+            data[date] || {},
+            hospitalData,
+            (first, second) => {
+              if (!isObject(second)) { return (first || 0) + (second || 0) }
+            }
+          )
         }
       }
 
-      return types
+      // Concatenação de todos os objetos, transformando o último nó em matriz.
+      return mergeWith(
+        {},
+        ...Object.values(data),
+        (first, second) => {
+          if (!isObject(second)) { return [...(first || []), second] }
+        }
+      )
     },
 
     historyCases () {
       const { historical } = this.dashboard
-
       const types = {}
 
       for (const date of this.historyKeys) {
         const data = historical[date].covid_cases
 
+        // Une vários objetos em um único, agrupando em matrizes.
         for (const key of Object.keys(data)) {
           types[key] ? types[key].push(data[key]) : types[key] = [data[key]]
         }
@@ -345,10 +362,52 @@ export default {
             data: this.historyCases.deaths
           },
           {
-            label: 'Recuperados (na cidade)',
+            label: 'Casos recuperados (na cidade)',
             fill: false,
             borderColor: '#cbf1d6',
             data: this.historyCases.cureds
+          },
+          {
+            label: 'Leitos de UTI ocupados (COVID-19)',
+            fill: false,
+            borderColor: '#fa5252',
+            data: this.historyBeds.intensive_care_unit?.covid?.busy
+          },
+          {
+            label: 'Leitos de UTI ocupados (não COVID-19)',
+            fill: false,
+            borderColor: '#fa5252',
+            borderDash: [5],
+            borderWidth: 1,
+            data: this.historyBeds.intensive_care_unit?.normal?.busy
+          },
+          {
+            label: 'Leitos de enfermaria ocupados (COVID-19)',
+            fill: false,
+            borderColor: '#a3a1fb',
+            data: this.historyBeds.nursing?.covid?.busy
+          },
+          {
+            label: 'Leitos de enfermaria ocupados (não COVID-19)',
+            fill: false,
+            borderColor: '#a3a1fb',
+            borderDash: [5],
+            borderWidth: 1,
+            data: this.historyBeds.nursing?.normal?.busy
+          },
+          {
+            label: 'Respiradores ocupados na UTI',
+            fill: false,
+            borderColor: '#ffb713',
+            data: this.historyBeds.intensive_care_unit?.ventilator?.busy
+          },
+          {
+            label: 'Respiradores ocupados na enfermatia',
+            fill: false,
+            borderColor: '#ffb713',
+            borderDash: [5],
+            borderWidth: 1,
+            data: this.historyBeds.nursing?.ventilator?.busy
           }
         ]
       }
@@ -408,10 +467,6 @@ export default {
       this.hospital = ''
     },
 
-    mergeDeep (original, accumulator) {
-      return accumulator
-    },
-
     fetch () {
       return this.fetchDashboard({ ...this.$route.query, city: this.$route.params.index })
     },
@@ -439,8 +494,8 @@ export default {
       this.hospital = this.$route.query.hospital || ''
     },
 
-    totalBeds ({ busy, free }) {
-      return busy + free
+    sumArrays (first, second) {
+      return first.map((item, index) => item + second[index])
     },
 
     updatedDate (model) {
@@ -465,13 +520,11 @@ export default {
 
     setMapHeight (defaultHeight = 300) {
       this.setHeight()
-
       window.addEventListener('resize', this.setHeight)
     },
 
     setHeight (defaultHeight) {
       const height = window.screen.width
-
       this.mapHeight = height < 768 ? `${defaultHeight}px` : `${this.$refs.cases.clientHeight}px`
     }
   }
