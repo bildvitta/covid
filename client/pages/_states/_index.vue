@@ -128,6 +128,8 @@
       </div>
     </cov-section>
 
+    <pre>{{ historyBeds }}</pre>
+
     <cov-loading :showing="isFetching" />
   </div>
 </template>
@@ -291,14 +293,17 @@ export default {
       }
 
       for (const date of this.historyKeys) {
-        // const hospitals = historical[date].beds
+        const hospitals = historical[date].beds
         // const self = {}
         // for (const type in types) {
         //   self[type] = {}
         // }
-        // for (const hospital of hospitals) {
-        // }
-        types[date] = historical[date].beds
+
+        for (const hospital of hospitals) {
+          for (const type in types) {
+            types[type] = this.mergeDeep(types[type], hospital[type])
+          }
+        }
       }
 
       return types
@@ -399,6 +404,10 @@ export default {
 
     clearHospital () {
       this.hospital = ''
+    },
+
+    mergeDeep (original, accumulator) {
+      return accumulator
     },
 
     fetch () {
