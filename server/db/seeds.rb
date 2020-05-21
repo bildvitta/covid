@@ -87,28 +87,6 @@ if Hospital.none?
   end
 
   DataBridge::Unimed.new.get_data.save!
-
-  cities.each do |city|
-    rand(2..7).times do
-      hospital = Hospital.create!(
-        city: city,
-        hospital_type: Hospital::TYPES.sample.last,
-        name: Faker::Company.name,
-        latitude: city.latitude + rand_geocoded.(),
-        longitude: city.longitude + rand_geocoded.(),
-        beds_attributes: (1..15).map do
-          {
-            status: Bed.statuses.values.sample,
-            bed_type: Bed::TYPES.sample.last,
-            using_ventilator: rand(2).zero?
-          }
-        end
-      )
-
-      fake_historical(hospital)
-    end
-  end
-
 end
 
 if CovidCase.none?
@@ -123,7 +101,7 @@ if CovidCase.none?
         total: rand(total..(total + 500)),
         deaths: deaths,
         cureds: cureds,
-        created_at: i.days.ago
+        reference_date: i.days.ago
       )
     end
   end

@@ -7,7 +7,7 @@
             <div ref="cases">
               <form>
                 <h3 class="typography typography--title m-b-md">Cidade</h3>
-                <cov-select v-model="city" :options="dashboard.cities" @input="filterCity" />
+                <cov-select v-model="city" :options="dashboard.cities" @input="filterCity()" />
               </form>
 
               <div class="m-t-lg">
@@ -46,7 +46,7 @@
                   </cov-grid-cell>
 
                   <cov-grid-cell :breakpoints="{ sm: 'fit', lg: 'full' }" class="hospitals-header__select m-t-sm">
-                    <cov-select v-model="hospital" :options="hospitalOptions" @input="filter" />
+                    <cov-select v-model="hospital" :options="hospitalOptions" @input="filter()" />
                   </cov-grid-cell>
                 </cov-grid>
               </form>
@@ -468,7 +468,7 @@ export default {
     }),
 
     badgesPercent ({ busy, total }) {
-      return this.formatPercent(busy / total)
+      return this.formatPercent((busy / total) || 0)
     },
 
     clearHospital () {
@@ -524,7 +524,7 @@ export default {
     updatedDistance (model) {
       model = this.dashboard[model]
 
-      if (model) {
+      if (model && model.updated_at) {
         const distance = formatDistanceToNow(
           new Date(model.updated_at),
           { locale: ptBR }
@@ -533,7 +533,7 @@ export default {
         return `Atualizado há ${distance}`
       }
 
-      return ''
+      return 'Não há dados'
     }
   }
 }
