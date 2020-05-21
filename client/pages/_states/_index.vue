@@ -70,8 +70,8 @@
                   <span class="beds__title">{{ bedsTypes[key].label }}</span>
                 </template>
                 <div>
-                  <cov-grid align-bottom justify-between>
-                    <cov-grid-cell :breakpoints="{ col: '1-of-2'}" class="beds__content p-r-md">
+                  <cov-grid align-bottom gutter justify-between>
+                    <cov-grid-cell :breakpoints="{ col: 'full', sm: 'full', md: '1-of-2', lg: '1-of-2' }" class="beds__content">
                       <div class="beds__box">
                         <div class="typography--caption">
                           COVID-19
@@ -89,7 +89,7 @@
                       </div>
                     </cov-grid-cell>
 
-                    <cov-grid-cell :breakpoints="{ col: '1-of-2'}" class="beds__content p-l-md">
+                    <cov-grid-cell :breakpoints="{ col: 'full', sm: 'full', md: '1-of-2', lg: '1-of-2' }" class="beds__content">
                       <div class="typography--caption beds__spacing-top">Não Covid-19</div>
                       <div class="beds__box m-t-md">
                         <span>Total</span>
@@ -480,17 +480,17 @@ export default {
     flex-wrap: wrap;
     justify-content: space-between;
   }
+}
 
-  &__content {
-    & + & {
-      border-left: 1px solid $tertiary-color;
+@include breakpoint(min-width $small-screen) {
+  .beds {
+    &__content {
+      & + & {
+        border-left: 1px solid $tertiary-color;
+      }
     }
   }
 }
-// .hospitals-header {
-//   &__title {}
-//   &__select {}
-// }
 
 @include breakpoint($medium-screen) {
   .hospitals-header {
