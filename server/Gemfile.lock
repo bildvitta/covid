@@ -106,7 +106,8 @@ GEM
     puma (4.3.5)
       nio4r (~> 2.0)
     rack (2.2.2)
-    rack-cors (0.4.1)
+    rack-cors (1.0.5)
+      rack (>= 1.6.0)
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
     rails (6.0.3)
@@ -182,7 +183,7 @@ DEPENDENCIES
   mysql2
   pg
   puma (~> 4.3)
-  rack-cors (~> 0.4.0)
+  rack-cors (~> 1.0.5)
   rails (~> 6.0.3)
   rest-client
   ruby-oci8
