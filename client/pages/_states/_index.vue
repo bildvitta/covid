@@ -40,12 +40,12 @@
           <cov-grid align-bottom class="reverse-row-lg" justify-between>
             <cov-grid-cell :breakpoints="{ sm: 'full', lg: '9-of-12' }">
               <form>
-                <cov-grid align-middle class="hospitals-header">
+                <cov-grid align-middle class="hospitals-header" gutter>
                   <cov-grid-cell :breakpoints="{ col: 'fit' }" class="hospitals-header__title">
-                    <h3 class="typography typography--title m-r-md">Hospitais</h3>
+                    <h3 class="typography typography--title p-r-md">Hospitais</h3>
                   </cov-grid-cell>
 
-                  <cov-grid-cell :breakpoints="{ sm: 'fit', lg: 'full' }" class="hospitals-header__select m-t-sm">
+                  <cov-grid-cell :breakpoints="{ sm: 'fit', lg: 'full' }" class="hospitals-header__select">
                     <cov-select v-model="hospital" :options="hospitalOptions" @input="filter()" />
                   </cov-grid-cell>
                 </cov-grid>
@@ -564,6 +564,8 @@ export default {
 
 @include breakpoint($medium-screen) {
   .hospitals-header {
+    flex-wrap: nowrap;
+
     &__title {
       text-align: right;
     }

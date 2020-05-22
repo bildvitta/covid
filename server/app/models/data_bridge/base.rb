@@ -12,11 +12,20 @@ module DataBridge
 
         next if hospitals[r.hospital_slug].nil?
 
-        Bed.where(hospital_id: hospitals[r.hospital_slug], slug: r.slug).first_or_create do |bed|
+        bed = Bed.where(hospital_id: hospitals[r.hospital_slug], slug: r.slug).first_or_create do |bed|
           bed.status = r.status
           bed.bed_type = r.bed_type
           bed.using_ventilator = r.using_ventilator
+          bed.updated_at = Time.now
         end
+
+        # melhorar
+        bed.status = r.status
+        bed.bed_type = r.bed_type
+        bed.using_ventilator = r.using_ventilator
+        bed.updated_at = Time.now
+
+        bed.save
       end
       # apagar as q nao vieram
 

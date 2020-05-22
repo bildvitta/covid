@@ -103,7 +103,7 @@ GEM
     nokogiri (1.10.9)
       mini_portile2 (~> 2.4.0)
     pg (1.2.3)
-    puma (4.3.3)
+    puma (4.3.5)
       nio4r (~> 2.0)
     rack (2.2.2)
     rack-cors (0.4.1)
@@ -144,6 +144,7 @@ GEM
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
+    ruby-oci8 (2.2.8)
     spring (2.1.0)
     spring-watcher-listen (2.0.1)
       listen (>= 2.7, < 4.0)
@@ -180,10 +181,11 @@ DEPENDENCIES
   listen (~> 3.2)
   mysql2
   pg
-  puma (~> 4.1)
+  puma (~> 4.3)
   rack-cors (~> 0.4.0)
   rails (~> 6.0.3)
   rest-client
+  ruby-oci8
   spring
   spring-watcher-listen (~> 2.0.0)
   tzinfo-data
