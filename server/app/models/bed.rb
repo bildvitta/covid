@@ -12,7 +12,7 @@ class Bed < ApplicationRecord
 
   belongs_to :hospital
 
-  after_commit -> { hospital.city.flush_cache }
+  after_commit -> { hospital.city.flush_cache hospital }
 
   extend FriendlyId
   friendly_id :generate_slug, use: :slugged
