@@ -5,10 +5,10 @@
         <cov-grid v-if="fetchSuccess" gutter>
           <cov-grid-cell :breakpoints="{ sm: 'full', md: 'full', lg: '1-of-2' }">
             <div ref="cases">
-              <form>
+              <div>
                 <h3 class="typography typography--title m-b-md">Cidade</h3>
                 <cov-select v-model="city" :options="dashboard.cities" @input="filterCity()" />
-              </form>
+              </div>
 
               <div class="m-t-lg">
                 <h3 class="typography typography--title">Casos</h3>
@@ -212,14 +212,14 @@ export default {
       }
 
       const limit = 15
-
       const datasets = {}
-      const labels = this.historyDates.slice(0, limit)
-      const total = this.historyCases.total.slice(0, limit)
+
+      const labels = this.historyDates.slice(-limit)
+      const total = this.historyCases.total.slice(-limit)
 
       for (const key of Object.keys(this.historyCases)) {
         const { label, color } = this.casesTypes[key]
-        const data = this.historyCases[key].slice(0, limit)
+        const data = this.historyCases[key].slice(-limit)
 
         datasets[key] = {
           labels,
