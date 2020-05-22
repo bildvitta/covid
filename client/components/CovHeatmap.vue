@@ -3,7 +3,7 @@
     <client-only>
       <l-map :center="[-21.1775, -47.81028]" :options="{ attributionControl: false }" :zoom="12">
         <l-tile-layer url="https://{s}.tile.osm.org/{z}/{x}/{y}.png" />
-        <l-heatmap :lat-lng="this.points" />
+        <l-heatmap :lat-lng="points" />
       </l-map>
     </client-only>
   </div>

@@ -35,7 +35,7 @@ class PagesController < ApplicationController
       }
 
       {
-        updated_at: @beds.order(updated_at: :desc).last.updated_at.iso8601,
+        updated_at: @beds.order(updated_at: :desc).last&.updated_at&.iso8601,
         intensive_care_unit: bed_json(@beds.icus, &block),
         nursing: bed_json(@beds.nursings, &block),
         ventilator: bed_json(@beds.using_ventilator, &block)
@@ -45,10 +45,10 @@ class PagesController < ApplicationController
 
   def cases_data
     cached_data :cases_data do
-      covid_case = @city.covid_cases.order(updated_at: :desc).first
+      covid_case = @city.covid_cases.order(reference_date: :desc).first || CovidCase.new
 
       {
-        updated_at: covid_case.updated_at.iso8601,
+        updated_at: covid_case.updated_at&.iso8601,
         cases: covid_case.to_json
       }
     end
@@ -99,8 +99,8 @@ class PagesController < ApplicationController
 
   def historical_data
     cached_data :historical_data do
-      (30.days.ago.to_date..Date.today).map do |date|
-        covid_cases = @city.covid_cases.find { |covid_case| covid_case.created_at.to_date == date }
+      (30.days.ago.to_date..1.days.ago.to_date).map do |date|
+        covid_cases = @city.covid_cases.find { |covid_case| covid_case.reference_date == date }
         covid_cases ||= CovidCase.new
 
         data = {

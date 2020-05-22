@@ -5,10 +5,10 @@
         <cov-grid v-if="fetchSuccess" gutter>
           <cov-grid-cell :breakpoints="{ sm: 'full', md: 'full', lg: '1-of-2' }">
             <div ref="cases">
-              <form>
+              <div>
                 <h3 class="typography typography--title m-b-md">Cidade</h3>
-                <cov-select v-model="city" :options="dashboard.cities" @input="filterCity" />
-              </form>
+                <cov-select v-model="city" :options="dashboard.cities" @input="filterCity()" />
+              </div>
 
               <div class="m-t-lg">
                 <h3 class="typography typography--title">Casos</h3>
@@ -40,13 +40,13 @@
           <cov-grid align-bottom class="reverse-row-lg" justify-between>
             <cov-grid-cell :breakpoints="{ sm: 'full', lg: '9-of-12' }">
               <form>
-                <cov-grid align-middle class="hospitals-header">
+                <cov-grid align-middle class="hospitals-header" gutter>
                   <cov-grid-cell :breakpoints="{ col: 'fit' }" class="hospitals-header__title">
-                    <h3 class="typography typography--title m-r-md">Hospitais</h3>
+                    <h3 class="typography typography--title p-r-md">Hospitais</h3>
                   </cov-grid-cell>
 
-                  <cov-grid-cell :breakpoints="{ sm: 'fit', lg: 'full' }" class="hospitals-header__select m-t-sm">
-                    <cov-select v-model="hospital" :options="hospitalOptions" @input="filter" />
+                  <cov-grid-cell :breakpoints="{ sm: 'fit', lg: 'full' }" class="hospitals-header__select">
+                    <cov-select v-model="hospital" :options="hospitalOptions" @input="filter()" />
                   </cov-grid-cell>
                 </cov-grid>
               </form>
@@ -212,14 +212,14 @@ export default {
       }
 
       const limit = 15
-
       const datasets = {}
-      const labels = this.historyDates.slice(0, limit)
-      const total = this.historyCases.total.slice(0, limit)
+
+      const labels = this.historyDates.slice(-limit)
+      const total = this.historyCases.total.slice(-limit)
 
       for (const key of Object.keys(this.historyCases)) {
         const { label, color } = this.casesTypes[key]
-        const data = this.historyCases[key].slice(0, limit)
+        const data = this.historyCases[key].slice(-limit)
 
         datasets[key] = {
           labels,
@@ -437,12 +437,15 @@ export default {
     },
 
     hospitals () {
-      return this.dashboard.hospitals
+      return this.dashboard.hospitals || []
     },
 
     hospitalsHeatmap () {
       return this.hospitals.reduce((hospitals, value) => {
-        hospitals.push([value.latitude, value.longitude, value.busy * 10])
+        for (let index = 0; index < value.busy; index++) {
+          hospitals.push([value.latitude, value.longitude, 1])
+        }
+
         return hospitals
       }, [])
     }
@@ -465,7 +468,7 @@ export default {
     }),
 
     badgesPercent ({ busy, total }) {
-      return this.formatPercent(busy / total)
+      return this.formatPercent((busy / total) || 0)
     },
 
     clearHospital () {
@@ -521,7 +524,7 @@ export default {
     updatedDistance (model) {
       model = this.dashboard[model]
 
-      if (model) {
+      if (model && model.updated_at) {
         const distance = formatDistanceToNow(
           new Date(model.updated_at),
           { locale: ptBR }
@@ -530,7 +533,7 @@ export default {
         return `Atualizado há ${distance}`
       }
 
-      return ''
+      return 'Não há dados'
     }
   }
 }
@@ -561,6 +564,8 @@ export default {
 
 @include breakpoint($medium-screen) {
   .hospitals-header {
+    flex-wrap: nowrap;
+
     &__title {
       text-align: right;
     }
