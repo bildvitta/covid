@@ -14,8 +14,11 @@ class City < ApplicationRecord
 
   scope :is_active, -> { joins(:hospitals).includes(:state, :hospitals) }
 
-  def flush_cache
+  def flush_cache hospital = nil
     Rails.cache.delete([self.class, "cached_city_#{slug}"])
+
+    Rails.cache.delete([:beds_data, slug, hospital&.slug])
+    Rails.cache.delete([:beds_data, slug, nil])
   end
 
   def get_city_state

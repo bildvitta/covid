@@ -18,7 +18,7 @@
 
     <footer class="footer">
       <div class="container">
-        Este é um projeto <em>open source</em>. Tenha acesso ao código-fonte na íntegra <a href="?" target="_blank">aqui</a>.
+        Este é um projeto <em>open source</em>. Tenha acesso ao código-fonte na íntegra <a href="https://github.com/bildvitta/covid" target="_blank">aqui</a>.
       </div>
     </footer>
   </div>
@@ -35,6 +35,8 @@
   background-color: $white;
   box-shadow: $shadow;
   padding: 20px 0;
+  position: relative;
+  z-index: 1001;
 
   .container {
     align-items: center;
