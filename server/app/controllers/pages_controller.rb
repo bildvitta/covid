@@ -35,7 +35,7 @@ class PagesController < ApplicationController
       }
 
       {
-        updated_at: @beds.order(updated_at: :desc).last&.updated_at&.iso8601,
+        updated_at: @beds.order(updated_at: :desc).first&.updated_at&.iso8601,
         intensive_care_unit: bed_json(@beds.icus, &block),
         nursing: bed_json(@beds.nursings, &block),
         ventilator: bed_json(@beds.using_ventilator, &block)
