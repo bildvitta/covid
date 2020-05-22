@@ -29,6 +29,6 @@ RUN mkdir /app
 WORKDIR /app
 COPY . /app
 
-RUN bundle check || bundle install
+RUN bundle check || bundle install --without production
 
 RUN chmod +x /app/scripts/entrypoint.sh
