@@ -144,6 +144,7 @@ GEM
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
+    ruby-oci8 (2.2.8)
     spring (2.1.0)
     spring-watcher-listen (2.0.1)
       listen (>= 2.7, < 4.0)
@@ -184,6 +185,7 @@ DEPENDENCIES
   rack-cors (~> 0.4.0)
   rails (~> 6.0.3)
   rest-client
+  ruby-oci8
   spring
   spring-watcher-listen (~> 2.0.0)
   tzinfo-data
