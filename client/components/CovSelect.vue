@@ -1,13 +1,11 @@
 <template>
-  <div>
-    <cov-box class="select">
-      <select v-model="model" v-bind="$attrs" class="select__display" v-on="$listeners">
-        <option v-for="(option, index) in formattedOptions" :key="index" :value="option.value">
-          {{ option.label }}
-        </option>
-      </select>
-    </cov-box>
-  </div>
+  <cov-box class="select">
+    <select v-model="model" v-bind="$attrs" class="select__display" v-on="events">
+      <option v-for="(option, index) in formattedOptions" :key="index" :value="option.value">
+        {{ option.label }}
+      </option>
+    </select>
+  </cov-box>
 </template>
 
 <script>
@@ -35,6 +33,11 @@ export default {
   },
 
   computed: {
+    events () {
+      const { input, ...events } = this.$listeners
+      return events
+    },
+
     model: {
       get () {
         return this.mapOptions ? this.value.value : this.value
