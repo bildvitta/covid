@@ -99,7 +99,7 @@ class PagesController < ApplicationController
 
   def historical_data
     cached_data :historical_data do
-      (30.days.ago.to_date..Date.today).map do |date|
+      (30.days.ago.to_date..1.days.ago.to_date).map do |date|
         covid_cases = @city.covid_cases.find { |covid_case| covid_case.reference_date == date }
         covid_cases ||= CovidCase.new
 
