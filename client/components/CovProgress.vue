@@ -1,7 +1,7 @@
 <template>
   <div class="cov-progress">
     <div v-for="(item, index) in formattedContent" :key="index" class="cov-progress__content" :class="backgroundClass(item)" :style="style(item, index)">
-      <span class="cov-progress__text">{{ item.value }}</span>
+      <span class="cov-progress__text">{{ formatPercent(item.value) }}</span>
     </div>
   </div>
 </template>
@@ -14,19 +14,26 @@ export default {
       required: true,
       default: () => []
     }
-
-    // total: {
-    //   type: Number,
-    //   required: true
-    // }
   },
 
   computed: {
     formattedContent () {
-      const total = this.content.find(item => item.isTotal)
+      let total = 0
+      let difference = 0
+
+      this.content.forEach((item) => {
+        if (item.isTotal) {
+          total = item.value
+          return
+        }
+
+        difference += item.value
+      })
 
       return this.content.map((item) => {
-        item.value = ((item.value * 100) / total)
+        item.value = item.isTotal
+          ? ((item.value - difference) * 100) / total
+          : (item.value * 100) / total
 
         return item
       })
@@ -42,6 +49,18 @@ export default {
 
     backgroundClass ({ color }) {
       return color ? `bg-${color}` : 'bg-primary'
+    },
+
+    formatPercent (number) {
+      number = (number / 100) || 0
+
+      const { format } = new Intl.NumberFormat('pt-BR', {
+        style: 'percent',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      })
+
+      return format(number)
     }
   }
 }
