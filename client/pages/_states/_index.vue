@@ -5,12 +5,12 @@
         <cov-grid v-if="fetchSuccess" gutter>
           <cov-grid-cell :breakpoints="{ sm: 'full', md: 'full', lg: '1-of-2' }">
             <div ref="cases">
-              <div>
+              <div id="city-selection">
                 <h3 class="typography typography--title m-b-md">Cidade</h3>
                 <cov-select v-model="city" :options="dashboard.cities" @input="filterCity()" />
               </div>
 
-              <div class="m-t-lg">
+              <div id="cases" class="m-t-lg">
                 <h3 class="typography typography--title">Casos</h3>
                 <div class="typography typography--subtitle m-b-md">
                   <abbr :title="updatedDate('covid_cases')">{{ updatedDistance('covid_cases') }}</abbr>
@@ -64,7 +64,7 @@
 
         <div class="beds m-t-md">
           <cov-grid align-center gutter>
-            <cov-grid-cell v-for="(item, key) in beds" :key="key" :breakpoints="{ sm: 'full', md: '1-of-2', lg: '1-of-3' }">
+            <cov-grid-cell v-for="(item, key) in beds" :id="key" :key="key" :breakpoints="{ sm: 'full', md: '1-of-2', lg: '1-of-3' }">
               <cov-card class="typography">
                 <template v-slot:header>
                   <span class="beds__title">{{ bedsTypes[key].label }}</span>
