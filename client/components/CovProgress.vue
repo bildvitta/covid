@@ -1,7 +1,7 @@
 <template>
   <div class="cov-progress">
-    <div v-for="(item, index) in content" :key="index" class="cov-progress__content" :class="backgroundClass(item)" :style="style(item, index)">
-      <span class="cov-progress__text">{{ item.width }}</span>
+    <div v-for="(item, index) in formattedContent" :key="index" class="cov-progress__content" :class="backgroundClass(item)" :style="style(item, index)">
+      <span class="cov-progress__text">{{ item.value }}</span>
     </div>
   </div>
 </template>
@@ -14,35 +14,34 @@ export default {
       required: true,
       default: () => []
     }
+
+    // total: {
+    //   type: Number,
+    //   required: true
+    // }
   },
 
-  watch: {
-    content () {
-      this.checkContent()
+  computed: {
+    formattedContent () {
+      const total = this.content.find(item => item.isTotal)
+
+      return this.content.map((item) => {
+        item.value = ((item.value * 100) / total)
+
+        return item
+      })
     }
   },
 
-  created () {
-    this.checkContent()
-  },
-
   methods: {
-    style ({ width }, index) {
+    style ({ value }, index) {
       const isLast = this.content.length - 1 === index
 
-      return { width: `calc(${width}% + ${isLast ? 0 : 4}px)` }
+      return { width: `calc(${value}% + ${isLast ? 0 : 4}px)` }
     },
 
     backgroundClass ({ color }) {
       return color ? `bg-${color}` : 'bg-primary'
-    },
-
-    checkContent () {
-      if (this.content.reduce((acc, current) => current.width + acc, 0) > 100) {
-        throw new Error('Please, the som of numbers must be less than 100')
-      }
-
-      return true
     }
   }
 }

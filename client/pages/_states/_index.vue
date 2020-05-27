@@ -132,7 +132,7 @@
       </div>
     </cov-section>
 
-    <cov-progress :content="[{ width: 50, color: 'primary' }, { width: 25, color: 'positive' }, { width: 25, color: 'warning' }]" />
+    <cov-progress :content="[{ value: 737, color: 'primary', isTotal: true }, { value: 15, color: 'positive' }, { value: 380, color: 'warning' }]" />
 
     <cov-loading :showing="isFetching" />
   </div>
