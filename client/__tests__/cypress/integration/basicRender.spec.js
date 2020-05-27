@@ -3,38 +3,33 @@ context("Basic screen render and components", () => {
     cy.visit("http://localhost:8080");
   });
 
-  describe("Basic Render", () => {
-    it("Visit page and redirect to Ribeirão Preto", () => {
-      cy.url().should("include", "sp/ribeirao-preto");
-      cy.get(".cov-loading").should("be.visible");
-    });
+  // describe("Basic Render", () => {
+  //   it("Visit page and redirect to Ribeirão Preto", () => {
+  //     cy.url().should("include", "sp/ribeirao-preto");
+  //     cy.get(".cov-loading").should("be.visible");
+  //   });
 
-    it("Default page components", () => {
-      cy.get("header.header > .container > .header__brand").contains(
-        "COVID-19"
-      );
-      cy.get("header.header > .container > .header__title").contains(
-        "Ocupação de leitos hospitalares"
-      );
+  //   it("Default page components", () => {
+  //     cy.get("header.header > .container > .header__brand").contains(
+  //       "COVID-19"
+  //     );
+  //     cy.get("header.header > .container > .header__title").contains(
+  //       "Ocupação de leitos hospitalares"
+  //     );
 
-      cy.get("footer.footer > .container").contains(
-        "Este é um projeto open source. Tenha acesso ao código-fonte na íntegra aqui"
-      );
-      cy.get("footer.footer > .container > a")
-        .should("have.attr", "href", "https://github.com/bildvitta/covid")
-        .should("have.attr", "target", "_blank");
-    });
-  });
+  //     cy.get("footer.footer > .container").contains(
+  //       "Este é um projeto open source. Tenha acesso ao código-fonte na íntegra aqui"
+  //     );
+  //     cy.get("footer.footer > .container > a")
+  //       .should("have.attr", "href", "https://github.com/bildvitta/covid")
+  //       .should("have.attr", "target", "_blank");
+  //   });
+  // });
 
   describe("Components Render", () => {
     it("First section - City Selection", () => {
-      cy.get(
-        "main .cov-section:nth-child(1) .cov-grid-cell--md-full > :nth-child(1) > :nth-child(1) > .typography"
-      ).contains("Cidade");
-      cy.get("main .cov-section:nth-child(1) .select > select").should(
-        "have.value",
-        "ribeirao-preto"
-      );
+      cy.get("#city-selection h3").contains("Cidade");
+      cy.get("#city-selection select").should("have.value", "ribeirao-preto");
     });
 
     it("First section - Cards Cases", () => {
