@@ -35,7 +35,7 @@ export default {
       justify-content: space-between;
 
       & + * {
-        margin-top: $space-sm;
+        margin-top: $space-xs;
       }
     }
   }

@@ -42,8 +42,8 @@ export default {
   background-color: $primary-color;
   border-radius: $radius;
   color: $white;
-  display: flex;
-  font-size: $font-size-medium;
+  display: inline-flex;
+  font-size: $font-size-small;
   font-weight: bold;
   padding: 3px 6px;
 
