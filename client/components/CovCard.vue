@@ -1,5 +1,5 @@
 <template>
-  <cov-box>
+  <cov-box v-bind="$attrs">
     <div v-if="hasHeader" class="card__header">
       <slot name="header" />
     </div>
@@ -30,6 +30,7 @@ export default {
   .card {
     &__header {
       align-items: center;
+      color: $primary-color;
       display: flex;
       font-size: 14px;
       justify-content: space-between;

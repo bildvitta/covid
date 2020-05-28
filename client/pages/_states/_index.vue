@@ -3,7 +3,7 @@
     <cov-section>
       <div class="container">
         <cov-grid v-if="fetchSuccess" gutter>
-          <cov-grid-cell :breakpoints="{ sm: 'full', md: 'full', lg: '1-of-3' }">
+          <cov-grid-cell :breakpoints="{ sm: 'full', md: 'full', lg: '3-of-8' }">
             <div ref="cases">
               <div>
                 <h3 class="text-title m-b-md">Cidade</h3>
@@ -18,9 +18,9 @@
 
                 <cov-grid v-if="dashboard.covid_cases" align-center gutter>
                   <cov-grid-cell v-for="(item, key) in dashboard.covid_cases.cases" :key="key" :breakpoints="{ sm: 'full', md: '1-of-2', lg: '1-of-3' }">
-                    <cov-card>
+                    <cov-card :outlined="casesTypes[key].border">
                       <div class="text-size-sm">{{ casesTypes[key].label }}</div>
-                      <div class="text-bold text-size-xl" :class="casesTypes[key].classes">{{ item }}</div>
+                      <div class="text-bold text-size-lg" :class="casesTypes[key].classes">{{ item }}</div>
                       <!-- <client-only>
                         <cov-bar-chart :chart-data="casesChartData[key]" :options="casesChartOptions" style="height: 150px;" />
                       </client-only> -->
@@ -288,19 +288,22 @@ export default {
         total: {
           label: 'Confirmados',
           classes: 'text-primary',
-          color: '#a3a1fb'
+          color: '#a3a1fb',
+          border: 'primary'
         },
 
         deaths: {
           label: 'Óbitos',
           classes: 'text-negative',
-          color: '#fA5252'
+          color: '#fA5252',
+          border: 'negative'
         },
 
         cureds: {
           label: 'Recuperados',
           classes: 'text-positive',
-          color: '#34c360'
+          color: '#34c360',
+          border: 'positive'
         }
       }
     },
