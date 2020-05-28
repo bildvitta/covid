@@ -6,27 +6,31 @@
           <cov-grid-cell :breakpoints="{ sm: 'full', md: 'full', lg: '1-of-3' }">
             <div ref="cases">
               <div>
-                <h3 class="typography typography--title m-b-md">Cidade</h3>
+                <h3 class="text-title m-b-md">Cidade</h3>
                 <cov-select v-model="city" :options="dashboard.cities" @input="filterCity()" />
               </div>
 
               <div class="m-t-lg">
-                <h3 class="typography typography--title">Casos</h3>
-                <div class="typography typography--subtitle m-b-md">
+                <h3 class="text-title">Casos</h3>
+                <div class="text-subtitle m-b-md">
                   <abbr :title="updatedDate('covid_cases')">{{ updatedDistance('covid_cases') }}</abbr>
                 </div>
 
                 <cov-grid v-if="dashboard.covid_cases" align-center gutter>
                   <cov-grid-cell v-for="(item, key) in dashboard.covid_cases.cases" :key="key" :breakpoints="{ sm: 'full', md: '1-of-2', lg: '1-of-3' }">
                     <cov-card>
-                      <div>{{ casesTypes[key].label }}</div>
-                      <div class="typography--heavy-text" :class="casesTypes[key].classes">{{ item }}</div>
+                      <div class="text-size-sm">{{ casesTypes[key].label }}</div>
+                      <div class="text-bold text-size-xl" :class="casesTypes[key].classes">{{ item }}</div>
                       <!-- <client-only>
                         <cov-bar-chart :chart-data="casesChartData[key]" :options="casesChartOptions" style="height: 150px;" />
                       </client-only> -->
                     </cov-card>
                   </cov-grid-cell>
                 </cov-grid>
+              </div>
+
+              <div class="m-t-lg">
+                <cov-progress :content="casesProgress" />
               </div>
             </div>
           </cov-grid-cell>
@@ -35,7 +39,7 @@
             <form>
               <div class="hospitals-header">
                 <div>
-                  <h3 class="typography typography--title m-b-md">Hospitais</h3>
+                  <h3 class="text-title m-b-md">Hospitais</h3>
                 </div>
 
                 <div>
@@ -45,9 +49,9 @@
             </form>
 
             <div class="m-t-lg">
-              <h3 class="typography typography--title">Leitos</h3>
+              <h3 class="text-title">Leitos</h3>
 
-              <div class="typography typography--subtitle">
+              <div class="text-subtitle">
                 <abbr :title="updatedDate('beds')">{{ updatedDistance('beds') }}</abbr>
               </div>
             </div>
@@ -62,20 +66,20 @@
                       <cov-grid align-bottom gutter justify-between>
                         <cov-grid-cell :breakpoints="{ col: '1-of-2' }">
                           <div>
-                            <div class="typography--caption">
+                            <div class="text-caption">
                               COVID-19
                             </div>
                             <cov-badge class="m-t-xs" :percent="badgesPercent(item.covid)">Ocupação {{ badgesPercent(item.covid) }}</cov-badge>
                           </div>
                         </cov-grid-cell>
                         <cov-grid-cell :breakpoints="{ col: '1-of-2' }" class="beds__content">
-                          <div class="beds__box m-t-md">
+                          <div class="beds__box">
                             <span>Total</span>
-                            <span class="typography--weight-bold typography--primary-color">{{ item.covid.total }}</span>
+                            <span class="text-bold text-primary">{{ item.covid.total }}</span>
                           </div>
                           <div class="beds__box">
                             <span>Ocupados</span>
-                            <span class="typography--weight-bold typography--primary-color">{{ item.covid.busy }}</span>
+                            <span class="text-bold text-primary">{{ item.covid.busy }}</span>
                           </div>
                         </cov-grid-cell>
                       </cov-grid>
@@ -85,16 +89,16 @@
                     <div>
                       <cov-grid gutter justify-between>
                         <cov-grid-cell :breakpoints="{ col: '1-of-2' }">
-                          <div class="typography--caption beds__spacing-top">Não COVID-19</div>
+                          <div class="text-caption beds__spacing-top">Não COVID-19</div>
                         </cov-grid-cell>
                         <cov-grid-cell :breakpoints="{ col: '1-of-2' }" class="beds__content">
                           <div class="beds__box">
                             <span>Total</span>
-                            <span class="typography--weight-bold typography--primary-color">{{ item.normal.total }}</span>
+                            <span class="text-bold text-primary">{{ item.normal.total }}</span>
                           </div>
                           <div class="beds__box">
                             <span>Ocupados</span>
-                            <span class="typography--weight-bold typography--primary-color">{{ item.normal.busy }}</span>
+                            <span class="text-bold text-primary">{{ item.normal.busy }}</span>
                           </div>
                         </cov-grid-cell>
                       </cov-grid>
@@ -120,7 +124,7 @@
       <div class="container">
         <cov-grid gutter justify-between>
           <cov-grid-cell :breakpoints="{ col: 'full', sm: 'full', md: 'full' }">
-            <h3 class="typography typography--title">Histórico</h3>
+            <h3 class="text-title">Histórico</h3>
 
             <cov-box class="m-t-md">
               <client-only>
@@ -131,8 +135,6 @@
         </cov-grid>
       </div>
     </cov-section>
-
-    <cov-progress :content="[{ value: 737, color: 'primary', isTotal: true }, { value: 150, color: 'positive' }, { value: 380, color: 'warning' }]" />
 
     <cov-loading :showing="isFetching" />
   </div>
@@ -259,6 +261,26 @@ export default {
         legend: { display: false },
         scales: { yAxes: scale, xAxes: scale }
       }
+    },
+
+    casesProgress () {
+      return [
+        {
+          value: this.dashboard.covid_cases.cases.total,
+          color: 'primary',
+          isTotal: true
+        },
+
+        {
+          value: this.dashboard.covid_cases.cases.cureds,
+          color: 'positive'
+        },
+
+        {
+          value: this.dashboard.covid_cases.cases.deaths,
+          color: 'negative'
+        }
+      ]
     },
 
     casesTypes () {

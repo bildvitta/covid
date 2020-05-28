@@ -1,7 +1,7 @@
 <template>
   <div class="cov-progress">
     <div v-for="(item, index) in formattedContent" :key="index" class="cov-progress__content" :class="backgroundClass(item)" :style="style(item, index)">
-      <span class="cov-progress__text">{{ formatPercent(item.value) }}</span>
+      <span class="cov-progress__text text-bold" :class="textClass(item)" :style="style(item, index)">{{ formatPercent(item.value) }}</span>
     </div>
   </div>
 </template>
@@ -61,6 +61,10 @@ export default {
       })
 
       return format(number)
+    },
+
+    textClass ({ color }) {
+      return color ? `text-${color}` : 'bg-primary'
     }
   }
 }
