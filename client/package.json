@@ -35,6 +35,7 @@
     "cypress": "^4.6.0",
     "eslint": "^7.0.0",
     "eslint-loader": "^4.0.2",
+    "eslint-plugin-cypress": "^2.11.1",
     "eslint-plugin-nuxt": ">=1.0.0",
     "eslint-plugin-vue": "^6.2.2",
     "sass": "^1.26.5",
