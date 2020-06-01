@@ -40,7 +40,7 @@ class PagesController < ApplicationController
         "Enfermaria - Respirador - Total", "Enfermaria - Respirador - Livre", "Enfermaria - Respirador - Ocupado", "Enfermaria - Respirador - Indisponível"
       ],
       data
-    ).generate!("/app/relatorio-leitos-#{Date.today.to_s}")
+    ).generate!(Rails.root.join('app/relatorio-leitos'))
 
     render_json({})
   end
@@ -50,27 +50,28 @@ class PagesController < ApplicationController
   def beds_data
     cached_data :beds_data do
       block = -> (beds) {
-        free = busy = unavailable = 0
+        free = busy = unavailable = ventilator = 0
 
         beds.each do |bed|
           free += 1 if bed.free?
           busy += 1 if bed.busy?
           unavailable += 1 if bed.unavailable?
+          ventilator += 1 if bed.using_ventilator
         end
 
         {
           total: free + busy + unavailable,
           free: free,
           busy: busy,
-          unavailable: unavailable
+          unavailable: unavailable,
+          ventilator: ventilator
         }
       }
 
       {
         updated_at: @beds.order(updated_at: :desc).first&.updated_at&.iso8601,
         intensive_care_unit: bed_json(@beds.icus, &block),
-        nursing: bed_json(@beds.nursings, &block),
-        ventilator: bed_json(@beds.using_ventilator, &block)
+        nursing: bed_json(@beds.nursings, &block)
       }
     end
   end
@@ -95,37 +96,36 @@ class PagesController < ApplicationController
   def bed_json details, &block
     covid_beds = []
     normal_beds = []
-    ventilators = []
 
     details.each do |detail|
       covid_beds << detail if detail.covid?
       normal_beds << detail if detail.normal?
-      ventilators << detail if detail.using_ventilator
     end
 
     unless block
       block = -> (bed_details) {
-        free = busy = unavailable = 0
+        free = busy = unavailable = ventilator = 0
 
         bed_details.each do |detail|
           free += detail.status_free
           busy += detail.status_busy
           unavailable += detail.status_unavailable
+          ventilator += free + busy + unavailable if detail.using_ventilator
         end
 
         {
           total: free + busy + unavailable,
           free: free,
           busy: busy,
-          unavailable: unavailable
+          unavailable: unavailable,
+          ventilator: ventilator
         }
       }
     end
 
     {
       covid: block.(covid_beds),
-      normal: block.(normal_beds),
-      ventilator: block.(ventilators)
+      normal: block.(normal_beds)
     }
   end
 
@@ -174,8 +174,7 @@ class PagesController < ApplicationController
   end
 
   def cached_data name, &block
-    block.()
-    # Rails.cache.fetch([name, @city.slug, @hospital&.slug], expires_in: rand(10..17).minutes, &block)
+    Rails.cache.fetch([name, @city.slug, @hospital&.slug], expires_in: rand(10..17).minutes, &block)
   end
 
 end
