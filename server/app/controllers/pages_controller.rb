@@ -32,15 +32,13 @@ class PagesController < ApplicationController
     ExcelGenerate.new(
       [
         "Data",
-        "UTI - Convid - Total", "UTI - Convid - Livre ", "UTI - Convid - Ocupado ", "UTI - Convid - Indisponível",
-        "UTI - Normal - Total", "UTI - Normal - Livre ", "UTI - Normal - Ocupado ", "UTI - Normal - Indisponível",
-        "UTI - Respirador - Total", "UTI - Respirador - Livre ", "UTI - Respirador - Ocupado ", "UTI - Respirador - Indisponível",
-        "Enfermaria - Convid - Total", "Enfermaria - Convid - Livre", "Enfermaria - Convid - Ocupado", "Enfermaria - Convid - Indisponível",
-        "Enfermaria - Normal - Total", "Enfermaria - Normal - Livre", "Enfermaria - Normal - Ocupado", "Enfermaria - Normal - Indisponível",
-        "Enfermaria - Respirador - Total", "Enfermaria - Respirador - Livre", "Enfermaria - Respirador - Ocupado", "Enfermaria - Respirador - Indisponível"
+        "UTI - Convid - Total", "UTI - Convid - Livre ", "UTI - Convid - Ocupado ", "UTI - Convid - Indisponível", "UTI - Convid - Respirador",
+        "UTI - Normal - Total", "UTI - Normal - Livre ", "UTI - Normal - Ocupado ", "UTI - Normal - Indisponível", "UTI - Normal - Respirador",
+        "Enfermaria - Convid - Total", "Enfermaria - Convid - Livre", "Enfermaria - Convid - Ocupado", "Enfermaria - Convid - Indisponível", "Enfermaria - Normal - Respirador",
+        "Enfermaria - Normal - Total", "Enfermaria - Normal - Livre", "Enfermaria - Normal - Ocupado", "Enfermaria - Normal - Indisponível", "Enfermaria - Normal - Respirador"
       ],
       data
-    ).generate!(Rails.root.join('app/relatorio-leitos'))
+    ).generate!(Rails.root.join('public/relatorio-leitos').to_s)
 
     render_json({})
   end
