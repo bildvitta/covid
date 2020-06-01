@@ -1,7 +1,14 @@
 <template>
   <div class="cov-progress">
-    <div v-for="(item, index) in formattedContent" :key="index" class="cov-progress__content" :class="backgroundClass(item)" :style="style(item, index)">
-      <span class="cov-progress__text text-bold" :class="textClass(item)" :style="style(item, index)">{{ formatPercent(item.value) }}</span>
+    <div class="cov-progress__progress">
+      <div v-for="(item, index) in formattedContent" :key="index" class="cov-progress__item" :class="backgroundClass(item)" :style="style(item, index)" />
+    </div>
+    <div class="cov-progress__content m-t-sm">
+      <div v-for="(item, index) in formattedContent" :key="`${index}-span`" class="cov-progress__text text-bold" :class="textClass(item)">
+        <span class="cov-progress__ball m-r-sm" :class="backgroundClass(item)" />
+        <span class="cov-progress__percent m-r-sm">{{ formatPercent(item.value) }}</span>
+        <span class="cov-progress__percent-name text-color text-weght-normal">{{ item.label }}</span>
+      </div>
     </div>
   </div>
 </template>
@@ -42,9 +49,14 @@ export default {
 
   methods: {
     style ({ value }, index) {
-      const isLast = this.content.length - 1 === index
+      if (!value) {
+        return { display: 'none' }
+      }
 
-      return { width: `calc(${value}% + ${isLast ? 0 : 4}px)` }
+      const isLast = this.content.length - 1 === index
+      const width = isLast ? `${value}%` : `calc(${value}% + 4px)`
+
+      return { width }
     },
 
     backgroundClass ({ color }) {
@@ -53,6 +65,10 @@ export default {
 
     formatPercent (number) {
       number = (number / 100) || 0
+
+      if (!number) {
+        return '---'
+      }
 
       const { format } = new Intl.NumberFormat('pt-BR', {
         style: 'percent',
@@ -73,12 +89,15 @@ export default {
 <style lang="scss">
 .cov-progress {
   border-radius: $circular-radius;
-  display: flex;
-  height: 10px;
   margin-bottom: 20px;
   width: 100%;
 
-  &__content {
+  &__progress {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  &__item {
     &:not(:first-child) {
       margin-left: -4px;
     }
@@ -88,14 +107,32 @@ export default {
     }
 
     border-radius: $circular-radius;
+    height: 10px;
     position: relative;
   }
 
+  &__content {
+    width: 100%;
+  }
+
+  &__ball {
+    border-radius: $circular-radius;
+    display: block;
+    height: 10px;
+    width: 10px;
+  }
+
+  &__percent {
+    width: 61px;
+  }
+
+  &__percent-name {
+    font-size: 14px;
+  }
+
   &__text {
-    bottom: -20px;
-    left: 50%;
-    position: absolute;
-    transform: translateX(-50%);
+    align-items: center;
+    display: flex;
   }
 }
 </style>

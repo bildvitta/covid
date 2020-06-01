@@ -16,11 +16,11 @@
                   <abbr :title="updatedDate('covid_cases')">{{ updatedDistance('covid_cases') }}</abbr>
                 </div>
 
-                <cov-grid v-if="dashboard.covid_cases" align-center gutter>
-                  <cov-grid-cell v-for="(item, key) in dashboard.covid_cases.cases" :key="key" :breakpoints="{ sm: 'full', md: '1-of-2', lg: '1-of-3' }">
+                <cov-grid v-if="dashboard.covid_cases" align-center gutter-small>
+                  <cov-grid-cell v-for="(item, key) in dashboard.covid_cases.cases" :key="key" :breakpoints="{ col: '1-of-3', sm: '1-of-3' }">
                     <cov-card :outlined="casesTypes[key].border">
                       <div class="text-size-sm">{{ casesTypes[key].label }}</div>
-                      <div class="text-bold text-size-lg" :class="casesTypes[key].classes">{{ item }}</div>
+                      <div class="text-bold text-size-lg" :class="casesTypes[key].classes">{{ formatCases(item) }}</div>
                       <!-- <client-only>
                         <cov-bar-chart :chart-data="casesChartData[key]" :options="casesChartOptions" style="height: 150px;" />
                       </client-only> -->
@@ -81,6 +81,11 @@
                             <span>Ocupados</span>
                             <span class="text-bold text-primary">{{ item.covid.busy }}</span>
                           </div>
+                          <div class="beds__box">
+                            <span>Respiradores</span>
+                            <!-- TODO mudar os dados -->
+                            <span class="text-bold text-primary">{{ dashboard.beds.ventilator.covid.busy }}</span>
+                          </div>
                         </cov-grid-cell>
                       </cov-grid>
                     </div>
@@ -100,6 +105,11 @@
                             <span>Ocupados</span>
                             <span class="text-bold text-primary">{{ item.normal.busy }}</span>
                           </div>
+                          <div class="beds__box">
+                            <span>Respiradores</span>
+                            <!-- TODO mudar os dados -->
+                            <span class="text-bold text-primary">{{ dashboard.beds.ventilator.normal.busy }}</span>
+                          </div>
                         </cov-grid-cell>
                       </cov-grid>
                     </div>
@@ -109,9 +119,9 @@
             </div>
           </cov-grid-cell>
         </cov-grid>
-      </div>
-      <div class="m-t-lg">
-        <cov-heatmap :points="hospitalsHeatmap" />
+        <div class="m-t-lg">
+          <cov-heatmap :points="hospitalsHeatmap" />
+        </div>
       </div>
       <div class="container text-center">
         <div class="m-t-xl">
@@ -268,17 +278,20 @@ export default {
         {
           value: this.dashboard.covid_cases.cases.total,
           color: 'primary',
+          label: 'Casos ativos',
           isTotal: true
         },
 
         {
           value: this.dashboard.covid_cases.cases.cureds,
-          color: 'positive'
+          color: 'positive',
+          label: 'Recuperados'
         },
 
         {
           value: this.dashboard.covid_cases.cases.deaths,
-          color: 'negative'
+          color: 'negative',
+          label: 'Óbitos'
         }
       ]
     },
@@ -565,6 +578,10 @@ export default {
       }
 
       return 'Não há dados'
+    },
+
+    formatCases (cases) {
+      return cases || '---'
     }
   }
 }

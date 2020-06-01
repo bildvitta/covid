@@ -4,7 +4,7 @@
 }
 
 .text-secondary {
-  color: $primary-color;
+  color: $secondary-color;
 }
 
 .text-negative {
@@ -19,6 +19,10 @@
   color: $warning-color;
 }
 
+.text-color {
+  color: $text-color;
+}
+
 // text position
 .text-right {
   text-align: right;
@@ -31,6 +35,10 @@
 // text weight
 .text-bold {
   font-weight: $font-weight-bold;
+}
+
+.text-weght-normal {
+  font-weight: normal;
 }
 
 //text type

@@ -46,6 +46,7 @@ export default {
   font-size: $font-size-small;
   font-weight: bold;
   padding: 3px 6px;
+  white-space: nowrap;
 
   &--negative {
     background-color: $negative-color;
