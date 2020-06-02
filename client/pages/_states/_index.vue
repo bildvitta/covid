@@ -387,7 +387,6 @@ export default {
     },
 
     historyChartData () {
-      console.log(this.historyBeds)
       return {
         labels: this.historyDates,
 
