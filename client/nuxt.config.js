@@ -29,11 +29,12 @@ export default {
   css: [
     '~/assets/styles/components/_container.scss',
     '~/assets/styles/components/_position.scss',
-    '~/assets/styles/components/_typography.scss',
     '~/assets/styles/styles.scss',
     '~/assets/styles/utilities/_keyframes.scss',
     '~/assets/styles/utilities/_spaces.scss',
-    '~/assets/styles/utilities/_text.scss'
+    '~/assets/styles/utilities/_text.scss',
+    '~/assets/styles/utilities/_background.scss',
+    '~/assets/styles/utilities/_border.scss'
   ],
 
   styleResources: {

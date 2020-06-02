@@ -4,7 +4,7 @@
 }
 
 .text-secondary {
-  color: $primary-color;
+  color: $secondary-color;
 }
 
 .text-negative {
@@ -19,14 +19,26 @@
   color: $warning-color;
 }
 
+.text-color {
+  color: $text-color;
+}
+
 // text position
 .text-right {
   text-align: right;
 }
 
+.text-center {
+  text-align: center;
+}
+
 // text weight
 .text-bold {
   font-weight: $font-weight-bold;
+}
+
+.text-weght-normal {
+  font-weight: normal;
 }
 
 //text type
@@ -41,11 +53,33 @@
 
 .text-subtitle {
   color: $tertiary-color;
+  font-size: $font-size-small;
 }
 
 .text-title {
   color: $primary-color;
-  font-size: 18px;
+  font-size: $font-size-medium;
   font-weight: bold;
   text-transform: uppercase;
+}
+
+// text size
+.text-size-sm {
+  font-size: $font-size-small;
+}
+
+.text-size {
+  font-size: $font-size;
+}
+
+.text-size-md {
+  font-size: $font-size-medium;
+}
+
+.text-size-lg {
+  font-size: $font-size-large;
+}
+
+.text-size-xl {
+  font-size: $font-size-extra-large;
 }

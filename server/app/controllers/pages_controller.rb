@@ -13,32 +13,63 @@ class PagesController < ApplicationController
     )
   end
 
+  def historical
+    data = {}
+    names = {
+      'Ribeirânia (Hospital São Lucas Ribeirânia)' => 'Hospital São Lucas Ribeirânia',
+      'Hospital Santa Casa de Misericórdia de Ribeirão Preto' => 'S. Casa de Misericórdia Rib. Pr'
+    }
+    
+    historical_data.each do |date, values|
+      values[:beds].each do |hash|
+        params = [I18n.l(date.to_date)] + hash[:intensive_care_unit].values.map(&:values).flatten + hash[:nursing].values.map(&:values).flatten
+        name = names[hash[:name]] || hash[:name]
+
+        data.key?(hash[:name]) ? data[name] << params : data[name] = [params]
+      end
+    end
+
+    ExcelGenerate.new(
+      [
+        "Data",
+        "UTI - Convid - Total", "UTI - Convid - Livre ", "UTI - Convid - Ocupado ", "UTI - Convid - Indisponível", "UTI - Convid - Respirador",
+        "UTI - Normal - Total", "UTI - Normal - Livre ", "UTI - Normal - Ocupado ", "UTI - Normal - Indisponível", "UTI - Normal - Respirador",
+        "Enfermaria - Convid - Total", "Enfermaria - Convid - Livre", "Enfermaria - Convid - Ocupado", "Enfermaria - Convid - Indisponível", "Enfermaria - Normal - Respirador",
+        "Enfermaria - Normal - Total", "Enfermaria - Normal - Livre", "Enfermaria - Normal - Ocupado", "Enfermaria - Normal - Indisponível", "Enfermaria - Normal - Respirador"
+      ],
+      data
+    ).generate!(Rails.root.join('public/relatorio-leitos').to_s)
+
+    render_json({})
+  end
+
   private
 
   def beds_data
     cached_data :beds_data do
       block = -> (beds) {
-        free = busy = unavailable = 0
+        free = busy = unavailable = ventilator = 0
 
         beds.each do |bed|
           free += 1 if bed.free?
           busy += 1 if bed.busy?
           unavailable += 1 if bed.unavailable?
+          ventilator += 1 if bed.using_ventilator
         end
 
         {
           total: free + busy + unavailable,
           free: free,
           busy: busy,
-          unavailable: unavailable
+          unavailable: unavailable,
+          ventilator: ventilator
         }
       }
 
       {
         updated_at: @beds.order(updated_at: :desc).first&.updated_at&.iso8601,
         intensive_care_unit: bed_json(@beds.icus, &block),
-        nursing: bed_json(@beds.nursings, &block),
-        ventilator: bed_json(@beds.using_ventilator, &block)
+        nursing: bed_json(@beds.nursings, &block)
       }
     end
   end
@@ -63,37 +94,36 @@ class PagesController < ApplicationController
   def bed_json details, &block
     covid_beds = []
     normal_beds = []
-    ventilators = []
 
     details.each do |detail|
       covid_beds << detail if detail.covid?
       normal_beds << detail if detail.normal?
-      ventilators << detail if detail.using_ventilator
     end
 
     unless block
       block = -> (bed_details) {
-        free = busy = unavailable = 0
+        free = busy = unavailable = ventilator = 0
 
         bed_details.each do |detail|
           free += detail.status_free
           busy += detail.status_busy
           unavailable += detail.status_unavailable
+          ventilator += free + busy + unavailable if detail.using_ventilator
         end
 
         {
           total: free + busy + unavailable,
           free: free,
           busy: busy,
-          unavailable: unavailable
+          unavailable: unavailable,
+          ventilator: ventilator
         }
       }
     end
 
     {
       covid: block.(covid_beds),
-      normal: block.(normal_beds),
-      ventilator: block.(ventilators)
+      normal: block.(normal_beds)
     }
   end
 

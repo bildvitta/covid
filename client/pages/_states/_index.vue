@@ -3,112 +3,129 @@
     <cov-section>
       <div class="container">
         <cov-grid v-if="fetchSuccess" gutter>
-          <cov-grid-cell :breakpoints="{ sm: 'full', md: 'full', lg: '1-of-2' }">
+          <cov-grid-cell :breakpoints="{ sm: 'full', md: 'full', lg: '3-of-8' }">
             <div ref="cases">
               <div>
-                <h3 class="typography typography--title m-b-md">Cidade</h3>
+                <h3 class="text-title m-b-md">Cidade</h3>
                 <cov-select v-model="city" :options="dashboard.cities" @input="filterCity()" />
               </div>
 
               <div class="m-t-lg">
-                <h3 class="typography typography--title">Casos</h3>
-                <div class="typography typography--subtitle m-b-md">
+                <h3 class="text-title">Casos</h3>
+                <div class="text-subtitle m-b-md">
                   <abbr :title="updatedDate('covid_cases')">{{ updatedDistance('covid_cases') }}</abbr>
                 </div>
 
-                <cov-grid v-if="dashboard.covid_cases" align-center gutter>
-                  <cov-grid-cell v-for="(item, key) in dashboard.covid_cases.cases" :key="key" :breakpoints="{ sm: 'full', md: '1-of-2', lg: '1-of-3' }">
-                    <cov-card>
-                      <div>{{ casesTypes[key].label }}</div>
-                      <div class="typography--heavy-text" :class="casesTypes[key].classes">{{ item }}</div>
-                      <client-only>
+                <cov-grid v-if="dashboard.covid_cases" align-center gutter-small>
+                  <cov-grid-cell v-for="(item, key) in dashboard.covid_cases.cases" :key="key" :breakpoints="{ col: '1-of-3', sm: '1-of-3' }">
+                    <cov-card :outlined="casesTypes[key].border">
+                      <div class="text-size-sm">{{ casesTypes[key].label }}</div>
+                      <div class="text-bold text-size-lg" :class="casesTypes[key].classes">{{ formatCases(item) }}</div>
+                      <!-- <client-only>
                         <cov-bar-chart :chart-data="casesChartData[key]" :options="casesChartOptions" style="height: 150px;" />
-                      </client-only>
+                      </client-only> -->
                     </cov-card>
                   </cov-grid-cell>
                 </cov-grid>
               </div>
+
+              <div class="m-t-lg">
+                <cov-progress :content="casesProgress" />
+              </div>
             </div>
           </cov-grid-cell>
 
-          <cov-grid-cell :breakpoints="{ sm: 'full', lg: '1-of-2' }">
-            <cov-heatmap :points="hospitalsHeatmap" />
-          </cov-grid-cell>
-        </cov-grid>
+          <cov-grid-cell :breakpoints="{ sm: 'full', lg: 'fill' }">
+            <form>
+              <div class="hospitals-header">
+                <div>
+                  <h3 class="text-title m-b-md">Hospitais</h3>
+                </div>
 
-        <div class="m-t-md">
-          <cov-grid align-bottom class="reverse-row-lg" justify-between>
-            <cov-grid-cell :breakpoints="{ sm: 'full', lg: '9-of-12' }">
-              <form>
-                <cov-grid align-middle class="hospitals-header" gutter>
-                  <cov-grid-cell :breakpoints="{ col: 'fit' }" class="hospitals-header__title">
-                    <h3 class="typography typography--title p-r-md">Hospitais</h3>
-                  </cov-grid-cell>
+                <div>
+                  <cov-select v-model="hospital" :options="hospitalOptions" @input="filter()" />
+                </div>
+              </div>
+            </form>
 
-                  <cov-grid-cell :breakpoints="{ sm: 'fit', lg: 'full' }" class="hospitals-header__select">
-                    <cov-select v-model="hospital" :options="hospitalOptions" @input="filter()" />
-                  </cov-grid-cell>
-                </cov-grid>
-              </form>
-            </cov-grid-cell>
+            <div class="m-t-lg">
+              <h3 class="text-title">Leitos</h3>
 
-            <cov-grid-cell :breakpoints="{ sm: 'full', lg: '3-of-12' }" class="m-t-md">
-              <h3 class="typography typography--title">Leitos</h3>
-
-              <div class="typography typography--subtitle">
+              <div class="text-subtitle">
                 <abbr :title="updatedDate('beds')">{{ updatedDistance('beds') }}</abbr>
               </div>
-            </cov-grid-cell>
-          </cov-grid>
+            </div>
+            <div class="m-t-md">
+              <cov-grid align-center gutter>
+                <cov-grid-cell v-for="(item, key) in beds" :key="key" :breakpoints="{ sm: 'full', md: 'full', lg: '1-of-2' }">
+                  <cov-card>
+                    <template v-slot:header>
+                      <span class="beds__title">{{ bedsTypes[key].label }}</span>
+                    </template>
+                    <div>
+                      <cov-grid align-bottom gutter justify-between>
+                        <cov-grid-cell :breakpoints="{ col: '1-of-2' }">
+                          <div>
+                            <div class="text-caption">
+                              COVID-19
+                            </div>
+                            <cov-badge class="m-t-xs" :percent="badgesPercent(item.covid)">Ocupação {{ badgesPercent(item.covid) }}</cov-badge>
+                          </div>
+                        </cov-grid-cell>
+                        <cov-grid-cell :breakpoints="{ col: '1-of-2' }" class="beds__content">
+                          <div class="beds__box">
+                            <span>Total</span>
+                            <span class="text-bold text-primary">{{ item.covid.total }}</span>
+                          </div>
+                          <div class="beds__box">
+                            <span>Ocupados</span>
+                            <span class="text-bold text-primary">{{ item.covid.busy }}</span>
+                          </div>
+                          <div class="beds__box">
+                            <span>Respiradores</span>
+                            <span class="text-bold text-primary">{{ item.covid.ventilator }}</span>
+                          </div>
+                        </cov-grid-cell>
+                      </cov-grid>
+                    </div>
+                  </cov-card>
+                  <cov-card class="beds__opacity m-t-md">
+                    <div>
+                      <cov-grid gutter justify-between>
+                        <cov-grid-cell :breakpoints="{ col: '1-of-2' }">
+                          <div class="text-caption beds__spacing-top">Não COVID-19</div>
+                        </cov-grid-cell>
+                        <cov-grid-cell :breakpoints="{ col: '1-of-2' }" class="beds__content">
+                          <div class="beds__box">
+                            <span>Total</span>
+                            <span class="text-bold text-primary">{{ item.normal.total }}</span>
+                          </div>
+                          <div class="beds__box">
+                            <span>Ocupados</span>
+                            <span class="text-bold text-primary">{{ item.normal.busy }}</span>
+                          </div>
+                          <div class="beds__box">
+                            <span>Respiradores</span>
+                            <span class="text-bold text-primary">{{ item.normal.ventilator }}</span>
+                          </div>
+                        </cov-grid-cell>
+                      </cov-grid>
+                    </div>
+                  </cov-card>
+                </cov-grid-cell>
+              </cov-grid>
+            </div>
+          </cov-grid-cell>
+        </cov-grid>
+        <div v-if="fetchSuccess" class="m-t-lg">
+          <cov-heatmap :points="hospitalsHeatmap" />
         </div>
-
-        <div class="beds m-t-md">
-          <cov-grid align-center gutter>
-            <cov-grid-cell v-for="(item, key) in beds" :key="key" :breakpoints="{ sm: 'full', md: '1-of-2', lg: '1-of-3' }">
-              <cov-card class="typography">
-                <template v-slot:header>
-                  <span class="beds__title">{{ bedsTypes[key].label }}</span>
-                </template>
-                <div>
-                  <cov-grid align-bottom gutter justify-between>
-                    <cov-grid-cell :breakpoints="{ col: 'full', sm: 'full', md: '1-of-2', lg: '1-of-2' }" class="beds__content">
-                      <div class="beds__box">
-                        <div class="typography--caption">
-                          COVID-19
-                          <div>Ocupação</div>
-                        </div>
-                        <cov-badge :percent="badgesPercent(item.covid)">{{ badgesPercent(item.covid) }}</cov-badge>
-                      </div>
-                      <div class="beds__box m-t-md">
-                        <span>Total</span>
-                        <span class="typography--weight-bold typography--primary-color">{{ item.covid.total }}</span>
-                      </div>
-                      <div class="beds__box">
-                        <span>Ocupados</span>
-                        <span class="typography--weight-bold typography--primary-color">{{ item.covid.busy }}</span>
-                      </div>
-                    </cov-grid-cell>
-
-                    <cov-grid-cell :breakpoints="{ col: 'full', sm: 'full', md: '1-of-2', lg: '1-of-2' }" class="beds__content">
-                      <div class="typography--caption beds__spacing-top">Não COVID-19</div>
-                      <div class="beds__box m-t-md">
-                        <span>Total</span>
-                        <span class="typography--weight-bold typography--primary-color">{{ item.normal.total }}</span>
-                      </div>
-                      <div class="beds__box">
-                        <span>Ocupados</span>
-                        <span class="typography--weight-bold typography--primary-color">{{ item.normal.busy }}</span>
-                      </div>
-                    </cov-grid-cell>
-                  </cov-grid>
-                </div>
-              </cov-card>
-            </cov-grid-cell>
-          </cov-grid>
-        </div>
-
+      </div>
+      <div class="container text-center">
         <div class="m-t-xl">
           <cov-button href="https://documenter.getpostman.com/view/11415346/Szt7BBFH?version=latest#5c46a2b1-fd55-4295-b8ce-9c1ccf26ee81" icon="code" label="Acesso a API" target="_blank" />
+          <!-- TODO Desativado temporariamente até api ficar pronta -->
+          <!-- <cov-button download="relatorios-leitos" icon="table_chart" label="Baixar planilha" /> -->
         </div>
       </div>
     </cov-section>
@@ -117,7 +134,7 @@
       <div class="container">
         <cov-grid gutter justify-between>
           <cov-grid-cell :breakpoints="{ col: 'full', sm: 'full', md: 'full' }">
-            <h3 class="typography typography--title">Histórico</h3>
+            <h3 class="text-title">Histórico</h3>
 
             <cov-box class="m-t-md">
               <client-only>
@@ -141,7 +158,7 @@ import { format, formatDistanceToNow } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 
 import CovBadge from '~/components/CovBadge'
-import CovBarChart from '~/components/CovBarChart'
+// import CovBarChart from '~/components/CovBarChart'
 import CovButton from '~/components/CovButton'
 import CovBox from '~/components/CovBox'
 import CovCard from '~/components/CovCard'
@@ -152,11 +169,12 @@ import CovLineChart from '~/components/CovLineChart'
 import CovLoading from '~/components/CovLoading'
 import CovSection from '~/components/CovSection'
 import CovSelect from '~/components/CovSelect'
+import CovProgress from '~/components/CovProgress'
 
 export default {
   components: {
     CovBadge,
-    CovBarChart,
+    // CovBarChart,
     CovBox,
     CovButton,
     CovCard,
@@ -166,7 +184,8 @@ export default {
     CovLineChart,
     CovLoading,
     CovSection,
-    CovSelect
+    CovSelect,
+    CovProgress
   },
 
   validate ({ params }) {
@@ -190,7 +209,7 @@ export default {
 
     beds () {
       if (this.dashboard.beds) {
-        const { updated_at: updatedAt, ...beds } = this.dashboard.beds
+        const { updated_at: updatedAt, ventilator, ...beds } = this.dashboard.beds
         return beds
       }
 
@@ -254,24 +273,50 @@ export default {
       }
     },
 
+    casesProgress () {
+      return [
+        {
+          value: this.dashboard.covid_cases.cases.total,
+          color: 'primary',
+          label: 'Casos ativos',
+          isTotal: true
+        },
+
+        {
+          value: this.dashboard.covid_cases.cases.cureds,
+          color: 'positive',
+          label: 'Recuperados'
+        },
+
+        {
+          value: this.dashboard.covid_cases.cases.deaths,
+          color: 'negative',
+          label: 'Óbitos'
+        }
+      ]
+    },
+
     casesTypes () {
       return {
         total: {
           label: 'Confirmados',
           classes: 'text-primary',
-          color: '#a3a1fb'
+          color: '#a3a1fb',
+          border: 'primary'
         },
 
         deaths: {
           label: 'Óbitos',
           classes: 'text-negative',
-          color: '#fA5252'
+          color: '#fA5252',
+          border: 'negative'
         },
 
         cureds: {
           label: 'Recuperados',
           classes: 'text-positive',
-          color: '#34c360'
+          color: '#34c360',
+          border: 'positive'
         }
       }
     },
@@ -395,7 +440,13 @@ export default {
             label: 'Respiradores ocupados na UTI',
             fill: false,
             borderColor: '#ffb713',
-            data: this.historyBeds.intensive_care_unit?.ventilator?.busy
+            data: this.historyBeds.intensive_care_unit?.covid?.ventilator
+          },
+          {
+            label: 'Respiradores ocupados na UTI (não COVID-19)',
+            fill: false,
+            borderColor: '#ffedc3',
+            data: this.historyBeds.intensive_care_unit?.normal?.ventilator
           },
           {
             label: 'Respiradores ocupados na enfermatia',
@@ -403,7 +454,15 @@ export default {
             borderColor: '#ffb713',
             borderDash: [5],
             borderWidth: 1,
-            data: this.historyBeds.nursing?.ventilator?.busy
+            data: this.historyBeds.nursing?.covid?.ventilator
+          },
+          {
+            label: 'Respiradores ocupados na enfermatia (não COVID-19)',
+            fill: false,
+            borderColor: '#ffedc3',
+            borderDash: [5],
+            borderWidth: 1,
+            data: this.historyBeds.nursing?.normal?.ventilator
           }
         ]
       }
@@ -533,6 +592,10 @@ export default {
       }
 
       return 'Não há dados'
+    },
+
+    formatCases (cases) {
+      return cases || '---'
     }
   }
 }
@@ -548,6 +611,23 @@ export default {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+  }
+
+  &__opacity {
+    opacity: 0.7;
+    position: relative;
+
+    &::before {
+      background-color: $primary-color;
+      content: '';
+      display: block;
+      height: 16px;
+      left: 50%;
+      position: absolute;
+      top: -16px;
+      transform: translateX(-50%);
+      width: 1px;
+    }
   }
 }
 
