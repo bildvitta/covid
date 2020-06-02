@@ -83,7 +83,6 @@
                           </div>
                           <div class="beds__box">
                             <span>Respiradores</span>
-                            <!-- TODO mudar os dados -->
                             <span class="text-bold text-primary">{{ item.covid.ventilator }}</span>
                           </div>
                         </cov-grid-cell>
@@ -107,7 +106,6 @@
                           </div>
                           <div class="beds__box">
                             <span>Respiradores</span>
-                            <!-- TODO mudar os dados -->
                             <span class="text-bold text-primary">{{ item.normal.ventilator }}</span>
                           </div>
                         </cov-grid-cell>
@@ -119,14 +117,15 @@
             </div>
           </cov-grid-cell>
         </cov-grid>
-        <div class="m-t-lg">
+        <div v-if="fetchSuccess" class="m-t-lg">
           <cov-heatmap :points="hospitalsHeatmap" />
         </div>
       </div>
       <div class="container text-center">
         <div class="m-t-xl">
           <cov-button href="https://documenter.getpostman.com/view/11415346/Szt7BBFH?version=latest#5c46a2b1-fd55-4295-b8ce-9c1ccf26ee81" icon="code" label="Acesso a API" target="_blank" />
-          <cov-button download="relatorios-leitos" icon="table_chart" label="Baixar planilha" />
+          <!-- TODO Desativado temporariamente até api ficar pronta -->
+          <!-- <cov-button download="relatorios-leitos" icon="table_chart" label="Baixar planilha" /> -->
         </div>
       </div>
     </cov-section>
