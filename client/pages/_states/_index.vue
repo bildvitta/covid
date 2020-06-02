@@ -84,7 +84,7 @@
                           <div class="beds__box">
                             <span>Respiradores</span>
                             <!-- TODO mudar os dados -->
-                            <span class="text-bold text-primary">{{ dashboard.beds.ventilator.covid.busy }}</span>
+                            <span class="text-bold text-primary">{{ item.covid.ventilator }}</span>
                           </div>
                         </cov-grid-cell>
                       </cov-grid>
@@ -108,7 +108,7 @@
                           <div class="beds__box">
                             <span>Respiradores</span>
                             <!-- TODO mudar os dados -->
-                            <span class="text-bold text-primary">{{ dashboard.beds.ventilator.normal.busy }}</span>
+                            <span class="text-bold text-primary">{{ item.normal.ventilator }}</span>
                           </div>
                         </cov-grid-cell>
                       </cov-grid>
@@ -126,6 +126,7 @@
       <div class="container text-center">
         <div class="m-t-xl">
           <cov-button href="https://documenter.getpostman.com/view/11415346/Szt7BBFH?version=latest#5c46a2b1-fd55-4295-b8ce-9c1ccf26ee81" icon="code" label="Acesso a API" target="_blank" />
+          <cov-button download="relatorios-leitos" icon="table_chart" label="Baixar planilha" />
         </div>
       </div>
     </cov-section>
@@ -386,6 +387,7 @@ export default {
     },
 
     historyChartData () {
+      console.log(this.historyBeds)
       return {
         labels: this.historyDates,
 
@@ -440,7 +442,13 @@ export default {
             label: 'Respiradores ocupados na UTI',
             fill: false,
             borderColor: '#ffb713',
-            data: this.historyBeds.intensive_care_unit?.ventilator?.busy
+            data: this.historyBeds.intensive_care_unit?.covid?.ventilator
+          },
+          {
+            label: 'Respiradores ocupados na UTI (não COVID-19)',
+            fill: false,
+            borderColor: '#ffedc3',
+            data: this.historyBeds.intensive_care_unit?.normal?.ventilator
           },
           {
             label: 'Respiradores ocupados na enfermatia',
@@ -448,7 +456,15 @@ export default {
             borderColor: '#ffb713',
             borderDash: [5],
             borderWidth: 1,
-            data: this.historyBeds.nursing?.ventilator?.busy
+            data: this.historyBeds.nursing?.covid?.ventilator
+          },
+          {
+            label: 'Respiradores ocupados na enfermatia (não COVID-19)',
+            fill: false,
+            borderColor: '#ffedc3',
+            borderDash: [5],
+            borderWidth: 1,
+            data: this.historyBeds.nursing?.normal?.ventilator
           }
         ]
       }
