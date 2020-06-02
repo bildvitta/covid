@@ -13,34 +13,14 @@ class PagesController < ApplicationController
     )
   end
 
-  def historical
-    data = {}
-    names = {
-      'Ribeirânia (Hospital São Lucas Ribeirânia)' => 'Hospital São Lucas Ribeirânia',
-      'Hospital Santa Casa de Misericórdia de Ribeirão Preto' => 'S. Casa de Misericórdia Rib. Pr'
-    }
-    
-    historical_data.each do |date, values|
-      values[:beds].each do |hash|
-        params = [I18n.l(date.to_date)] + hash[:intensive_care_unit].values.map(&:values).flatten + hash[:nursing].values.map(&:values).flatten
-        name = names[hash[:name]] || hash[:name]
+  def historical_report
+    expires_in = ('03:00'.to_time.next_day - Time.zone.now).seconds
 
-        data.key?(hash[:name]) ? data[name] << params : data[name] = [params]
-      end
+    filename_link = cached_data :historical_xlsx, expires_in: expires_in do
+      historical_xlsx
     end
 
-    ExcelGenerate.new(
-      [
-        "Data",
-        "UTI - Convid - Total", "UTI - Convid - Livre ", "UTI - Convid - Ocupado ", "UTI - Convid - Indisponível", "UTI - Convid - Respirador",
-        "UTI - Normal - Total", "UTI - Normal - Livre ", "UTI - Normal - Ocupado ", "UTI - Normal - Indisponível", "UTI - Normal - Respirador",
-        "Enfermaria - Convid - Total", "Enfermaria - Convid - Livre", "Enfermaria - Convid - Ocupado", "Enfermaria - Convid - Indisponível", "Enfermaria - Normal - Respirador",
-        "Enfermaria - Normal - Total", "Enfermaria - Normal - Livre", "Enfermaria - Normal - Ocupado", "Enfermaria - Normal - Indisponível", "Enfermaria - Normal - Respirador"
-      ],
-      data
-    ).generate!(Rails.root.join('public/relatorio-leitos').to_s)
-
-    render_json({})
+    render_json({ link: filename_link })
   end
 
   private
@@ -133,9 +113,11 @@ class PagesController < ApplicationController
         covid_cases = @city.covid_cases.find { |covid_case| covid_case.reference_date == date }
         covid_cases ||= CovidCase.new
 
+        hospitals = @city.hospitals.where('? IS NULL OR hospitals.id = ?', @hospital&.id, @hospital&.id)
+
         data = {
           covid_cases: covid_cases.to_json,
-          beds: @city.hospitals.map do |hospital|
+          beds: hospitals.map do |hospital|
             details = hospital.bed_states.to_a.find_by(:date, date)&.details.to_a
 
             intensive_care_unit = []
@@ -171,8 +153,40 @@ class PagesController < ApplicationController
     @beds = @hospital.beds
   end
 
-  def cached_data name, &block
-    Rails.cache.fetch([name, @city.slug, @hospital&.slug], expires_in: rand(10..17).minutes, &block)
+  def cached_data name, expires_in: rand(10..17).minutes, &block
+    Rails.cache.fetch([name, @city.slug, @hospital&.slug], expires_in: expires_in, &block)
   end
 
+  def historical_xlsx
+    data = {}
+    names = {
+      'Ribeirânia (Hospital São Lucas Ribeirânia)' => 'Hospital São Lucas Ribeirânia',
+      'Hospital Santa Casa de Misericórdia de Ribeirão Preto' => 'S. Casa de Misericórdia Rib. Pr'
+    }
+    
+    historical_data.each do |date, values|
+      values[:beds].each do |hash|
+        params = [I18n.l(date.to_date)] + hash[:intensive_care_unit].values.map(&:values).flatten + hash[:nursing].values.map(&:values).flatten
+        name = names[hash[:name]] || hash[:name]
+
+        data.key?(hash[:name]) ? data[name] << params : data[name] = [params]
+      end
+    end
+
+    filename = "relatorio-leitos-#{@city.slug}#{'-' + @hospital.slug if @hospital}.xlsx"
+    path = Rails.root.join('public/reports/' + filename).to_s
+
+    ExcelGenerate.new(
+      [
+        "Data",
+        "UTI - Convid - Total", "UTI - Convid - Livre ", "UTI - Convid - Ocupado ", "UTI - Convid - Indisponível", "UTI - Convid - Respirador",
+        "UTI - Normal - Total", "UTI - Normal - Livre ", "UTI - Normal - Ocupado ", "UTI - Normal - Indisponível", "UTI - Normal - Respirador",
+        "Enfermaria - Convid - Total", "Enfermaria - Convid - Livre", "Enfermaria - Convid - Ocupado", "Enfermaria - Convid - Indisponível", "Enfermaria - Normal - Respirador",
+        "Enfermaria - Normal - Total", "Enfermaria - Normal - Livre", "Enfermaria - Normal - Ocupado", "Enfermaria - Normal - Indisponível", "Enfermaria - Normal - Respirador"
+      ],
+      data
+    ).generate!(path)
+
+    "#{request.protocol}#{request.host_with_port}/reports/#{filename}"
+  end
 end

@@ -5,5 +5,6 @@ Rails.application.routes.draw do
 
   namespace :pages, path: '/' do
     get :dashboard
+    get :historical_report, path: 'historical-report'
   end
 end
