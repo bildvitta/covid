@@ -2,6 +2,7 @@ const state = () => ({
   dashboard: {},
   fetchSuccess: false,
   isFetching: false,
+  params: {},
   error: {}
 })
 
@@ -9,6 +10,7 @@ const getters = {
   dashboard: state => state.dashboard,
   error: state => state.error,
   fetchSuccess: state => state.fetchSuccess,
+  params: state => state.params,
   isFetching: state => state.isFetching
 }
 
@@ -18,7 +20,7 @@ const actions = {
 
     try {
       const { data } = await this.$axios.get('dashboard', { params })
-      commit('setDashboard', data)
+      commit('setDashboard', { data, params })
       return data
     } catch (error) {
       commit('setError', error)
@@ -30,8 +32,9 @@ const actions = {
 }
 
 const mutations = {
-  setDashboard (state, dashboard) {
-    state.dashboard = dashboard
+  setDashboard (state, { data, params }) {
+    state.dashboard = data
+    state.params = { ...params }
     state.fetchSuccess = true
   },
 

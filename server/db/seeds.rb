@@ -78,6 +78,13 @@ if Hospital.none?
         city: city,
         latitude: -21.180653,
         longitude: -47.813874
+      },
+      {
+        name: 'Hospital Santa Lydia',
+        hospital_type: 1,
+        city: city,
+        latitude: -21.170,
+        longitude: -47.802
       }
     ].each do |hospital|
       hospital = Hospital.create!(hospital)
