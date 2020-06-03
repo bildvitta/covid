@@ -13,8 +13,8 @@ class CovidCase < ApplicationRecord
     city = (City.find_by slug: 'ribeirao-preto').id
     covid = self.get_data_from_api
     covid[:results].each do |data|
-      if (CovidCase.where("created_at >= :start_date AND created_at <= :end_date", {:start_date => "#{data[:date]} 00:00:00", :end_date => "#{data[:date]} 23:59:59"}).count < 1)
-        CovidCase.create(city_id: city, total: data[:confirmed], deaths: data[:deaths], created_at: data[:date])
+      if (CovidCase.where("reference_date = :reference_date AND city_id = :city", {reference_date: data[:date], city: city}).count < 1)
+        CovidCase.create(city_id: city, total: data[:confirmed], deaths: data[:deaths], reference_date: data[:date])
       end
     end
   end
