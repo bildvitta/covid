@@ -86,7 +86,7 @@ if Hospital.none?
     end
   end
 
-  DataBridge::Unimed.new.get_data.save!
+  # DataBridge::Unimed.new.get_data.save!
 end
 
 if CovidCase.none?

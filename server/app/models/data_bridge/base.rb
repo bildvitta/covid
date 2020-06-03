@@ -3,13 +3,10 @@ module DataBridge
     attr_accessor :raw_data, :data, :results
 
     def save!
-      hospitals = {}
+      hospitals = Hospital.where(slug: self.results.map{ |r| r.hospital_slug }.uniq).map{ |h| [h.slug, h.id] }.to_h
+      Bed.where(hospital_id: hospitals.values).destroy_all
 
       self.results.each do |r|
-        unless hospitals.has_key?(r.hospital_slug)
-          hospitals[r.hospital_slug] = Hospital.where(slug: r.hospital_slug).first.try(:id)
-        end
-
         next if hospitals[r.hospital_slug].nil?
 
         bed = Bed.where(hospital_id: hospitals[r.hospital_slug], slug: r.slug).first_or_create do |bed|
@@ -27,7 +24,6 @@ module DataBridge
 
         bed.save
       end
-      # apagar as q nao vieram
 
       return self
     end

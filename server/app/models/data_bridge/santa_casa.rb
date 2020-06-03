@@ -19,7 +19,6 @@ module DataBridge
 
     def process_beds
       self.results = []
-      puts self.data.inspect
       return unless self.valid_data?
 
       self.data.each do |r|

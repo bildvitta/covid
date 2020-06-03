@@ -2,14 +2,11 @@ module DataBridge
   class Unimed < DataBridge::WebServiceBase
 
     def connection_data
-      {
-        hostname: 'dadoshurpcovid.unimedribeirao.net',
-        port: 443, use_ssl: true, base_path: '/'
-      }
+      Rails.application.credentials.unimed_connection
     end
 
     def get_data
-      payload = { id: 'WSHURP', key: 'lrnHJQ8YkFy7S75X3efwFXU3csdmcoFo', type: 'A' }
+      payload = Rails.application.credentials.unimed_payload
       headers = { 'Content-Type' => 'application/x-www-form-urlencoded' }
 
       self.request_api( 'index.aspx', {}, payload, headers, { payload_processor: :to_query } ) do |request|
