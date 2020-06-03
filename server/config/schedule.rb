@@ -4,7 +4,7 @@ every 1.day, at: '0:30' do
   runner 'Routines::GenerateHistorical.new(1.day.ago.to_date).run!'
 end
 
-every 1.day, at: '1:30' do
+every 1.hour do
   runner 'CovidCase.populate_with_api'
 end
 
@@ -16,10 +16,10 @@ every 1.day, at: ['0:07', '6:07', '13:07', '19:07'] do
   runner "DataBridge::SaoLucas.new.get_data.save!"
 end
 
-every 1.day, at: ['0:10', '6:10', '13:10', '19:10'] do
+every 1.day, at: ['0:09', '6:09', '13:09', '19:09'] do
   runner "DataBridge::SantaCasa.new.get_data.save!"
 end
 
-
-# undefined method `children' for nil:NilClass
-# DataBridge::Unimed.new.get_data.save!; DataBridge::SaoLucas.new.get_data.save!; DataBridge::SantaCasa.new.get_data.save!; Routines::GenerateHistorical.new(1.day.ago.to_date).run!
+every 1.day, at: ['0:12', '6:12', '13:12', '19:12'] do
+  runner "DataBridge::BeneficenciaPortuguesa.new.get_data.save!"
+end

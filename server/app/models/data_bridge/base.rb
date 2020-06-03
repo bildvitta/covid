@@ -3,8 +3,7 @@ module DataBridge
     attr_accessor :raw_data, :data, :results
 
     def save!
-      hospitals = Hospital.where(slug: self.results.map{ |r| r.hospital_slug }.uniq).map{ |h| [h.slug, h.id] }.to_h
-      Bed.where(hospital_id: hospitals.values).destroy_all
+      hospitals = Hospital.where(slug: self.results.map(&:hospital_slug).uniq).map{ |h| [h.slug, h.id] }.to_h
 
       self.results.each do |r|
         next if hospitals[r.hospital_slug].nil?
@@ -24,6 +23,12 @@ module DataBridge
 
         bed.save
       end
+
+      current_beds = self.results.map(&:slug).uniq
+      saved_beds = Bed.where(hospital_id: hospitals.values).map(&:slug)
+
+      # remove deleted beds
+      Bed.where(hospital_id: hospitals.values).where(slug: (saved_beds - current_beds)).destroy_all
 
       return self
     end
