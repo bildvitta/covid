@@ -124,8 +124,7 @@
       <div class="container text-center">
         <div class="m-t-xl">
           <cov-button href="https://documenter.getpostman.com/view/11415346/Szt7BBFH?version=latest#5c46a2b1-fd55-4295-b8ce-9c1ccf26ee81" icon="code" label="Acesso a API" target="_blank" />
-          <!-- TODO Desativado temporariamente até api ficar pronta -->
-          <!-- <cov-button download="relatorios-leitos" icon="table_chart" label="Baixar planilha" /> -->
+          <cov-button icon="table_chart" label="Baixar planilha" @click="download" />
         </div>
       </div>
     </cov-section>
@@ -204,7 +203,8 @@ export default {
       dashboard: 'dashboard/dashboard',
       error: 'dashboard/error',
       fetchSuccess: 'dashboard/fetchSuccess',
-      isFetching: 'dashboard/isFetching'
+      isFetching: 'dashboard/isFetching',
+      params: 'dashboard/params'
     }),
 
     beds () {
@@ -596,6 +596,30 @@ export default {
 
     formatCases (cases) {
       return cases || '---'
+    },
+
+    async download (event) {
+      try {
+        const { data } = await this.$axios.get('historical-report', { params: this.params })
+
+        this.createLink(data.link)
+      } catch (error) {}
+    },
+
+    createLink (url) {
+      const link = document.createElement('a')
+
+      link.setAttribute('href', url)
+      link.setAttribute('download', '')
+      link.style.visibility = 'hidden'
+      document.body.appendChild(link)
+      link.click()
+
+      this.removeLink(link)
+    },
+
+    removeLink (link) {
+      document.body.removeChild(link)
     }
   }
 }

@@ -48,6 +48,7 @@ export default {
   border: 0;
   border-radius: $radius;
   color: $text-color;
+  cursor: pointer;
   display: inline-block;
   font-family: inherit;
   font-size: 14px;
