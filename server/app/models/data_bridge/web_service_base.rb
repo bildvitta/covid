@@ -81,7 +81,7 @@ module DataBridge
     def get_host
       port = (!connection_data[:port].blank? && ![80, 443].include?(connection_data[:port]) ? ":#{connection_data[:port]}" : '')
 
-      return "http#{(connection_data[:use_ssl] ? 's' : '')}://#{connection_data[:hostname]}#{port}#{connection_data[:base_path]}"
+      return "http#{(connection_data[:use_ssl].to_s == 'true' ? 's' : '')}://#{connection_data[:hostname]}#{port}#{connection_data[:base_path]}"
     end
 
   end
