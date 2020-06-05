@@ -2,6 +2,20 @@ module DataBridge
   class WebServiceBase < DataBridge::Base
 
     protected
+    def self.get_token token_path
+      return @token if !@token.nil?
+
+      begin
+        response = JSON.parse(RestClient.post get_address(token_path, {}), {
+          username: connection_data[:username], password: connection_data[:password]
+        }.to_json, content_type: :json, accept: :json)
+
+        @token = response['access_token']
+      rescue
+        @token = nil
+      end
+    end
+
     def request_api path, params = {}, payload = {}, headers = {}, options = {}
       options = { http_method: :post, payload_processor: :to_json }.merge(options)
       print "POST #{filter_address(get_address(path, params), params)}..."
