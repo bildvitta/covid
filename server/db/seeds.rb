@@ -85,6 +85,22 @@ if Hospital.none?
         city: city,
         latitude: -21.170,
         longitude: -47.802
+      },
+      {
+        name: 'Hospital das Clínicas',
+        slug: 'hc-campus-ribeirao-preto',
+        hospital_type: 1,
+        city: city,
+        latitude: -21.1624149,
+        longitude: -47.8544455
+      },
+      {
+        name: 'Hospital das Clínicas Unidade de Emergência',
+        slug: 'hc-emergencia-ribeirao-preto',
+        hospital_type: 1,
+        city: city,
+        latitude: -21.185455,
+        longitude: -47.8084284
       }
     ].each do |hospital|
       hospital = Hospital.create!(hospital)
