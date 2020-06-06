@@ -2,15 +2,16 @@ module DataBridge
   class WebServiceBase < DataBridge::Base
 
     protected
-    def self.get_token token_path
+    def get_token token_path, response_param = 'access_token'
       return @token if !@token.nil?
 
       begin
-        response = JSON.parse(RestClient.post get_address(token_path, {}), {
-          username: connection_data[:username], password: connection_data[:password]
+        response = JSON.parse(RestClient.post get_address(token_path, {}, false), {
+          username: connection_data[:username], password: connection_data[:password],
+          refresh_token: '', grant_type: 'password'
         }.to_json, content_type: :json, accept: :json)
 
-        @token = response['access_token']
+        @token = response[response_param]
       rescue
         @token = nil
       end
@@ -18,11 +19,23 @@ module DataBridge
 
     def request_api path, params = {}, payload = {}, headers = {}, options = {}
       options = { http_method: :post, payload_processor: :to_json }.merge(options)
-      print "POST #{filter_address(get_address(path, params), params)}..."
+      print "#{options[:http_method].upcase} #{filter_address(get_address(path, params), params)}..."
 
-      if Rails.env.development?
+      if options.has_key?(:token)
+        self.get_token(options[:token])
+        headers = headers.merge({ 'Authorization' => "Bearer #{@token}" })
+
+        puts "\nToken: #{@token.to_s.first(5)}***..." if Rails.env.development?
+      end
+
+      if Rails.env.development? && !payload.blank?
         puts "\nPayload: " + ('-' * 50)
         puts JSON.pretty_generate(payload)
+      end
+
+      if Rails.env.development? && !headers.blank?
+        puts "\nHeaders: " + ('-' * 50)
+        puts JSON.pretty_generate(headers)
       end
 
       begin
@@ -77,9 +90,9 @@ module DataBridge
       keys.map{ |key| [key.to_sym, (params.has_key?(key.to_sym) ? params[key.to_sym] : '')] }.to_h
     end
 
-    def get_address path, params = {}
+    def get_address path, params = {}, with_base_path = true
       params = {} unless params.kind_of?(Hash)
-      return "#{get_host}#{path}" + (params.empty? ? '' : '?') + params.to_query
+      return "#{get_host(with_base_path)}#{path}" + (params.empty? ? '' : '?') + params.to_query
     end
 
     def filter_address address, params = {}
@@ -92,10 +105,10 @@ module DataBridge
       return address
     end
 
-    def get_host
+    def get_host with_base_path = true
       port = (!connection_data[:port].blank? && ![80, 443].include?(connection_data[:port]) ? ":#{connection_data[:port]}" : '')
 
-      return "http#{(connection_data[:use_ssl].to_s == 'true' ? 's' : '')}://#{connection_data[:hostname]}#{port}#{connection_data[:base_path]}"
+      return "http#{(connection_data[:use_ssl].to_s == 'true' ? 's' : '')}://#{connection_data[:hostname]}#{port}#{connection_data[:base_path] if with_base_path}"
     end
 
   end

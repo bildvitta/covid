@@ -50,7 +50,7 @@ module DataBridge
 
     def get_status status
       case status.to_s.downcase.strip.to_sym
-      when :livre
+      when :livre, :vago
         return :free
       when :ocupado
         return :busy
