@@ -50,7 +50,10 @@ export default {
 
   buildModules: [
     '@nuxtjs/eslint-module',
-    '@nuxtjs/stylelint-module'
+    '@nuxtjs/stylelint-module',
+    ['@nuxtjs/google-analytics', {
+      id: 'UA-168800565-1'
+    }]
   ],
 
   modules: [
@@ -60,9 +63,6 @@ export default {
     '@nuxtjs/style-resources',
     'nuxt-leaflet'
   ],
-
-  // axios: {
-  // },
 
   build: {
     transpile: [

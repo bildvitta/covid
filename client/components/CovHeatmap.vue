@@ -3,7 +3,7 @@
     <client-only>
       <l-map :center="[-21.1775, -47.81028]" :options="{ attributionControl: false }" :zoom="12">
         <l-tile-layer url="https://{s}.tile.osm.org/{z}/{x}/{y}.png" />
-        <l-heatmap :lat-lng="points" />
+        <l-heatmap :lat-lng="points" :radius="50" />
       </l-map>
     </client-only>
   </div>
@@ -27,17 +27,6 @@ export default {
   data () {
     return {
       height: '300px'
-    }
-  },
-
-  computed: {
-    heatmapPoints () {
-      // https://github.com/Leaflet/Leaflet.heat
-      const points = [
-        [-21.1775, -47.81028, 0.5]
-      ]
-
-      return points
     }
   },
 
