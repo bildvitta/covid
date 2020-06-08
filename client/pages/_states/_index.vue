@@ -123,7 +123,8 @@
     <cov-section color="melrose">
       <div class="container">
         <cov-grid gutter justify-between>
-          <cov-grid-cell :breakpoints="{ col: '1-of-2', sm: 'full', md: 'full' }">
+          <!-- <cov-grid-cell :breakpoints="{ col: '1-of-2', sm: 'full', md: 'full' }"> -->
+          <cov-grid-cell :breakpoints="{ sm: 'full' }">
             <h3 class="text-title">Leitos</h3>
 
             <cov-box class="m-t-md">
@@ -133,7 +134,7 @@
             </cov-box>
           </cov-grid-cell>
 
-          <cov-grid-cell :breakpoints="{ col: '1-of-2', sm: 'full', md: 'full' }">
+          <!-- <cov-grid-cell :breakpoints="{ col: '1-of-2', sm: 'full', md: 'full' }">
             <h3 class="text-title">Respiradores</h3>
 
             <cov-box class="m-t-md">
@@ -141,7 +142,7 @@
                 <cov-line-chart :chart-data="ventilatorsChartData" :options="ventilatorsChartOptions" />
               </client-only>
             </cov-box>
-          </cov-grid-cell>
+          </cov-grid-cell> -->
 
           <cov-grid-cell :breakpoints="{ sm: 'full' }">
             <h3 class="text-title">Casos</h3>
