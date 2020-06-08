@@ -45,8 +45,7 @@ export default {
   },
 
   plugins: [
-    '~/plugins/axios',
-    { src: '~plugins/ga.js', mode: 'client' }
+    '~/plugins/axios'
   ],
 
   buildModules: [
@@ -65,19 +64,9 @@ export default {
     'nuxt-leaflet'
   ],
 
-  // axios: {
-  // },
-
   build: {
     transpile: [
       'lodash-es'
     ]
   }
-
-  // googleAnalytics: {
-  //   debug: {
-  //     enabled: true,
-  //     sendHitTask: true
-  //   }
-  // }
 }
