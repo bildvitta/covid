@@ -161,15 +161,17 @@ class PagesController < ApplicationController
     data = {}
     names = {
       'Ribeirânia (Hospital São Lucas Ribeirânia)' => 'Hospital São Lucas Ribeirânia',
-      'Hospital Santa Casa de Misericórdia de Ribeirão Preto' => 'S. Casa de Misericórdia Rib. Pr'
+      'Hospital Santa Casa de Misericórdia de Ribeirão Preto' => 'S. Casa de Misericórdia Rib. Pr',
+      'Hospital das Clínicas Unidade de Emergência' => 'H. das Clínicas Uni. de Emer.'
     }
-    
+
     historical_data.each do |date, values|
       values[:beds].each do |hash|
         params = [I18n.l(date.to_date)] + hash[:intensive_care_unit].values.map(&:values).flatten + hash[:nursing].values.map(&:values).flatten
         name = names[hash[:name]] || hash[:name]
+        name = name.first(31)
 
-        data.key?(hash[:name]) ? data[name] << params : data[name] = [params]
+        data.key?(name) ? data[name] << params : data[name] = [params]
       end
     end
 
@@ -178,11 +180,11 @@ class PagesController < ApplicationController
 
     ExcelGenerate.new(
       [
-        "Data",
-        "UTI - Convid - Total", "UTI - Convid - Livre ", "UTI - Convid - Ocupado ", "UTI - Convid - Indisponível", "UTI - Convid - Respirador",
-        "UTI - Normal - Total", "UTI - Normal - Livre ", "UTI - Normal - Ocupado ", "UTI - Normal - Indisponível", "UTI - Normal - Respirador",
-        "Enfermaria - Convid - Total", "Enfermaria - Convid - Livre", "Enfermaria - Convid - Ocupado", "Enfermaria - Convid - Indisponível", "Enfermaria - Normal - Respirador",
-        "Enfermaria - Normal - Total", "Enfermaria - Normal - Livre", "Enfermaria - Normal - Ocupado", "Enfermaria - Normal - Indisponível", "Enfermaria - Normal - Respirador"
+        'Data',
+        'UTI - Convid - Total', 'UTI - Convid - Livre ', 'UTI - Convid - Ocupado ', 'UTI - Convid - Indisponível', 'UTI - Convid - Respirador',
+        'UTI - Normal - Total', 'UTI - Normal - Livre ', 'UTI - Normal - Ocupado ', 'UTI - Normal - Indisponível', 'UTI - Normal - Respirador',
+        'Enfermaria - Convid - Total', 'Enfermaria - Convid - Livre', 'Enfermaria - Convid - Ocupado', 'Enfermaria - Convid - Indisponível', 'Enfermaria - Normal - Respirador',
+        'Enfermaria - Normal - Total', 'Enfermaria - Normal - Livre', 'Enfermaria - Normal - Ocupado', 'Enfermaria - Normal - Indisponível', 'Enfermaria - Normal - Respirador'
       ],
       data
     ).generate!(path)
