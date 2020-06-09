@@ -73,7 +73,7 @@
                             <span class="text-bold text-primary">{{ item.covid.busy }}</span>
                           </div>
                           <div class="beds__box">
-                            <span>Respiradores</span>
+                            <span>Respiradores em uso</span>
                             <span class="text-bold text-primary">{{ item.covid.ventilator }}</span>
                           </div>
                         </cov-grid-cell>
@@ -97,7 +97,7 @@
                           <span class="text-bold text-primary">{{ item.normal.busy }}</span>
                         </div>
                         <div class="beds__box">
-                          <span>Respiradores</span>
+                          <span>Respiradores em uso</span>
                           <span class="text-bold text-primary">{{ item.normal.ventilator }}</span>
                         </div>
                       </cov-grid-cell>
@@ -621,8 +621,13 @@ export default {
 
   &__box {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     justify-content: space-between;
+    line-height: 0.8;
+
+    & + & {
+      margin-top: 8px;
+    }
   }
 
   &__opacity {

@@ -93,8 +93,10 @@ export default {
   width: 100%;
 
   &__progress {
+    border-radius: $circular-radius;
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    overflow: hidden;
   }
 
   &__item {

@@ -24,11 +24,16 @@ module DataBridge
         bed.save
       end
 
-      current_beds = self.results.map(&:slug).uniq
-      saved_beds = Bed.where(hospital_id: hospitals.values).map(&:slug)
+      current_beds = hospitals.map{ |k, v| [k, []] }.to_h
+      self.results.each do |r|
+        current_beds[r.hospital_slug] << r.slug
+      end
 
-      # remove deleted beds
-      Bed.where(hospital_id: hospitals.values).where(slug: (saved_beds - current_beds)).destroy_all
+      current_beds.each do |hospital, beds|
+        # remove deleted beds
+        saved_beds = Bed.where(hospital_id: hospitals[hospital]).map(&:slug)
+        Bed.where(hospital_id: hospitals[hospital]).where(slug: (saved_beds - beds)).destroy_all
+      end
 
       return self
     end
