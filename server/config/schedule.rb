@@ -16,6 +16,10 @@ every '10 * * * *' do
   runner "DataBridge::SaoLucas.new.get_data.save!"
 end
 
+every '5 * * * *' do
+  runner "DataBridge::SaoPaulo.new.get_data.save!"
+end
+
 every 1.day, at: ['0:09', '6:09', '13:09', '19:09'] do
   runner "DataBridge::SantaCasa.new.get_data.save!"
 end
