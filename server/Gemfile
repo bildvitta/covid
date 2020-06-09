@@ -52,6 +52,7 @@ gem 'friendly_id', '~> 5.2.4'
 gem 'rest-client'
 gem 'whenever'
 gem 'mysql2'
+gem 'newrelic_rpm'
 
 # Excel
 gem 'acts_as_xlsx'

@@ -108,6 +108,7 @@ GEM
     msgpack (1.3.3)
     mysql2 (0.5.3)
     netrc (0.11.0)
+    newrelic_rpm (6.11.0.365)
     nio4r (2.5.2)
     nokogiri (1.10.9)
       mini_portile2 (~> 2.4.0)
@@ -194,6 +195,7 @@ DEPENDENCIES
   friendly_id (~> 5.2.4)
   listen (~> 3.2)
   mysql2
+  newrelic_rpm
   pg
   puma (~> 4.3)
   rack-cors (>= 1.0.4)
