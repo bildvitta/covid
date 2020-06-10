@@ -33,20 +33,5 @@ module DataBridge
       end
     end
 
-    def get_bed_type bed_type
-      case bed_type.to_s.strip.downcase
-      # when 'uti-covid'
-      #   return 1
-      when 'uti-nao-covid', 'uti'
-        return 2
-      # when 'enfermaria-covid'
-      #   return 3
-      when 'enfermaria-nao-covid', 'enfermaria'
-        return 4
-      else
-        return 0
-      end
-    end
-
   end
 end
