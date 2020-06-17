@@ -213,12 +213,6 @@ export default {
     }
   },
 
-  head () {
-    return {
-      title: 'COVID-19 | Ribeirão Preto | Ocupação de leitos hospitalares'
-    }
-  },
-
   computed: {
     ...mapGetters({
       dashboard: 'dashboard/dashboard',
@@ -619,6 +613,12 @@ export default {
 
     removeLink (link) {
       document.body.removeChild(link)
+    }
+  },
+
+  head () {
+    return {
+      title: 'COVID-19 | Ribeirão Preto | Ocupação de leitos hospitalares'
     }
   }
 }
