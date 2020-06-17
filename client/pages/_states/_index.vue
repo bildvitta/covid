@@ -24,6 +24,9 @@
                     </cov-card>
                   </cov-grid-cell>
                 </cov-grid>
+                <span class="m-t-sm text-subtitle">
+                  Fonte: <a href="https://brasil.io/">brasil.io</a>
+                </span>
               </div>
 
               <div class="m-t-lg">
