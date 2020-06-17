@@ -18,13 +18,41 @@
 
     <footer class="footer">
       <div class="container">
-        Este é um projeto <em>open source</em>. Tenha acesso ao código-fonte na íntegra <a href="https://github.com/bildvitta/covid" target="_blank">aqui</a>.
+        Este é um projeto <em>open source</em> feito com <img alt="coração" class="heart" src="~/assets/images/heart.svg" style="height: 16px;"> pelo time da <img alt="coração" src="~/assets/images/nave.svg" style="height: 14px;">.
+        <div>Acesse ao código-fonte na íntegra <a href="https://github.com/bildvitta/covid" target="_blank">aqui</a>.</div>
       </div>
     </footer>
   </div>
 </template>
 
 <style lang="scss">
+
+@keyframes heartbeat {
+  0% {
+    transform: scale(0.75);
+  }
+
+  20% {
+    transform: scale(1);
+  }
+
+  40% {
+    transform: scale(0.75);
+  }
+
+  60% {
+    transform: scale(1);
+  }
+
+  80% {
+    transform: scale(0.75);
+  }
+
+  100% {
+    transform: scale(0.75);
+  }
+}
+
 .default-layout {
   display: flex;
   flex-direction: column;
@@ -86,5 +114,9 @@
   .container {
     text-align: center;
   }
+}
+
+.heart {
+  animation: heartbeat 1.4s infinite;
 }
 </style>

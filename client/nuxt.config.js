@@ -7,11 +7,15 @@ export default {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
+      { hid: 'description', name: 'description', content: process.env.npm_package_description || '' },
+      { name: 'theme-color', content: 'white' },
+      { name: 'apple-mobile-web-app-title', content: 'Leitos COVID' },
+      { name: 'apple-mobile-web-app-status-bar-style', content: 'white' }
     ],
 
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'apple-touch-icon', type: 'image/x-icon', href: '/apple-touch-icon.png' },
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,700;1,400;1,700&family=Material+Icons+Outlined&display=swap' }
     ]
   },

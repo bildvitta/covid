@@ -182,6 +182,7 @@ import CovSelect from '~/components/CovSelect'
 import CovProgress from '~/components/CovProgress'
 
 export default {
+
   components: {
     CovBadge,
     CovBox,
@@ -199,6 +200,10 @@ export default {
 
   validate ({ params }) {
     return params.states === 'sp'
+  },
+
+  asyncData () {
+
   },
 
   data () {
@@ -608,6 +613,12 @@ export default {
 
     removeLink (link) {
       document.body.removeChild(link)
+    }
+  },
+
+  head () {
+    return {
+      title: 'COVID-19 | Ribeirão Preto | Ocupação de leitos hospitalares'
     }
   }
 }
