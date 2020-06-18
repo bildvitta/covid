@@ -11,6 +11,8 @@ class Hospital < ApplicationRecord
   extend FriendlyId
   friendly_id :name, use: :slugged
 
+  default_scope { order(name: :asc) }
+
   def get_type
     TYPES.to_h.key(hospital_type)
   end
