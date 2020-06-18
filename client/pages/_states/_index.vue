@@ -112,6 +112,7 @@
           </cov-grid-cell>
         </cov-grid>
         <div v-if="fetchSuccess" class="m-t-lg">
+          <h3 class="text-title m-b-md">Mapa de calor dos leitos</h3>
           <cov-heatmap :points="hospitalsHeatmap" />
         </div>
       </div>
