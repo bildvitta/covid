@@ -12,7 +12,7 @@ every 1.day, at: '19:00' do
   runner 'DataBridge::SaoFrancisco.new.get_data.save!'
 end
 
-every 1.day, at: ['0:05', '6:05', '13:05', '19:05'] do
+every '7 * * * *' do
   runner "DataBridge::Unimed.new.get_data.save!"
 end
 
