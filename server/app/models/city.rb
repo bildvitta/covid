@@ -33,7 +33,7 @@ class City < ApplicationRecord
 
   def self.cached_for_select
     Rails.cache.fetch(:city_for_select) do
-      is_active.map do |city|
+      is_active.order('hospitals.name ASC').map do |city|
         hospitals = [{ label: 'Todos', value: '' }]
 
         hospitals.concat(
