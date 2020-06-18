@@ -25,7 +25,7 @@
                   </cov-grid-cell>
                 </cov-grid>
                 <span class="m-t-sm text-subtitle">
-                  Fonte: <a href="https://brasil.io/">brasil.io</a>
+                  Fonte: <a href="https://brasil.io/" target="_blank">brasil.io</a>
                 </span>
               </div>
 
@@ -112,6 +112,7 @@
           </cov-grid-cell>
         </cov-grid>
         <div v-if="fetchSuccess" class="m-t-lg">
+          <h3 class="text-title m-b-md">Mapa de calor dos leitos</h3>
           <cov-heatmap :points="hospitalsHeatmap" />
         </div>
       </div>
