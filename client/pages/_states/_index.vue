@@ -25,7 +25,7 @@
                   </cov-grid-cell>
                 </cov-grid>
                 <span class="m-t-sm text-subtitle">
-                  Fonte: <a href="https://brasil.io/">brasil.io</a>
+                  Fonte: <a href="https://brasil.io/" target="_blank">brasil.io</a>
                 </span>
               </div>
 

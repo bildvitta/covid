@@ -9,13 +9,23 @@ export default {
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: process.env.npm_package_description || '' },
       { name: 'theme-color', content: 'white' },
+      { hid: 'og:title', content: 'Leitos COVID-19, Ribeirão Preto' },
+      { hid: 'og:type', content: 'website' },
+      { hid: 'og:url', content: 'https://leitoscovid.org/' },
+      { hid: 'og:site_name', content: 'Leitos COVID-19' },
+      { hid: 'og:description', content: process.env.npm_package_description || '' },
+      { hid: 'og:image', content: 'https://leitoscovid.org/og-image.png' },
+      { name: 'twitter:card', content: 'summary_large_image' },
+      { name: 'twitter:title', content: 'COVID-19 | Ocupação de leitos hospitalares | Ribeirão Preto' },
+      { name: 'twitter:image', content: 'https://leitoscovid.org/og-image.png' },
+      { name: 'twitter:description', content: process.env.npm_package_description },
       { name: 'apple-mobile-web-app-title', content: 'Leitos COVID' },
       { name: 'apple-mobile-web-app-status-bar-style', content: 'white' }
     ],
 
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: 'apple-touch-icon', type: 'image/x-icon', href: '/apple-touch-icon.png' },
+      { rel: 'apple-touch-icon', type: 'image/png', href: '/apple-touch-icon.png' },
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,700;1,400;1,700&family=Material+Icons+Outlined&display=swap' }
     ]
   },
