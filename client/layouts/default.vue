@@ -2,9 +2,9 @@
   <div class="default-layout">
     <header class="header">
       <div class="container">
-        <div class="header__brand">
+        <h1 class="header__brand">
           COVID-19
-        </div>
+        </h1>
 
         <div class="header__title">
           Ocupação de leitos hospitalares
