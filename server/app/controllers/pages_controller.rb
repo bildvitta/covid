@@ -88,7 +88,7 @@ class PagesController < ApplicationController
           free += detail.status_free
           busy += detail.status_busy
           unavailable += detail.status_unavailable
-          ventilator += free + busy + unavailable if detail.using_ventilator
+          ventilator += detail.status_free + detail.status_busy + detail.status_unavailable if detail.using_ventilator
         end
 
         {
