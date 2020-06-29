@@ -57,7 +57,7 @@ module DataBridge
       case status.to_s.downcase.strip.to_sym
       when :livre, :vago
         return :free
-      when :ocupado
+      when :ocupado, :paciente
         return :busy
       else
         return :unavailable
