@@ -32,7 +32,7 @@ module DataBridge
           status:           get_status(r['gsx$status']['$t']),
           bed_type:         get_bed_type(r['gsx$tipodeleito']['$t'].to_s.strip.parameterize.gsub('-19', '')),
           slug:             r['gsx$identificadorleito']['$t'].parameterize,
-          using_ventilator: r['gsx$usorespirador']['$t'].to_s.downcase == 'sim',
+          using_ventilator: r['gsx$usodeventilaçãomecânica']['$t'].to_s.downcase == 'sim',
         )
       end
     end

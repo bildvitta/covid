@@ -108,6 +108,7 @@
                   </cov-card>
                 </cov-grid-cell>
               </cov-grid>
+              <span class="m-t-sm text-subtitle">Fonte: Os dados são disponibilizados diretamente dos hospitais responsáveis.</span>
             </div>
           </cov-grid-cell>
         </cov-grid>
