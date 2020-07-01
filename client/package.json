@@ -21,7 +21,8 @@
     "lodash-es": "^4.17.15",
     "nuxt": "^2.0.0",
     "nuxt-leaflet": "0.0.21",
-    "vue-chartjs": "^3.5.0"
+    "vue-chartjs": "^3.5.0",
+    "vue-multiselect": "^2.1.6"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^3.0.0",
