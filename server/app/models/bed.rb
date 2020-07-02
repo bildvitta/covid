@@ -3,6 +3,8 @@ class Bed < ApplicationRecord
 
   include BedTypes
 
+  # Leitos do tipo extra, não estão sendo considerados como leitos livres
+  # Rotina de geração de historico e beds_data no controller
   TYPES = [
     ['UTI COVID', 1],
     ['UTI NÃO-COVID', 2],
