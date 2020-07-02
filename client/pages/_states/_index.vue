@@ -7,7 +7,10 @@
             <div ref="cases">
               <div>
                 <h3 class="text-title m-b-md">Cidade</h3>
-                <cov-select v-model="city" :options="dashboard.cities" @input="filterCity()" />
+                <!-- TODO remover quando estiver aprovado -->
+                <!-- <cov-select v-model="city" :options="dashboard.cities" @input="filterCity()" /> -->
+                <cov-multi-select v-model="city" :allow-empty="true" deselect-label label="label" :options="dashboard.cities" placeholder :searchable="false" select-label selected-label track-by="value" @input="filterCity()" />
+                {{ city }}
               </div>
 
               <div class="m-t-lg">
@@ -38,7 +41,24 @@
           <cov-grid-cell :breakpoints="{ sm: 'full', lg: 'fill' }">
             <div class="hospitals-header">
               <h3 class="text-title m-b-md">Hospitais</h3>
-              <cov-select v-model="hospital" :options="hospitalOptions" @input="filter()" />
+              <!-- TODO remover quando estiver aprovado -->
+              <!-- <cov-select v-model="hospital" :options="hospitalOptions" @input="filter()" /> -->
+              <cov-multi-select v-model="hospital" :allow-empty="true" class="cov-multiselect" deselect-label label="name" multiple :options="dashboard.hospitals" placeholder :searchable="false" select-label selected-label track-by="value" @input="filter()">
+                <template slot="option" slot-scope="{ option }">
+                  <div class="flex no-wrap justify-between items-start">
+                    <cov-checkbox :checked="isChecked(option.value)" class="cov-multiselect__checkbox m-r-xs" />
+                    <div class="cov-multiselect__content">
+                      <div class="cov-multiselect__content-header flex justify-between items-center">
+                        <span class="cov-multiselect__content-title">{{ option.name }}</span>
+                        <cov-badge color="quaternary" dense outlined>Publico</cov-badge>
+                      </div>
+                      <div class="text-size-sm">
+                        {{ updatedDistance('', option.updated_at) }}
+                      </div>
+                    </div>
+                  </div>
+                </template>
+              </cov-multi-select>
             </div>
 
             <div class="m-t-lg">
@@ -161,36 +181,6 @@
         </cov-grid>
       </div>
     </cov-section>
-
-    <div style="margin: 500px auto; max-width: 500px; padding: 20px;">
-      <multi-select v-if="fetchSuccess" v-model="hospital" :allow-empty="true" class="cov-multiselect" deselect-label label="name" multiple :options="dashboard.hospitals" placeholder="Select one" :searchable="false" select-label selected-label track-by="value" @input="filter()">
-        <template slot="option" slot-scope="{ option }">
-          <div class="flex no-wrap justify-between items-start">
-            <cov-checkbox :checked="isChecked(option.value)" class="cov-multiselect__checkbox m-r-xs" />
-            <div class="cov-multiselect__content">
-              <div class="cov-multiselect__content-header flex justify-between items-center">
-                <span class="cov-multiselect__content-title">{{ option.name }}</span>
-                <cov-badge color="quaternary" dense outlined>Publico</cov-badge>
-              </div>
-              <div class="text-size-sm">
-                {{ updatedDistance('', option.updated_at) }}
-              </div>
-            </div>
-          </div>
-        </template>
-      </multi-select>
-      <!-- <multiselect v-if="fetchSuccess" v-model="test" :allow-empty="true" class="cov-multiselect" deselect-label label="label" multiple :options="dashboard.cities[0].hospitals" placeholder="Select one" :searchable="false" select-label selected-label track-by="value">
-        <template slot="option" slot-scope="{ option }">
-          <div class="cov-multiselect__option">
-            <div>
-              <input :checked="isChecked(option.value)" type="checkbox">
-              {{ option.label }}
-            </div>
-            <cov-badge class="m-t-xs" :percent="20">Ocupação {{ 20 }}</cov-badge>
-          </div>
-        </template>
-      </multiselect> -->
-    </div>
     <cov-loading :showing="isFetching" />
   </div>
 </template>
@@ -201,10 +191,8 @@ import { isEmpty, isObject, mergeWith, omitBy } from 'lodash-es'
 
 import { format, formatDistanceToNow } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
-// import Vue from 'vue'
 
-// import multiselect from 'vue-multiselect'
-import MultiSelect from '~/components/MultiSelect'
+import CovMultiSelect from '~/components/CovMultiSelect'
 import CovBadge from '~/components/CovBadge'
 import CovButton from '~/components/CovButton'
 import CovBox from '~/components/CovBox'
@@ -215,7 +203,7 @@ import CovHeatmap from '~/components/CovHeatmap'
 import CovLineChart from '~/components/CovLineChart'
 import CovLoading from '~/components/CovLoading'
 import CovSection from '~/components/CovSection'
-import CovSelect from '~/components/CovSelect'
+// import CovSelect from '~/components/CovSelect'
 import CovProgress from '~/components/CovProgress'
 import CovCheckbox from '~/components/CovCheckbox'
 
@@ -231,9 +219,9 @@ export default {
     CovLineChart,
     CovLoading,
     CovSection,
-    CovSelect,
+    // CovSelect,
     CovProgress,
-    MultiSelect,
+    CovMultiSelect,
     CovCheckbox
     // multiselect
   },
@@ -573,7 +561,7 @@ export default {
     },
 
     clearHospital () {
-      this.hospital = ''
+      this.hospital = []
     },
 
     fetch () {
@@ -582,8 +570,10 @@ export default {
 
     filter (isCity) {
       if (isCity && typeof isCity === 'boolean') {
-        return this.$router.push({ params: { index: this.city } })
+        return this.city && this.$router.push({ params: { index: this.city.value } })
       }
+
+      console.log('fui chamado aqui')
 
       const toQuery = this.hospital.map(item => item.value).join(',')
 
@@ -611,7 +601,10 @@ export default {
     },
 
     setSelect () {
-      this.city = this.$route.params.index || 'ribeirao-preto'
+      const cityQuery = this.$route.params.index || 'ribeirao-preto'
+      this.city = this.dashboard.cities.find(city => city.value === cityQuery)
+      // this.city = this.$route.params.index || 'ribeirao-preto'
+
       // this.hospital = this.$route.query.hospital || ''
       const hospitalsQuery = (this.$route.query.hospital || '').split(',') || []
       // TODO mudar para API
@@ -671,7 +664,7 @@ export default {
     },
 
     isChecked (value) {
-      return !!this.hospital.find(item => item.value === value)
+      return this.hospital && !!this.hospital.find(item => item.value === value)
     }
   },
 

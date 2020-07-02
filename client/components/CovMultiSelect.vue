@@ -4,10 +4,6 @@
     <template v-for="(slot, key) in $scopedSlots" :slot="key" slot-scope="option">
       <slot v-bind="option" :name="key" />
     </template>
-    <!-- # TODO mudar nome do componente para CovMultiple.vue -->
-    <!-- <template v-for="(slot, key) in $scopedSlots" v-slot:[key]="options">
-      <slot v-bind="options" :name="key" />
-    </template> -->
   </multiselect>
 </template>
 
@@ -22,7 +18,7 @@ export default {
   props: {
     value: {
       type: [Object, Array, String],
-      required: true
+      default: null
     }
   },
 
@@ -89,6 +85,13 @@ export default {
 
   &__option {
     padding: 8px 20px;
+  }
+}
+
+@include breakpoint(max-width $small-screen) {
+  .multiselect__option {
+    padding-left: 10px;
+    padding-right: 10px;
   }
 }
 </style>
