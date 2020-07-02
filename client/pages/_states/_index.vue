@@ -10,7 +10,6 @@
                 <!-- TODO remover quando estiver aprovado -->
                 <!-- <cov-select v-model="city" :options="dashboard.cities" @input="filterCity()" /> -->
                 <cov-multi-select v-model="city" :allow-empty="true" deselect-label label="label" :options="dashboard.cities" placeholder :searchable="false" select-label selected-label track-by="value" @input="filterCity()" />
-                {{ city }}
               </div>
 
               <div class="m-t-lg">
