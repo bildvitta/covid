@@ -48,6 +48,10 @@ module DataBridge
         return 3
       when 'enfermaria-nao-covid'
         return 4
+      when 'uti-covid-extra'
+        return 5
+      when 'enfermaria-covid-extra'
+        return 6
       else
         return 0
       end

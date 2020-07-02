@@ -31,7 +31,7 @@ class PagesController < ApplicationController
         free = busy = unavailable = ventilator = 0
 
         beds.each do |bed|
-          free += 1 if bed.free?
+          free += 1 if bed.free? && !bed.extra?
           busy += 1 if bed.busy?
           unavailable += 1 if bed.unavailable?
           ventilator += 1 if bed.using_ventilator
