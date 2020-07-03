@@ -12,9 +12,10 @@ class Routines::GenerateHistorical
   end
 
   def create_bed_state! hospital
-    free_type = Bed.statuses[:free]
-    bed_count = hospital.beds.where('(beds.status != ?) OR (beds.status = ? AND beds.bed_type NOT IN (?))', free_type, free_type, Bed.extra_types)
-    bed_count = bed_count.group(:using_ventilator, :status, :bed_type).count
+    # free_type = Bed.statuses[:free]
+    # bed_count = hospital.beds.where('(beds.status != ?) OR (beds.status = ? AND beds.bed_type NOT IN (?))', free_type, free_type, Bed.extra_types)
+    # bed_count = bed_count.group(:using_ventilator, :status, :bed_type).count
+    bed_count = hospital.beds.group(:using_ventilator, :status, :bed_type).count
     bed_state = BedState.find_or_create_by(date: date, hospital: hospital)
 
     bed_state.details.destroy_all
