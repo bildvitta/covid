@@ -31,8 +31,9 @@ export default {
       const percent = parseFloat(this.percent)
 
       return {
-        'badge--negative': percent >= 90,
-        'badge--warning': percent >= 60 && percent < 90,
+        'badge--negative': percent >= 80,
+        'badge--orange': percent >= 70 && percent < 80,
+        'badge--warning': percent >= 60 && percent < 70,
         'badge--positive': percent < 60,
         'badge--outline': this.outlined,
         'badge--dense': this.dense,
@@ -85,6 +86,10 @@ export default {
 
   &--warning {
     background-color: $warning-color;
+  }
+
+  &--orange {
+    background-color: $orange;
   }
 
   &--outline {
