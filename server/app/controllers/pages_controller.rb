@@ -67,7 +67,17 @@ class PagesController < ApplicationController
 
   def hospitals_data
     cached_data :hospitals_data do
-      @city.hospitals.includes(:beds).map(&:to_json)
+      hospital = ->(name, slug = '') {
+        Hospital.new(name: name, slug: slug, hospital_type: '', latitude: 0, longitude: 0)
+      }
+
+      hospitals = [
+        hospital.call('Todos'),
+        hospital.call('Público', 'public'),
+        hospital.call('Privado', 'private')
+      ] + @city.hospitals.includes(:beds)
+
+      hospitals.map(&:to_json)
     end
   end
 
