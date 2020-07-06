@@ -113,7 +113,17 @@ class PagesController < ApplicationController
         covid_cases = @city.covid_cases.find { |covid_case| covid_case.reference_date == date }
         covid_cases ||= CovidCase.new
 
-        hospitals = @city.hospitals.where('? IS NULL OR hospitals.id = ?', @hospital&.id, @hospital&.id)
+        hospitals = 
+          case params[:hospital]
+          when ->(hospital) { hospital.blank? }
+            @city.hospitals
+          when 'public'
+            @city.hospitals.where(hospital_type: 1)
+          when 'private'
+            @city.hospitals.where(hospital_type: 2)
+          else
+            @city.hospitals.where(id: @hospital.id)
+          end
 
         data = {
           covid_cases: covid_cases.to_json,
@@ -147,7 +157,17 @@ class PagesController < ApplicationController
     @city = params[:city].present? ? params[:city] : 'ribeirao-preto'
     @city = City.cached_for(@city)
 
-    return @beds = @city.beds if params[:hospital].blank?
+    @beds = 
+      case params[:hospital]
+      when ->(hospital) { hospital.blank? }
+        @city.beds
+      when 'public'
+        @city.beds.joins(:hospital).where(hospitals: { hospital_type: 1 })
+      when 'private'
+        @city.beds.joins(:hospital).where(hospitals: { hospital_type: 2 })
+      end
+
+    return if @beds
 
     @hospital = @city.hospitals.find { |hospital| hospital.slug == params[:hospital] }
     @beds = @hospital.beds
