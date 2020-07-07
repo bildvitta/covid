@@ -67,12 +67,12 @@ class PagesController < ApplicationController
 
   def hospitals_data
     cached_data :hospitals_data do
-      hospital = ->(name, slug = '') {
+      hospital = ->(name, slug) {
         Hospital.new(name: name, slug: slug, hospital_type: '', latitude: 0, longitude: 0)
       }
 
       hospitals = [
-        hospital.call('Todos'),
+        hospital.call('Todos', 'all'),
         hospital.call('Público', 'public'),
         hospital.call('Privado', 'private')
       ] + @city.hospitals.includes(:beds)
@@ -123,17 +123,7 @@ class PagesController < ApplicationController
         covid_cases = @city.covid_cases.find { |covid_case| covid_case.reference_date == date }
         covid_cases ||= CovidCase.new
 
-        hospitals = 
-          case params[:hospital]
-          when ->(hospital) { hospital.blank? }
-            @city.hospitals
-          when 'public'
-            @city.hospitals.where(hospital_type: 1)
-          when 'private'
-            @city.hospitals.where(hospital_type: 2)
-          else
-            @city.hospitals.where(id: @hospital.id)
-          end
+        hospitals = @city.hospitals.where(filter_beds)
 
         data = {
           covid_cases: covid_cases.to_json,
@@ -167,20 +157,31 @@ class PagesController < ApplicationController
     @city = params[:city].present? ? params[:city] : 'ribeirao-preto'
     @city = City.cached_for(@city)
 
-    @beds = 
-      case params[:hospital]
-      when ->(hospital) { hospital.blank? }
-        @city.beds
-      when 'public'
-        @city.beds.joins(:hospital).where(hospitals: { hospital_type: 1 })
-      when 'private'
-        @city.beds.joins(:hospital).where(hospitals: { hospital_type: 2 })
-      end
+    @beds = @city.beds.joins(:hospital).where(filter_beds)
+  end
 
-    return if @beds
+  def filter_beds
+    filters = {
+      'public' => 1,
+      'private' => 2,
+    }
 
-    @hospital = @city.hospitals.find { |hospital| hospital.slug == params[:hospital] }
-    @beds = @hospital.beds
+    filter_params = params[:hospital].to_s.split(',')
+
+    hospital_slugs, hospital_types = [], []
+    
+    return '' if filter_params.blank? || filter_params.include?('all')
+
+    filter_params.uniq.each do |filter|
+      filters.key?(filter) ? hospital_types << filters[filter] : hospital_slugs << filter
+    end
+
+    query = [
+      ("hospitals.slug IN (#{hospital_slugs.map { |slug| "'#{slug}'" }.join(',') })" if hospital_slugs.present?),
+      ("hospitals.hospital_type IN (#{hospital_types.join(',')})" if hospital_types.present?)
+    ]
+
+    query.compact.join(' OR ')
   end
 
   def cached_data name, expires_in: rand(10..17).minutes, &block
