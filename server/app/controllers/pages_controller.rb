@@ -28,17 +28,19 @@ class PagesController < ApplicationController
   def beds_data
     cached_data :beds_data do
       block = -> (beds) {
-        free = busy = unavailable = ventilator = 0
+        total = free = busy = unavailable = ventilator = 0
 
         beds.each do |bed|
-          free += 1 if bed.free? && !bed.extra?
+          free += 1 if bed.free?# && !bed.extra?
           busy += 1 if bed.busy?
           unavailable += 1 if bed.unavailable?
           ventilator += 1 if bed.using_ventilator
+
+          total += 1 unless bed.extra?
         end
 
         {
-          total: free + busy + unavailable,
+          total: total,
           free: free,
           busy: busy,
           unavailable: unavailable,
@@ -92,17 +94,19 @@ class PagesController < ApplicationController
 
     unless block
       block = -> (bed_details) {
-        free = busy = unavailable = ventilator = 0
+        total = free = busy = unavailable = ventilator = 0
 
         bed_details.each do |detail|
           free += detail.status_free
           busy += detail.status_busy
           unavailable += detail.status_unavailable
           ventilator += detail.status_free + detail.status_busy + detail.status_unavailable if detail.using_ventilator
+
+          total += detail.status_free + detail.status_busy + detail.status_unavailable unless detail.extra?
         end
 
         {
-          total: free + busy + unavailable,
+          total: total,
           free: free,
           busy: busy,
           unavailable: unavailable,
