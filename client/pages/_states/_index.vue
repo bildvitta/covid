@@ -661,7 +661,7 @@ export default {
 .cov-multiselect {
   &__checkbox {
     position: relative;
-    top: 2px;
+    top: 4px;
   }
 
   &__content {
