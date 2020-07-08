@@ -24,7 +24,7 @@ export default {
 
   watch: {
     '$attrs.checked' (value) {
-      this.$el.classList.toggle('js-checked', value)
+      this.$el.classList.toggle('js-checked')
     }
   },
 
@@ -49,8 +49,7 @@ export default {
   outline: 0;
   width: 16px;
 
-  &.js-checked,
-  &:checked {
+  &.js-checked {
     background-image: url('../assets/images/check.svg');
     background-position: center;
     background-size: 14px;
