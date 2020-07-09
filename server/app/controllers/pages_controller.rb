@@ -69,7 +69,7 @@ class PagesController < ApplicationController
 
   def hospitals_data
     cached_data :hospitals_data do
-      @city.hospitals.includes(:beds).map(&:to_json)
+      @city.hospitals.joins(:beds).order('beds.updated_at DESC').includes(:beds).map(&:to_json)
     end
   end
 
@@ -113,16 +113,19 @@ class PagesController < ApplicationController
 
   def historical_data
     cached_data :historical_data do
-      (30.days.ago.to_date..1.days.ago.to_date).map do |date|
+      range_days = 30.days.ago.to_date..1.days.ago.to_date
+      hospitals = @city.hospitals.distinct.where(filter_beds).reorder(id: :asc)
+      bed_states = BedState.joins(:hospital, :details).where(date: range_days, hospital: hospitals).distinct
+      bed_states = bed_states.includes(:details).distinct.map { |bed_state| [[bed_state.date.to_s, bed_state.hospital_id], bed_state.details] }.to_h
+
+      range_days.map do |date|
         covid_cases = @city.covid_cases.find { |covid_case| covid_case.reference_date == date }
         covid_cases ||= CovidCase.new
-
-        hospitals = @city.hospitals.where('? IS NULL OR hospitals.id = ?', @hospital&.id, @hospital&.id)
 
         data = {
           covid_cases: covid_cases.to_json,
           beds: hospitals.map do |hospital|
-            details = hospital.bed_states.to_a.find_by(:date, date)&.details.to_a
+            details = bed_states[[date.to_s, hospital.id]].to_a
 
             intensive_care_unit = []
             nursing = []
@@ -151,14 +154,11 @@ class PagesController < ApplicationController
     @city = params[:city].present? ? params[:city] : 'ribeirao-preto'
     @city = City.cached_for(@city)
 
-    return @beds = @city.beds if params[:hospital].blank?
-
-    @hospital = @city.hospitals.find { |hospital| hospital.slug == params[:hospital] }
-    @beds = @hospital.beds
+    @beds = @city.beds.joins(:hospital).where(filter_beds).distinct.reorder(id: :desc)
   end
 
   def cached_data name, expires_in: rand(10..17).minutes, &block
-    Rails.cache.fetch([name, @city.slug, @hospital&.slug], expires_in: expires_in, &block)
+    Rails.cache.fetch([name, @city.slug, filter_params], expires_in: expires_in, &block)
   end
 
   def historical_xlsx
@@ -194,5 +194,36 @@ class PagesController < ApplicationController
     ).generate!(path)
 
     "#{request.protocol}#{request.host_with_port}/reports/#{filename}"
+  end
+
+  def filter_params
+    return @filter_params if @filter_params
+
+    @filter_params = params[:hospital].to_s.split(',').uniq
+    @filter_params = 'all' if @filter_params.blank? || @filter_params.include?('all')
+
+    @filter_params
+  end
+
+  def filter_beds
+    filters = {
+      'public' => 1,
+      'private' => 2,
+    }
+
+    hospital_slugs, hospital_types = [], []
+
+    return '' if filter_params == 'all'
+
+    filter_params.each do |filter|
+      filters.key?(filter) ? hospital_types << filters[filter] : hospital_slugs << filter
+    end
+
+    query = [
+      ("hospitals.slug IN (#{hospital_slugs.map { |slug| "'#{slug}'" }.join(',') })" if hospital_slugs.any?),
+      ("hospitals.hospital_type IN (#{hospital_types.join(',')})" if hospital_types.any?)
+    ]
+
+    query.compact.join(' OR ')
   end
 end

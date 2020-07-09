@@ -34,7 +34,8 @@ class Hospital < ApplicationRecord
       latitude: latitude,
       longitude: longitude,
       total: total,
-      busy: busy
+      busy: busy,
+      updated_at: beds[0]&.updated_at&.iso8601
     }
   end
 end
