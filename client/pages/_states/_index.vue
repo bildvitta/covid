@@ -1,44 +1,22 @@
 <template>
-  <div class="position position--relative">
+  <div v-if="fetchSuccess" class="position position--relative">
     <cov-section>
       <div class="container">
-        <cov-grid v-if="fetchSuccess" gutter>
-          <cov-grid-cell :breakpoints="{ sm: 'full', md: 'full', lg: '3-of-8' }">
+        <cov-grid gutter>
+          <cov-grid-cell :breakpoints="{ sm: 'full', md: 'full', lg: 'full' }">
             <div ref="cases">
               <div>
                 <h3 class="text-title m-b-md">Cidade</h3>
                 <cov-multi-select v-model="city" :allow-empty="true" deselect-label label="label" :options="dashboard.cities" placeholder :searchable="false" select-label selected-label track-by="value" @input="filterCity()" />
               </div>
-
-              <div class="m-t-lg">
-                <h3 class="text-title">Casos</h3>
-                <div class="text-subtitle m-b-md">
-                  <abbr :title="updatedDate('covid_cases')">{{ updatedDistance('covid_cases') }}</abbr>
-                </div>
-
-                <cov-grid v-if="dashboard.covid_cases" align-center gutter-small>
-                  <cov-grid-cell v-for="(item, key) in dashboard.covid_cases.cases" :key="key" :breakpoints="{ col: '1-of-3', sm: '1-of-3' }">
-                    <cov-card :outlined="casesTypes[key].color">
-                      <div class="text-size-sm">{{ casesTypes[key].label }}</div>
-                      <div class="text-bold text-size-lg" :class="casesTypes[key].classes">{{ formatCases(item) }}</div>
-                    </cov-card>
-                  </cov-grid-cell>
-                </cov-grid>
-                <span class="m-t-sm text-subtitle">
-                  Fonte: <a href="https://brasil.io/" target="_blank">brasil.io</a>
-                </span>
-              </div>
-
-              <div class="m-t-lg">
-                <cov-progress :content="casesProgress" />
-              </div>
             </div>
           </cov-grid-cell>
 
-          <cov-grid-cell :breakpoints="{ sm: 'full', lg: 'fill' }">
+          <cov-grid-cell :breakpoints="{ sm: 'full', md: 'full', lg: '1-of-2' }">
             <div class="hospitals-header">
-              <h3 class="text-title m-b-md">Hospitais</h3>
-              <cov-multi-select v-model="hospital" :allow-empty="true" class="cov-multiselect" deselect-label label="name" multiple :options="hospitalOptions" placeholder :searchable="false" select-label selected-label track-by="value" @input="filter()">
+              <h3 class="text-title">Hospitais</h3>
+              <div class="text-subtitle">Fonte: Os dados são disponibilizados diretamente dos hospitais responsáveis.</div>
+              <cov-multi-select v-model="hospital" :allow-empty="true" class="cov-multiselect m-t-sm" deselect-label label="name" multiple :options="hospitalOptions" placeholder :searchable="false" select-label selected-label track-by="value" @input="filter()">
                 <template slot="option" slot-scope="{ option }">
                   <div class="flex no-wrap justify-between items-start">
                     <cov-checkbox :checked="isChecked(option.value)" class="m-r-xs" :class="multiSelectCheckboxClass(option)" />
@@ -55,8 +33,10 @@
                 </template>
               </cov-multi-select>
             </div>
+          </cov-grid-cell>
 
-            <div class="m-t-lg">
+          <cov-grid-cell :breakpoints="{ sm: 'full', lg: 'full' }">
+            <div>
               <h3 class="text-title">Leitos</h3>
 
               <div class="text-subtitle">
@@ -67,45 +47,45 @@
             <div class="m-t-md">
               <cov-grid align-center gutter>
                 <cov-grid-cell v-for="(item, key) in beds" :key="key" :breakpoints="{ sm: 'full', md: 'full', lg: '1-of-2' }">
-                  <cov-card>
-                    <template v-slot:header>
-                      <span class="beds__title">{{ bedsTypes[key].label }}</span>
-                    </template>
-                    <div>
-                      <cov-grid align-bottom gutter justify-between>
-                        <cov-grid-cell :breakpoints="{ col: '1-of-2' }">
-                          <div>
-                            <div class="text-caption">
-                              COVID-19
-                            </div>
-                            <cov-badge class="m-t-xs" :percent="badgesPercent(item.covid)">Ocupação {{ badgesPercent(item.covid) }}</cov-badge>
-                          </div>
-                        </cov-grid-cell>
-                        <cov-grid-cell :breakpoints="{ col: '1-of-2' }" class="beds__content">
-                          <div class="beds__box">
-                            <span>Total</span>
-                            <span class="text-bold text-primary">{{ item.covid.total }}</span>
-                          </div>
-                          <div class="beds__box">
-                            <span>Ocupados</span>
-                            <span class="text-bold text-primary">{{ item.covid.busy }}</span>
-                          </div>
-                          <div class="beds__box">
-                            <span>Respiradores em uso</span>
-                            <span class="text-bold text-primary">{{ item.covid.ventilator }}</span>
-                          </div>
-                        </cov-grid-cell>
-                      </cov-grid>
-                    </div>
-                  </cov-card>
-
-                  <cov-card class="beds__opacity m-t-md">
-                    <cov-grid gutter justify-between>
-                      <cov-grid-cell :breakpoints="{ col: '1-of-2' }">
-                        <div class="text-caption beds__spacing-top">Não COVID-19</div>
+                  <!-- INICIO CARD -->
+                  <cov-card lighten :percent="percent(item.covid)">
+                    <cov-grid>
+                      <cov-grid-cell :breakpoints="{ col: '1-of-3' }">
+                        <cov-card class="beds__card" :percent="percent(item.covid)">
+                          <div class="text-size-sm">Ocupação</div>
+                          <div class="text-size-lg text-bold">{{ badgesPercent(item.covid) }}</div>
+                        </cov-card>
                       </cov-grid-cell>
 
-                      <cov-grid-cell :breakpoints="{ col: '1-of-2' }" class="beds__content">
+                      <cov-grid-cell :breakpoints="{ col: '2-of-3' }">
+                        <div class="beds__title">{{ bedsTypes[key].label }} <span class="text-caption">COVIDE-19</span></div>
+                        <div class="beds__box m-t-md">
+                          <span class="text-black text-bold">Total</span>
+                          <span class="text-bold text-primary">{{ item.covid.total }}</span>
+                        </div>
+
+                        <div class="beds__box">
+                          <span class="text-black text-bold">Ocupados</span>
+                          <span class="text-bold text-primary">{{ item.covid.busy }}</span>
+                        </div>
+
+                        <div class="beds__box">
+                          <span class="text-black text-bold">Respiradores em uso</span>
+                          <span class="text-bold text-primary">{{ item.covid.ventilator }}</span>
+                        </div>
+                      </cov-grid-cell>
+                    </cov-grid>
+                  </cov-card>
+                  <!-- FIM CARD -->
+
+                  <cov-card class="beds__small m-t-md">
+                    <cov-grid gutter justify-between>
+                      <cov-grid-cell :breakpoints="{ col: 'full' }">
+                        <span class="beds__title text-primary">{{ bedsTypes[key].label }}</span>
+                        <span class="text-caption m-l-sm">Outros</span>
+                      </cov-grid-cell>
+
+                      <cov-grid-cell :breakpoints="{ col: 'full' }" class="beds__content">
                         <div class="beds__box">
                           <span>Total</span>
                           <span class="text-bold text-primary">{{ item.normal.total }}</span>
@@ -123,17 +103,28 @@
                   </cov-card>
                 </cov-grid-cell>
               </cov-grid>
-              <span class="m-t-sm text-subtitle">Fonte: Os dados são disponibilizados diretamente dos hospitais responsáveis.</span>
             </div>
           </cov-grid-cell>
+
+          <cov-grid-cell :breakpoints="{ sm: 'full' }">
+            <h3 class="text-title">Gráfico de leitos</h3>
+
+            <cov-box class="m-t-md">
+              <client-only>
+                <cov-line-chart :chart-data="historyChartData" :options="historyChartOptions" />
+              </client-only>
+            </cov-box>
+          </cov-grid-cell>
         </cov-grid>
+
         <div v-if="fetchSuccess" class="m-t-lg">
           <h3 class="text-title m-b-md">Mapa de calor dos leitos</h3>
           <cov-heatmap :points="hospitalsHeatmap" />
         </div>
       </div>
-      <div class="container text-center">
-        <div class="m-t-xl">
+
+      <div class="container">
+        <div class="m-t-xl m-l-n-sm">
           <cov-button href="https://documenter.getpostman.com/view/11415346/Szt7BBFH" icon="code" label="Acesso a API" target="_blank" />
           <cov-button icon="table_chart" label="Baixar planilha" @click="download" />
         </div>
@@ -145,13 +136,34 @@
         <cov-grid gutter justify-between>
           <!-- <cov-grid-cell :breakpoints="{ col: '1-of-2', sm: 'full', md: 'full' }"> -->
           <cov-grid-cell :breakpoints="{ sm: 'full' }">
-            <h3 class="text-title">Leitos</h3>
+            <cov-grid align-bottom gutter>
+              <cov-grid-cell :breakpoints="{ sm: 'full', md: '1-of-2', lg: '1-of-3' }">
+                <div class="m-t-lg">
+                  <h3 class="text-title">Número de casos da cidade</h3>
+                  <div class="text-size-sm m-b-md">
+                    <abbr :title="updatedDate('covid_cases')">{{ updatedDistance('covid_cases') }}</abbr>
+                  </div>
 
-            <cov-box class="m-t-md">
-              <client-only>
-                <cov-line-chart :chart-data="historyChartData" :options="historyChartOptions" />
-              </client-only>
-            </cov-box>
+                  <cov-grid v-if="dashboard.covid_cases" align-center gutter-small>
+                    <cov-grid-cell v-for="(item, key) in dashboard.covid_cases.cases" :key="key" :breakpoints="{ col: '1-of-3', sm: '1-of-3' }">
+                      <cov-card :outlined="casesTypes[key].color">
+                        <div class="text-size-sm">{{ casesTypes[key].label }}</div>
+                        <div class="text-bold text-size-lg" :class="casesTypes[key].classes">{{ formatCases(item) }}</div>
+                      </cov-card>
+                    </cov-grid-cell>
+                  </cov-grid>
+                  <span class="m-t-sm text-size-sm">
+                    Fonte: <a href="https://brasil.io/" target="_blank">brasil.io</a>
+                  </span>
+                </div>
+              </cov-grid-cell>
+
+              <cov-grid-cell :breakpoints="{ sm: 'full', md: '1-of-2', lg: '1-of-3' }">
+                <div class="m-t-lg">
+                  <cov-progress :content="casesProgress" />
+                </div>
+              </cov-grid-cell>
+            </cov-grid>
           </cov-grid-cell>
 
           <!-- <cov-grid-cell :breakpoints="{ col: '1-of-2', sm: 'full', md: 'full' }">
@@ -165,7 +177,7 @@
           </cov-grid-cell> -->
 
           <cov-grid-cell :breakpoints="{ sm: 'full' }">
-            <h3 class="text-title">Casos</h3>
+            <h3 class="text-title">Gráfico de evolução de casos</h3>
 
             <cov-box class="m-t-md">
               <client-only>
@@ -580,6 +592,10 @@ export default {
       return format(number)
     },
 
+    percent ({ busy, total }) {
+      return (busy / total) || 0
+    },
+
     setSelect () {
       const cityQuery = this.$route.params.index || 'ribeirao-preto'
       this.city = this.dashboard.cities.find(city => city.value === cityQuery)
@@ -687,12 +703,25 @@ export default {
     line-height: 0.8;
 
     & + & {
-      margin-top: 8px;
+      margin-top: 6px;
     }
   }
 
-  &__opacity {
-    opacity: 0.7;
+  &__card {
+    border-radius: $radius;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: center;
+    max-height: 120px;
+    max-width: 120px;
+    padding: 16px;
+  }
+
+  &__small {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 80%;
     position: relative;
 
     &::before {

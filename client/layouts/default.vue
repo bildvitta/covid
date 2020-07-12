@@ -9,6 +9,11 @@
         <div class="header__title">
           Ocupação de leitos hospitalares
         </div>
+
+        <div class="header__select">
+          <!-- <cov-multi-select v-model="city" :allow-empty="true" deselect-label label="label" :options="dashboard.cities" placeholder :searchable="false" select-label selected-label track-by="value" @input="filterCity()" /> -->
+          Select
+        </div>
       </div>
     </header>
 
@@ -69,7 +74,6 @@
   .container {
     align-items: center;
     display: flex;
-    justify-content: space-between;
   }
 
   &__brand,
@@ -85,7 +89,12 @@
 
   &__title {
     color: $primary-color;
-    font-size: 28px;
+    font-size: 16px;
+    margin-left: 16px;
+  }
+
+  &__select {
+    margin-left: auto;
   }
 
   @include breakpoint (max-width $small-screen) {
