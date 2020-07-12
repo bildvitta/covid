@@ -48,6 +48,7 @@
               <cov-grid align-center gutter>
                 <cov-grid-cell v-for="(item, key) in beds" :key="key" :breakpoints="{ sm: 'full', md: 'full', lg: '1-of-2' }">
                   <!-- INICIO CARD -->
+
                   <cov-card lighten :percent="percent(item.covid)">
                     <cov-grid>
                       <cov-grid-cell :breakpoints="{ col: '1-of-3' }">
