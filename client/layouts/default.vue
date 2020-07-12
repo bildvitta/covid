@@ -11,8 +11,7 @@
         </div>
 
         <div class="header__select">
-          <!-- <cov-multi-select v-model="city" :allow-empty="true" deselect-label label="label" :options="dashboard.cities" placeholder :searchable="false" select-label selected-label track-by="value" @input="filterCity()" /> -->
-          Select
+          <cov-multi-select v-if="fetchSuccess" v-model="city" :allow-empty="true" deselect-label label="label" :options="dashboard.cities" placeholder :searchable="false" select-label selected-label style="width: 300px;" track-by="value" @input="filter()" />
         </div>
       </div>
     </header>
@@ -29,6 +28,63 @@
     </footer>
   </div>
 </template>
+
+<script>
+import { mapActions, mapGetters } from 'vuex'
+import CovMultiSelect from '../components/CovMultiSelect'
+
+import { EventBus } from '../helpers/EventBus'
+
+export default {
+  components: {
+    CovMultiSelect
+  },
+
+  data () {
+    return {
+      city: ''
+    }
+  },
+
+  computed: {
+    ...mapGetters({
+      dashboard: 'dashboard/dashboard',
+      fetchSuccess: 'dashboard/fetchSuccess'
+    })
+  },
+
+  watch: {
+    fetchSuccess (value) {
+      value && this.setSelect()
+    }
+  },
+
+  created () {
+    this.fetch()
+  },
+
+  methods: {
+    ...mapActions({
+      fetchDashboard: 'dashboard/fetch'
+    }),
+
+    fetch () {
+      return this.fetchDashboard({ ...this.$route.query, city: this.$route.params.index })
+    },
+
+    filter () {
+      EventBus.$emit('clear-hospital')
+
+      return this.city && this.$router.push({ params: { index: this.city.value } })
+    },
+
+    setSelect () {
+      const cityQuery = this.$route.params.index || 'ribeirao-preto'
+      this.city = this.dashboard.cities.find(city => city.value === cityQuery)
+    }
+  }
+}
+</script>
 
 <style lang="scss">
 

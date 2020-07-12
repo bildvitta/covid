@@ -6,8 +6,8 @@
           <cov-grid-cell :breakpoints="{ sm: 'full', md: 'full', lg: 'full' }">
             <div ref="cases">
               <div>
-                <h3 class="text-title m-b-md">Cidade</h3>
-                <cov-multi-select v-model="city" :allow-empty="true" deselect-label label="label" :options="dashboard.cities" placeholder :searchable="false" select-label selected-label track-by="value" @input="filterCity()" />
+                <!-- <h3 class="text-title m-b-md">Cidade</h3> -->
+                <!-- <cov-multi-select v-model="city" :allow-empty="true" deselect-label label="label" :options="dashboard.cities" placeholder :searchable="false" select-label selected-label track-by="value" @input="filterCity()" /> -->
               </div>
             </div>
           </cov-grid-cell>
@@ -200,6 +200,8 @@ import { isEmpty, isObject, mergeWith, omitBy } from 'lodash-es'
 import { format, formatDistanceToNow } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 
+import { EventBus } from '../../helpers/EventBus'
+
 import CovMultiSelect from '~/components/CovMultiSelect'
 import CovBadge from '~/components/CovBadge'
 import CovButton from '~/components/CovButton'
@@ -237,7 +239,6 @@ export default {
 
   data () {
     return {
-      city: '',
       hospital: [],
       defaultHospitalOptions: [
         { name: 'Todos', value: 'all', noUpdateLabel: true },
@@ -533,7 +534,7 @@ export default {
   },
 
   watch: {
-    $route () {
+    $route (value) {
       this.fetch()
     },
 
@@ -543,7 +544,10 @@ export default {
   },
 
   created () {
-    this.fetch()
+    EventBus.$on('clear-hospital', () => {
+      this.clearHospital()
+      this.filter()
+    })
   },
 
   methods: {
@@ -560,23 +564,14 @@ export default {
     },
 
     fetch () {
-      return this.fetchDashboard({ ...this.$route.query, city: this.$route.params.index })
+      return this.fetchDashboard({ ...this.$route.query })
     },
 
-    filter (isCity) {
-      if (isCity && typeof isCity === 'boolean') {
-        return this.city && this.$router.push({ params: { index: this.city.value } })
-      }
-
+    filter () {
       const toQuery = this.hospital.map(item => item.value).join(',')
 
       const query = omitBy({ ...this.$route.query, hospital: toQuery }, isEmpty)
       this.$router.push({ query })
-    },
-
-    filterCity () {
-      this.clearHospital()
-      this.filter(true)
     },
 
     formatDateTime (value, token = 'dd/MM/yyyy HH:mm:ss', options) {
@@ -598,11 +593,8 @@ export default {
     },
 
     setSelect () {
-      const cityQuery = this.$route.params.index || 'ribeirao-preto'
-      this.city = this.dashboard.cities.find(city => city.value === cityQuery)
-
       const hospitalsQuery = (this.$route.query.hospital || '').split(',') || []
-      this.hospital = this.dashboard.hospitals.filter((option, index) => hospitalsQuery.includes(option.value))
+      this.hospital = this.hospitalOptions.filter((option, index) => hospitalsQuery.includes(option.value))
     },
 
     sumArrays (first, second) {
