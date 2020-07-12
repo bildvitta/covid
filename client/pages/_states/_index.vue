@@ -49,34 +49,25 @@
                 <cov-grid-cell v-for="(item, key) in beds" :key="key" :breakpoints="{ sm: 'full', md: 'full', lg: '1-of-2' }">
                   <!-- INICIO CARD -->
 
-                  <cov-card lighten :percent="percent(item.covid)">
-                    <cov-grid>
-                      <cov-grid-cell :breakpoints="{ col: '1-of-3' }">
-                        <cov-card class="beds__card" :percent="percent(item.covid)">
-                          <div class="text-size-sm">Ocupação</div>
-                          <div class="text-size-lg text-bold">{{ badgesPercent(item.covid) }}</div>
-                        </cov-card>
-                      </cov-grid-cell>
+                  <cov-info-card :percent="percent(item.covid)">
+                    <template v-slot:content>
+                      <div class="beds__title">{{ bedsTypes[key].label }} <span class="text-caption">COVIDE-19</span></div>
+                      <div class="beds__box m-t-md">
+                        <span class="text-black text-bold">Total</span>
+                        <span class="text-bold">{{ item.covid.total }}</span>
+                      </div>
 
-                      <cov-grid-cell :breakpoints="{ col: '2-of-3' }">
-                        <div class="beds__title">{{ bedsTypes[key].label }} <span class="text-caption">COVIDE-19</span></div>
-                        <div class="beds__box m-t-md">
-                          <span class="text-black text-bold">Total</span>
-                          <span class="text-bold text-primary">{{ item.covid.total }}</span>
-                        </div>
+                      <div class="beds__box">
+                        <span class="text-black text-bold">Ocupados</span>
+                        <span class="text-bold">{{ item.covid.busy }}</span>
+                      </div>
 
-                        <div class="beds__box">
-                          <span class="text-black text-bold">Ocupados</span>
-                          <span class="text-bold text-primary">{{ item.covid.busy }}</span>
-                        </div>
-
-                        <div class="beds__box">
-                          <span class="text-black text-bold">Respiradores em uso</span>
-                          <span class="text-bold text-primary">{{ item.covid.ventilator }}</span>
-                        </div>
-                      </cov-grid-cell>
-                    </cov-grid>
-                  </cov-card>
+                      <div class="beds__box">
+                        <span class="text-black text-bold">Respiradores em uso</span>
+                        <span class="text-bold">{{ item.covid.ventilator }}</span>
+                      </div>
+                    </template>
+                  </cov-info-card>
                   <!-- FIM CARD -->
 
                   <cov-card class="beds__small m-t-md">
@@ -202,19 +193,20 @@ import { ptBR } from 'date-fns/locale'
 
 import { EventBus } from '../../helpers/EventBus'
 
-import CovMultiSelect from '~/components/CovMultiSelect'
 import CovBadge from '~/components/CovBadge'
-import CovButton from '~/components/CovButton'
 import CovBox from '~/components/CovBox'
+import CovButton from '~/components/CovButton'
 import CovCard from '~/components/CovCard'
+import CovCheckbox from '~/components/CovCheckbox'
 import CovGrid from '~/components/CovGrid'
 import CovGridCell from '~/components/CovGridCell'
 import CovHeatmap from '~/components/CovHeatmap'
+import CovInfoCard from '~/components/CovInfoCard'
 import CovLineChart from '~/components/CovLineChart'
 import CovLoading from '~/components/CovLoading'
-import CovSection from '~/components/CovSection'
+import CovMultiSelect from '~/components/CovMultiSelect'
 import CovProgress from '~/components/CovProgress'
-import CovCheckbox from '~/components/CovCheckbox'
+import CovSection from '~/components/CovSection'
 
 export default {
   components: {
@@ -222,15 +214,16 @@ export default {
     CovBox,
     CovButton,
     CovCard,
+    CovCheckbox,
     CovGrid,
     CovGridCell,
     CovHeatmap,
+    CovInfoCard,
     CovLineChart,
     CovLoading,
-    CovSection,
-    CovProgress,
     CovMultiSelect,
-    CovCheckbox
+    CovProgress,
+    CovSection
   },
 
   validate ({ params }) {

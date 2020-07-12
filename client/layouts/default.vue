@@ -2,17 +2,23 @@
   <div class="default-layout">
     <header class="header">
       <div class="container">
-        <h1 class="header__brand">
-          COVID-19
-        </h1>
+        <cov-grid class="header__container" gutter justify-between>
+          <cov-grid-cell :breakpoints="{ col:'full', sm: 'full', md: 'fill', lg: 'fill' }">
+            <h1 class="header__brand text-center">
+              COVID-19
+            </h1>
+          </cov-grid-cell>
 
-        <div class="header__title">
-          Ocupação de leitos hospitalares
-        </div>
+          <cov-grid-cell :breakpoints="{ col:'full', sm: 'full', md: 'fill', lg: 'fill' }" class="m-r-auto">
+            <div class="header__title">
+              Ocupação de leitos hospitalares
+            </div>
+          </cov-grid-cell>
 
-        <div class="header__select">
-          <cov-multi-select v-if="fetchSuccess" v-model="city" :allow-empty="true" deselect-label label="label" :options="dashboard.cities" placeholder :searchable="false" select-label selected-label style="width: 300px;" track-by="value" @input="filter()" />
-        </div>
+          <cov-grid-cell :breakpoints="{ col:'full', sm: 'full', md: 'full', lg: 'fill' }">
+            <cov-multi-select v-if="fetchSuccess" v-model="city" :allow-empty="true" class="header__select" deselect-label label="label" :options="dashboard.cities" placeholder :searchable="false" select-label selected-label track-by="value" @input="filter()" />
+          </cov-grid-cell>
+        </cov-grid>
       </div>
     </header>
 
@@ -35,9 +41,14 @@ import CovMultiSelect from '../components/CovMultiSelect'
 
 import { EventBus } from '../helpers/EventBus'
 
+import CovGrid from '~/components/CovGrid'
+import CovGridCell from '~/components/CovGridCell'
+
 export default {
   components: {
-    CovMultiSelect
+    CovMultiSelect,
+    CovGrid,
+    CovGridCell
   },
 
   data () {
@@ -127,7 +138,7 @@ export default {
   position: relative;
   z-index: 1001;
 
-  .container {
+  &__container {
     align-items: center;
     display: flex;
   }
@@ -146,11 +157,11 @@ export default {
   &__title {
     color: $primary-color;
     font-size: 16px;
-    margin-left: 16px;
   }
 
   &__select {
-    margin-left: auto;
+    min-width: 300px;
+    width: 100%;
   }
 
   @include breakpoint (max-width $small-screen) {
