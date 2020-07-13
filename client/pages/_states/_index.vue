@@ -3,15 +3,6 @@
     <cov-section>
       <div class="container">
         <cov-grid gutter>
-          <cov-grid-cell :breakpoints="{ sm: 'full', md: 'full', lg: 'full' }">
-            <div ref="cases">
-              <div>
-                <!-- <h3 class="text-title m-b-md">Cidade</h3> -->
-                <!-- <cov-multi-select v-model="city" :allow-empty="true" deselect-label label="label" :options="dashboard.cities" placeholder :searchable="false" select-label selected-label track-by="value" @input="filterCity()" /> -->
-              </div>
-            </div>
-          </cov-grid-cell>
-
           <cov-grid-cell :breakpoints="{ sm: 'full', md: 'full', lg: '1-of-2' }">
             <div class="hospitals-header">
               <h3 class="text-title">Hospitais</h3>
@@ -36,7 +27,7 @@
           </cov-grid-cell>
 
           <cov-grid-cell :breakpoints="{ sm: 'full', lg: 'full' }">
-            <div>
+            <div class="m-t-lg">
               <h3 class="text-title">Leitos</h3>
 
               <div class="text-subtitle">
@@ -51,7 +42,7 @@
 
                   <cov-info-card :percent="percent(item.covid)">
                     <template v-slot:content>
-                      <div class="beds__title">{{ bedsTypes[key].label }} <span class="text-caption">COVIDE-19</span></div>
+                      <div class="beds__title">{{ bedsTypes[key].label }} <span class="text-caption">COVID-19</span></div>
                       <div class="beds__box m-t-md">
                         <span class="text-black text-bold">Total</span>
                         <span class="text-bold">{{ item.covid.total }}</span>
@@ -99,7 +90,7 @@
           </cov-grid-cell>
 
           <cov-grid-cell :breakpoints="{ sm: 'full' }">
-            <h3 class="text-title">Gráfico de leitos</h3>
+            <h3 class="text-title m-t-lg">Gráfico de leitos</h3>
 
             <cov-box class="m-t-md">
               <client-only>
@@ -109,7 +100,7 @@
           </cov-grid-cell>
         </cov-grid>
 
-        <div v-if="fetchSuccess" class="m-t-lg">
+        <div v-if="fetchSuccess" class="m-t-xl">
           <h3 class="text-title m-b-md">Mapa de calor dos leitos</h3>
           <cov-heatmap :points="hospitalsHeatmap" />
         </div>
@@ -130,7 +121,7 @@
           <cov-grid-cell :breakpoints="{ sm: 'full' }">
             <cov-grid align-bottom gutter>
               <cov-grid-cell :breakpoints="{ sm: 'full', md: '1-of-2', lg: '1-of-3' }">
-                <div class="m-t-lg">
+                <div>
                   <h3 class="text-title">Número de casos da cidade</h3>
                   <div class="text-size-sm m-b-md">
                     <abbr :title="updatedDate('covid_cases')">{{ updatedDistance('covid_cases') }}</abbr>
@@ -169,7 +160,7 @@
           </cov-grid-cell> -->
 
           <cov-grid-cell :breakpoints="{ sm: 'full' }">
-            <h3 class="text-title">Gráfico de evolução de casos</h3>
+            <h3 class="text-title m-t-md">Gráfico de evolução de casos</h3>
 
             <cov-box class="m-t-md">
               <client-only>
