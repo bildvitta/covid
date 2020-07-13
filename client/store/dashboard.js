@@ -11,7 +11,8 @@ const getters = {
   error: state => state.error,
   fetchSuccess: state => state.fetchSuccess,
   params: state => state.params,
-  isFetching: state => state.isFetching
+  isFetching: state => state.isFetching,
+  clearHospitalSelect: state => state.clearHospitalSelect
 }
 
 const actions = {

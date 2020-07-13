@@ -175,8 +175,8 @@ export default {
   }
 
   .cov-grid-cell--#{$prefix}fill {
-    flex: 1 1 0%;
-    flex-basis: 0%;
+    flex: none;
+    width: auto;
   }
 
   .cov-grid-cell--#{$prefix}full {

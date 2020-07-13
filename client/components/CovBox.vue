@@ -29,6 +29,7 @@ export default {
 .cov-box {
   $root: &;
 
+  background-color: $white;
   border-radius: $radius;
   padding: 15px;
   width: 100%;
@@ -37,30 +38,30 @@ export default {
     box-shadow: $shadow;
   }
 
-  &:not(&--outlined) {
-    background-color: $white;
-  }
-
   &--primary {
     &#{$root}--outlined {
+      background: transparent;
       border-color: $primary-color;
     }
   }
 
   &--negative {
     &#{$root}--outlined {
+      background: transparent;
       border-color: $negative-color;
     }
   }
 
   &--positive {
     &#{$root}--outlined {
+      background: transparent;
       border-color: $positive-color;
     }
   }
 
   &--warning {
     &#{$root}--outlined {
+      background: transparent;
       border-color: $warning-color;
     }
   }
