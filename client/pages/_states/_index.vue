@@ -100,7 +100,7 @@
           </cov-grid-cell>
         </cov-grid>
 
-        <div v-if="fetchSuccess" class="m-t-xl">
+        <div v-if="fetchSuccess" class="m-t-xl p-t-md">
           <h3 class="text-title m-b-md">Mapa de calor dos leitos</h3>
           <cov-heatmap :points="hospitalsHeatmap" />
         </div>
@@ -160,7 +160,7 @@
           </cov-grid-cell> -->
 
           <cov-grid-cell :breakpoints="{ sm: 'full' }">
-            <h3 class="text-title m-t-md">Gráfico de evolução de casos</h3>
+            <h3 class="text-title m-t-lg">Gráfico de evolução de casos</h3>
 
             <cov-box class="m-t-md">
               <client-only>
