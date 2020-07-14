@@ -39,7 +39,6 @@
               <cov-grid align-center gutter>
                 <cov-grid-cell v-for="(item, key) in beds" :key="key" :breakpoints="{ sm: 'full', md: 'full', lg: '1-of-2' }">
                   <!-- INICIO CARD -->
-
                   <cov-info-card :percent="percent(item.covid)">
                     <template v-slot:content>
                       <div class="beds__title">{{ bedsTypes[key].label }} <span class="text-caption">COVID-19</span></div>
