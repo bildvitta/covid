@@ -27,7 +27,7 @@ class CovidCase < ApplicationRecord
     row = nil
     city = City.find_by_slug('ribeirao-preto')
     reference_date = Date.today - 1.day
-    spreadsheet = DataBridge::GoogleDriveBase.new.start_session('')
+    spreadsheet = DataBridge::GoogleDriveBase.new.start_session(Rails.application.credentials.google_drive_config)
     spreadsheet = spreadsheet.get_spreadsheet(Rails.application.credentials.spreadsheet_key)
     worksheet = spreadsheet.worksheets[1]
     
