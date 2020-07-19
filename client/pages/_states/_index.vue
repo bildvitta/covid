@@ -101,7 +101,7 @@
 
         <div v-if="fetchSuccess" class="m-t-xl p-t-md">
           <h3 class="text-title m-b-md">Mapa de calor dos leitos</h3>
-          <cov-heatmap :points="hospitalsHeatmap" />
+          <cov-heatmap :markers="hospitals" :points="hospitalsHeatmap" />
         </div>
       </div>
 
