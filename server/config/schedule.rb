@@ -5,7 +5,8 @@ every 1.day, at: '0:30' do
 end
 
 every '2 * * * *' do
-  runner 'CovidCase.populate_with_api'
+  # runner 'CovidCase.populate_with_api'
+  runner 'CovidCase.google_drive_sheets'
 end
 
 every 1.day, at: '19:00' do

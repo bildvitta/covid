@@ -30,13 +30,25 @@ class CovidCase < ApplicationRecord
     spreadsheet = DataBridge::GoogleDriveBase.new.start_session(Rails.application.credentials.google_drive_config)
     spreadsheet = spreadsheet.get_spreadsheet(Rails.application.credentials.spreadsheet_key)
     worksheet = spreadsheet.worksheets[1]
-    
+
     worksheet.num_rows.downto(1).each do |i|
-      break row = i if worksheet[i, 1] == I18n.l(reference_date)
+      next if worksheet[i, 1].blank?
+
+      begin
+        reference_date = worksheet[i, 1].to_date
+
+        CovidCase.find_or_initialize_by(city: city, reference_date: reference_date).update(total: worksheet[i, 4], deaths: worksheet[i, 7])
+      rescue => e
+        puts "WARNING on generate CovidCase (reference date #{worksheet[i, 1]}): #{e}"
+      end
     end
+    
+    # worksheet.num_rows.downto(1).each do |i|
+    #   break row = i if worksheet[i, 1] == I18n.l(reference_date)
+    # end
 
-    return populate_with_api unless row
+    # return populate_with_api unless row
 
-    CovidCase.find_or_initialize_by(city: city, reference_date: reference_date).update(total: worksheet[row, 4], deaths: worksheet[row, 7])
+    # CovidCase.find_or_initialize_by(city: city, reference_date: reference_date).update(total: worksheet[row, 4], deaths: worksheet[row, 7])
   end
 end
