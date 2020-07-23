@@ -52,7 +52,7 @@ export default {
 
   computed: {
     percentClasses () {
-      const percent = parseFloat(this.percent)
+      const percent = parseFloat(this.percent) * 100
 
       return {
         'cov-info-card--negative': percent >= 80,
@@ -62,7 +62,7 @@ export default {
     },
 
     percentCardClasses () {
-      const percent = parseFloat(this.percent)
+      const percent = parseFloat(this.percent) * 100
 
       return {
         'cov-info-card__percent-card--negative': percent >= 80,
@@ -94,12 +94,12 @@ export default {
     }
 
     &--warning {
-      background-color: lighten($warning-color, 40%);
+      background-color: lighten($warning-color, 35%);
       color: $warning-color;
     }
 
     &--negative {
-      background-color: lighten($negative-color, 40%);
+      background-color: lighten($negative-color, 25%);
       color: $negative-color;
     }
 

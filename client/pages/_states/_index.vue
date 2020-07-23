@@ -39,7 +39,6 @@
               <cov-grid align-center gutter>
                 <cov-grid-cell v-for="(item, key) in beds" :key="key" :breakpoints="{ sm: 'full', md: 'full', lg: '1-of-2' }">
                   <!-- INICIO CARD -->
-
                   <cov-info-card :percent="percent(item.covid)">
                     <template v-slot:content>
                       <div class="beds__title">{{ bedsTypes[key].label }} <span class="text-caption">COVID-19</span></div>
@@ -102,7 +101,7 @@
 
         <div v-if="fetchSuccess" class="m-t-xl p-t-md">
           <h3 class="text-title m-b-md">Mapa de calor dos leitos</h3>
-          <cov-heatmap :points="hospitalsHeatmap" />
+          <cov-heatmap :markers="hospitals" :points="hospitalsHeatmap" />
         </div>
       </div>
 
@@ -136,7 +135,7 @@
                     </cov-grid-cell>
                   </cov-grid>
                   <span class="m-t-sm text-size-sm">
-                    Fonte: <a href="https://brasil.io/" target="_blank">brasil.io</a>
+                    Fonte: <a href="http://superaparque.com.br/" target="_blank">Supera Parque</a>
                   </span>
                 </div>
               </cov-grid-cell>
@@ -578,7 +577,11 @@ export default {
 
     setSelect () {
       const hospitalsQuery = (this.$route.query.hospital || '').split(',') || []
-      this.hospital = this.hospitalOptions.filter((option, index) => hospitalsQuery.includes(option.value))
+      const query = this.hospitalOptions.filter((option, index) => hospitalsQuery.includes(option.value))
+
+      this.hospital = query.length ? query : [{
+        name: 'Todos', value: 'all'
+      }]
     },
 
     sumArrays (first, second) {

@@ -58,3 +58,5 @@ gem 'newrelic_rpm'
 gem 'acts_as_xlsx'
 gem 'rubyzip', '2.0.0'
 gem 'zip-zip'
+
+gem 'google_drive'
