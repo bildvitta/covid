@@ -135,7 +135,7 @@
                     </cov-grid-cell>
                   </cov-grid>
                   <span class="m-t-sm text-size-sm">
-                    Fonte: <a href="https://brasil.io/" target="_blank">brasil.io</a>
+                    Fonte: <a href="http://superaparque.com.br/" target="_blank">Supera Parque</a>
                   </span>
                 </div>
               </cov-grid-cell>
@@ -577,7 +577,11 @@ export default {
 
     setSelect () {
       const hospitalsQuery = (this.$route.query.hospital || '').split(',') || []
-      this.hospital = this.hospitalOptions.filter((option, index) => hospitalsQuery.includes(option.value))
+      const query = this.hospitalOptions.filter((option, index) => hospitalsQuery.includes(option.value))
+
+      this.hospital = query.length ? query : [{
+        name: 'Todos', value: 'all'
+      }]
     },
 
     sumArrays (first, second) {
