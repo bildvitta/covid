@@ -50,5 +50,7 @@ class CovidCase < ApplicationRecord
     # return populate_with_api unless row
 
     # CovidCase.find_or_initialize_by(city: city, reference_date: reference_date).update(total: worksheet[row, 4], deaths: worksheet[row, 7])
+
+    Rails.cache.clear
   end
 end
