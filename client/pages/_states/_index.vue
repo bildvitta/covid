@@ -7,7 +7,7 @@
             <div class="hospitals-header">
               <h3 class="text-title">Hospitais</h3>
               <div class="text-subtitle">Fonte: Os dados são disponibilizados diretamente dos hospitais responsáveis.</div>
-              <cov-multi-select v-model="hospital" :allow-empty="true" class="cov-multiselect m-t-sm" deselect-label label="name" multiple :options="hospitalOptions" placeholder :searchable="false" select-label selected-label track-by="value" @input="filter()">
+              <cov-multi-select v-model="hospital" :allow-empty="true" class="cov-multiselect m-t-sm" :close-on-select="false" deselect-label label="name" multiple :options="hospitalOptions" placeholder :searchable="false" select-label selected-label track-by="value" @input="filter()">
                 <template slot="option" slot-scope="{ option }">
                   <div class="flex no-wrap justify-between items-start">
                     <cov-checkbox :checked="isChecked(option.value)" class="m-r-xs" :class="multiSelectCheckboxClass(option)" />
