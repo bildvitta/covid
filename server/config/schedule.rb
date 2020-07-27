@@ -33,7 +33,7 @@ every 1.day, at: ['0:12', '6:12', '13:12', '19:12'] do
   runner "DataBridge::BeneficenciaPortuguesa.new.get_data.save!"
 end
 
-every 1.day, at: ['0:15', '6:15', '13:15', '19:15'] do
+every '15 * * * *' do
   runner "DataBridge::SantaLydia.new.get_data.save!"
 end
 

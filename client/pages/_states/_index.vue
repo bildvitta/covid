@@ -135,7 +135,7 @@
                     </cov-grid-cell>
                   </cov-grid>
                   <span class="m-t-sm text-size-sm">
-                    Fonte: <a href="http://superaparque.com.br/" target="_blank">Supera Parque</a>
+                    Fonte: <a href="https://bit.ly/superaparquecovid19" target="_blank">Supera Parque</a>
                   </span>
                 </div>
               </cov-grid-cell>
