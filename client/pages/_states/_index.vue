@@ -6,7 +6,7 @@
           <cov-grid-cell :breakpoints="{ sm: 'full', md: 'full', lg: '1-of-2' }">
             <div class="hospitals-header">
               <h3 class="text-title">Hospitais</h3>
-              <div class="text-subtitle">Fonte: Os dados são disponibilizados diretamente dos hospitais responsáveis.</div>
+              <div class="text-subtitle">Fonte: Os dados são enviados pelos próprios hospitais.</div>
               <cov-multi-select v-model="hospital" :allow-empty="true" class="cov-multiselect m-t-sm" :close-on-select="false" deselect-label label="name" multiple :options="hospitalOptions" placeholder :searchable="false" select-label selected-label track-by="value" @input="filter()">
                 <template slot="option" slot-scope="{ option }">
                   <div class="flex no-wrap justify-between items-start">
@@ -64,7 +64,7 @@
                     <cov-grid gutter justify-between>
                       <cov-grid-cell :breakpoints="{ col: 'full' }">
                         <span class="beds__title text-primary">{{ bedsTypes[key].label }}</span>
-                        <span class="text-caption m-l-sm">Outros</span>
+                        <span class="text-caption">Outros</span>
                       </cov-grid-cell>
 
                       <cov-grid-cell :breakpoints="{ col: 'full' }" class="beds__content">
@@ -121,7 +121,7 @@
             <cov-grid align-bottom gutter>
               <cov-grid-cell :breakpoints="{ sm: 'full', md: '1-of-2', lg: '1-of-3' }">
                 <div>
-                  <h3 class="text-title">Número de casos da cidade</h3>
+                  <h3 class="text-title">Número de casos na cidade</h3>
                   <div class="text-size-sm m-b-md">
                     <abbr :title="updatedDate('covid_cases')">{{ updatedDistance('covid_cases') }}</abbr>
                   </div>
@@ -404,30 +404,48 @@ export default {
 
         datasets: [
           {
-            label: 'UTI',
+            label: 'Total UTI COVID-19',
+            fill: false,
+            borderColor: '#fca8a8',
+            borderDash: [1],
+            borderWidth: 2,
+            hidden: true,
+            data: this.historyBeds.intensive_care_unit?.covid?.total
+          },
+          {
+            label: 'UTI COVID-19',
             fill: false,
             borderColor: '#fa5252',
             data: this.historyBeds.intensive_care_unit?.covid?.busy
           },
           {
-            label: 'UTI (não COVID-19)',
+            label: 'UTI não COVID-19',
             fill: false,
             borderColor: '#fa5252',
-            borderDash: [5],
+            borderDash: [8],
             borderWidth: 1,
             data: this.historyBeds.intensive_care_unit?.normal?.busy
           },
           {
-            label: 'Enfermaria',
+            label: 'Total Enfermaria COVID-19',
+            fill: false,
+            borderColor: '#d1d0fd',
+            borderDash: [1],
+            borderWidth: 2,
+            hidden: true,
+            data: this.historyBeds.nursing?.covid?.total
+          },
+          {
+            label: 'Enfermaria COVID-19',
             fill: false,
             borderColor: '#a3a1fb',
             data: this.historyBeds.nursing?.covid?.busy
           },
           {
-            label: 'Enfermaria (não COVID-19)',
+            label: 'Enfermaria não COVID-19',
             fill: false,
             borderColor: '#a3a1fb',
-            borderDash: [5],
+            borderDash: [8],
             borderWidth: 1,
             data: this.historyBeds.nursing?.normal?.busy
           }
