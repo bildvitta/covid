@@ -23,7 +23,7 @@ module DataBridge
       self.results = []
       return unless self.valid_data?
 
-      self.data['dados'].each do |r|
+      self.data['dados'].each_with_index do |r, i|
         hospital_slug = get_hospital_slug(r['gsx$identificadorhospital']['$t'])
         next if hospital_slug != 'hospital-sao-francisco'
 
@@ -31,7 +31,7 @@ module DataBridge
           hospital_slug:    hospital_slug,
           status:           get_status(r['gsx$status']['$t']),
           bed_type:         get_bed_type(r['gsx$tipodeleito']['$t'].to_s.strip.parameterize.gsub('-19', '')),
-          slug:             r['gsx$identificadorleito']['$t'].parameterize,
+          slug:             (r['gsx$identificadorleito']['$t'].parameterize + '-' + i.to_s),
           using_ventilator: r['gsx$usodeventilaçãomecânica']['$t'].to_s.downcase == 'sim',
         )
       end
