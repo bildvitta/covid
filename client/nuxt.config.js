@@ -80,6 +80,12 @@ export default {
   ],
 
   build: {
+    babel: {
+      plugins: [
+        '@babel/plugin-proposal-optional-chaining'
+      ]
+    },
+
     transpile: [
       'lodash-es'
     ]

@@ -29,7 +29,7 @@
     <footer class="footer">
       <div class="container">
         Este é um projeto <em>open source</em> feito com <img alt="coração" class="heart" src="~/assets/images/heart.svg" style="height: 16px;"> pelo time da <img alt="coração" src="~/assets/images/nave.svg" style="height: 14px;">.
-        <div>Acesse ao código-fonte na íntegra <a href="https://github.com/bildvitta/covid" target="_blank">aqui</a>.</div>
+        <div>Acesse o código-fonte na íntegra <a href="https://github.com/bildvitta/covid" target="_blank">aqui</a>.</div>
       </div>
     </footer>
   </div>

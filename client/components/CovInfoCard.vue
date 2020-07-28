@@ -10,22 +10,6 @@
 
       <cov-grid-cell :breakpoints="{ col: '2-of-3' }">
         <slot name="content" />
-        <!-- <div class="beds__title">{{ bedsTypes[key].label }} <span class="text-caption">COVIDE-19</span></div>
-
-        <div class="beds__box m-t-md">
-          <span class="text-black text-bold">Total</span>
-          <span class="text-bold text-primary">{{ item.covid.total }}</span>
-        </div>
-
-        <div class="beds__box">
-          <span class="text-black text-bold">Ocupados</span>
-          <span class="text-bold text-primary">{{ item.covid.busy }}</span>
-        </div>
-
-        <div class="beds__box">
-          <span class="text-black text-bold">Respiradores em uso</span>
-          <span class="text-bold text-primary">{{ item.covid.ventilator }}</span>
-        </div> -->
       </cov-grid-cell>
     </cov-grid>
   </cov-card>
@@ -55,9 +39,10 @@ export default {
       const percent = parseFloat(this.percent) * 100
 
       return {
-        'cov-info-card--negative': percent >= 80,
-        'cov-info-card--warning': percent >= 60 && percent < 80,
-        'cov-info-card--positive': percent < 60
+        'cov-info-card--red': percent >= 80,
+        'cov-info-card--orange': percent >= 75 && percent < 80,
+        'cov-info-card--yellow': percent >= 70 && percent < 75,
+        'cov-info-card--green': percent < 70
       }
     },
 
@@ -65,9 +50,10 @@ export default {
       const percent = parseFloat(this.percent) * 100
 
       return {
-        'cov-info-card__percent-card--negative': percent >= 80,
-        'cov-info-card__percent-card--warning': percent >= 60 && percent < 80,
-        'cov-info-card__percent-card--positive': percent < 60
+        'cov-info-card__percent-card--red': percent >= 80,
+        'cov-info-card__percent-card--orange': percent >= 75 && percent < 80,
+        'cov-info-card__percent-card--yellow': percent >= 70 && percent < 75,
+        'cov-info-card__percent-card--green': percent < 70
       }
     }
   },
@@ -88,19 +74,24 @@ export default {
 
 <style lang="scss">
   .cov-info-card {
-    &--positive {
-      background-color: lighten($positive-color, 40%);
-      color: $positive-color;
+    &--green {
+      background-color: lighten($green, 40%);
+      color: $green;
     }
 
-    &--warning {
-      background-color: lighten($warning-color, 35%);
-      color: $warning-color;
+    &--yellow {
+      background-color: lighten($yellow, 35%);
+      color: $yellow;
     }
 
-    &--negative {
-      background-color: lighten($negative-color, 25%);
-      color: $negative-color;
+    &--orange {
+      background-color: lighten($orange, 35%);
+      color: $orange;
+    }
+
+    &--red {
+      background-color: lighten($red, 25%);
+      color: $red;
     }
 
     &__percent-card {
@@ -110,16 +101,20 @@ export default {
       height: 100%;
       justify-content: center;
 
-      &--positive {
-        background-color: $positive-color;
+      &--green {
+        background-color: $green;
       }
 
-      &--warning {
-        background-color: $warning-color;
+      &--yellow {
+        background-color: $yellow;
       }
 
-      &--negative {
-        background-color: $negative-color;
+      &--orange {
+        background-color: $orange;
+      }
+
+      &--red {
+        background-color: $red;
       }
     }
 
