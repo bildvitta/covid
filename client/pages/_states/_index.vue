@@ -227,7 +227,8 @@ export default {
         { name: 'Todos', value: 'all', noUpdateLabel: true },
         { name: 'Público', value: 'public', noUpdateLabel: true },
         { name: 'Privado', value: 'private', noUpdateLabel: true }
-      ]
+      ],
+      filtered: false
     }
   },
 
@@ -549,6 +550,10 @@ export default {
       this.clearHospital()
       this.filter()
     })
+
+    const unwatchIsLiveProp = this.$watch('hospital', (newValue) => {
+      unwatchIsLiveProp()
+    })
   },
 
   methods: {
@@ -569,6 +574,21 @@ export default {
     },
 
     filter () {
+      const length = this.hospital.length - 1
+
+      if (!this.filtered) {
+        this.hospital.splice(0, length)
+        this.filtered = true
+
+        return null
+      }
+
+      const all = this.hospital.find(item => item.value === 'all')
+
+      if (all) {
+        this.hospital.splice(0, length)
+      }
+
       const toQuery = this.hospital.map(item => item.value).join(',')
 
       const query = omitBy({ ...this.$route.query, hospital: toQuery }, isEmpty)
