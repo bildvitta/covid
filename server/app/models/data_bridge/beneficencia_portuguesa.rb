@@ -34,7 +34,7 @@ module DataBridge
 
     def get_bed_type bed_type
       case bed_type.to_s.gsub('.', '').strip.downcase
-      when 'uco', 'uti'
+      when 'uco', 'uti', 'un semi intensiva'
         return 1
       when 'enfermaria', 'apartamento'
         return 3

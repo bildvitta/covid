@@ -2,13 +2,23 @@
   <div class="default-layout">
     <header class="header">
       <div class="container">
-        <h1 class="header__brand">
-          COVID-19
-        </h1>
+        <cov-grid class="header__container" gutter justify-between>
+          <cov-grid-cell :breakpoints="{ col:'full', sm: 'full', md: 'fill', lg: 'fill' }">
+            <h1 class="header__brand text-center">
+              COVID-19
+            </h1>
+          </cov-grid-cell>
 
-        <div class="header__title">
-          Ocupação de leitos hospitalares
-        </div>
+          <cov-grid-cell :breakpoints="{ col:'full', sm: 'full', md: 'fill', lg: 'fill' }" class="m-r-auto">
+            <div class="header__title">
+              Ocupação de leitos hospitalares
+            </div>
+          </cov-grid-cell>
+
+          <cov-grid-cell :breakpoints="{ col:'full', sm: 'full', md: 'full', lg: 'fill' }">
+            <cov-multi-select v-if="fetchSuccess" v-model="city" :allow-empty="true" class="header__select" deselect-label label="label" :options="dashboard.cities" placeholder :searchable="false" select-label selected-label track-by="value" @input="filter()" />
+          </cov-grid-cell>
+        </cov-grid>
       </div>
     </header>
 
@@ -19,11 +29,73 @@
     <footer class="footer">
       <div class="container">
         Este é um projeto <em>open source</em> feito com <img alt="coração" class="heart" src="~/assets/images/heart.svg" style="height: 16px;"> pelo time da <img alt="coração" src="~/assets/images/nave.svg" style="height: 14px;">.
-        <div>Acesse ao código-fonte na íntegra <a href="https://github.com/bildvitta/covid" target="_blank">aqui</a>.</div>
+        <div>Acesse o código-fonte na íntegra <a href="https://github.com/bildvitta/covid" target="_blank">aqui</a>.</div>
       </div>
     </footer>
   </div>
 </template>
+
+<script>
+import { mapActions, mapGetters } from 'vuex'
+import CovMultiSelect from '../components/CovMultiSelect'
+
+import { EventBus } from '../helpers/EventBus'
+
+import CovGrid from '~/components/CovGrid'
+import CovGridCell from '~/components/CovGridCell'
+
+export default {
+  components: {
+    CovMultiSelect,
+    CovGrid,
+    CovGridCell
+  },
+
+  data () {
+    return {
+      city: ''
+    }
+  },
+
+  computed: {
+    ...mapGetters({
+      dashboard: 'dashboard/dashboard',
+      fetchSuccess: 'dashboard/fetchSuccess'
+    })
+  },
+
+  watch: {
+    fetchSuccess (value) {
+      value && this.setSelect()
+    }
+  },
+
+  created () {
+    this.fetch()
+  },
+
+  methods: {
+    ...mapActions({
+      fetchDashboard: 'dashboard/fetch'
+    }),
+
+    fetch () {
+      return this.fetchDashboard({ ...this.$route.query, city: this.$route.params.index })
+    },
+
+    filter () {
+      EventBus.$emit('clear-hospital')
+
+      return this.city && this.$router.push({ params: { index: this.city.value } })
+    },
+
+    setSelect () {
+      const cityQuery = this.$route.params.index || 'ribeirao-preto'
+      this.city = this.dashboard.cities.find(city => city.value === cityQuery)
+    }
+  }
+}
+</script>
 
 <style lang="scss">
 
@@ -66,10 +138,9 @@
   position: relative;
   z-index: 1001;
 
-  .container {
+  &__container {
     align-items: center;
     display: flex;
-    justify-content: space-between;
   }
 
   &__brand,
@@ -85,7 +156,12 @@
 
   &__title {
     color: $primary-color;
-    font-size: 28px;
+    font-size: 16px;
+  }
+
+  &__select {
+    min-width: 300px;
+    width: 100%;
   }
 
   @include breakpoint (max-width $small-screen) {

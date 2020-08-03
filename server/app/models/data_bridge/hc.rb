@@ -19,7 +19,7 @@ module DataBridge
       self.results = []
       return unless self.valid_data?
 
-      self.data.each do |r|
+      self.data['result'].each do |r|
         self.results << DataBridge::InternalObject.new(
           hospital_slug:    get_hospital_slug(r['identificadorHospital']),
           status:           get_status(r['status']),

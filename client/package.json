@@ -1,7 +1,7 @@
 {
   "name": "covid",
   "version": "1.0.0",
-  "description": "Leitos hospitalares COVID-19.",
+  "description": "Leitos hospitalares COVID-19 em Ribeirão Preto.",
   "author": "Bild &amp; Vitta",
   "private": true,
   "scripts": {
@@ -25,6 +25,7 @@
     "vue-multiselect": "^2.1.6"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-optional-chaining": "^7.10.4",
     "@nuxtjs/eslint-config": "^3.0.0",
     "@nuxtjs/eslint-module": "^2.0.0",
     "@nuxtjs/google-analytics": "^2.3.0",

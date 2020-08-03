@@ -23,15 +23,23 @@ module DataBridge
       self.results = []
       return unless self.valid_data?
 
-      self.data['dados'].each do |r|
+      self.data['dados'].each_with_index do |r, i|
         hospital_slug = get_hospital_slug(r['gsx$identificadorhospital']['$t'])
         next if hospital_slug != 'hospital-sao-francisco'
+
+        btype = get_bed_type(r['gsx$tipodeleito']['$t'].to_s.strip.parameterize.gsub('-19', ''))
+
+        if [1, 2, 5].include?(btype)
+          bslug = (r['gsx$identificadorleito']['$t'].parameterize + '-' + i.to_s)
+        else
+          bslug = r['gsx$identificadorleito']['$t'].parameterize
+        end
 
         self.results << DataBridge::InternalObject.new(
           hospital_slug:    hospital_slug,
           status:           get_status(r['gsx$status']['$t']),
-          bed_type:         get_bed_type(r['gsx$tipodeleito']['$t'].to_s.strip.parameterize.gsub('-19', '')),
-          slug:             r['gsx$identificadorleito']['$t'].parameterize,
+          bed_type:         btype,
+          slug:             bslug,
           using_ventilator: r['gsx$usodeventilaçãomecânica']['$t'].to_s.downcase == 'sim',
         )
       end

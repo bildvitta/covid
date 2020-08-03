@@ -4,53 +4,29 @@ $spaces: (
   sm: $space-sm,
   md: $space-md,
   lg: $space-lg,
-  xl: $space-xl
+  xl: $space-xl,
+  auto: auto
 );
 
-@mixin margin($top: null, $right: null, $bottom: null, $left: null) {
-  margin-bottom: $bottom;
-  margin-left: $left;
-  margin-right: $right;
-  margin-top: $top;
-}
-
-@mixin padding($top: null, $right: null, $bottom: null, $left: null) {
-  padding-bottom: $bottom;
-  padding-left: $left;
-  padding-right: $right;
-  padding-top: $top;
-}
+$positions: (
+  top: t,
+  right: r,
+  bottom: b,
+  left: l,
+);
 
 @each $name, $value in $spaces {
-  .m-b-#{$name} {
-    @include margin($bottom: $value);
-  }
+  @each $position, $nick-name in $positions {
+    .m-#{$nick-name}-#{$name} {
+      margin-#{$position}: $value;
+    }
 
-  .m-l-#{$name} {
-    @include margin($left: $value);
-  }
+    .m-#{$nick-name}-n-#{$name} {
+      margin-#{$position}: -$value;
+    }
 
-  .m-r-#{$name} {
-    @include margin($right: $value);
-  }
-
-  .m-t-#{$name} {
-    @include margin($top: $value);
-  }
-
-  .p-b-#{$name} {
-    @include padding($bottom: $value);
-  }
-
-  .p-l-#{$name} {
-    @include padding($left: $value);
-  }
-
-  .p-r-#{$name} {
-    @include padding($right: $value);
-  }
-
-  .p-t-#{$name} {
-    @include padding($top: $value);
+    .p-#{$nick-name}-#{$name} {
+      padding-#{$position}: $value;
+    }
   }
 }
