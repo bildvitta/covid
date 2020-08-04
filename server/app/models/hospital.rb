@@ -1,5 +1,5 @@
 class Hospital < ApplicationRecord
-  TYPES = [['Público', 1], ['Privado', 2]]
+  TYPES = [['Público', 1], ['Privado', 2], ['Filantrópico', 3]]
 
   belongs_to :city
 

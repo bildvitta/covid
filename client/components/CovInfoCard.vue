@@ -1,29 +1,23 @@
 <template>
   <cov-card class="cov-info-card" :class="percentClasses">
-    <cov-grid gutter>
-      <cov-grid-cell :breakpoints="{ col: '1-of-3' }">
-        <cov-card class="cov-info-card__percent-card" :class="percentCardClasses">
-          <div class="cov-info-card__observation text-size-sm">Ocupação</div>
-          <div class="text-size-lg text-bold">{{ formatPercent(percent) }}</div>
-        </cov-card>
-      </cov-grid-cell>
+    <div class="cov-info-card__percent-info cov-info-card__infos cov-info-card__infos--sm-order-2">
+      <cov-card class="cov-info-card__percent-card" :class="percentCardClasses">
+        <div class="cov-info-card__observation text-size-sm">Ocupação</div>
+        <div class="text-size-lg text-bold">{{ formatPercent(percent) }}</div>
+      </cov-card>
+    </div>
 
-      <cov-grid-cell :breakpoints="{ col: '2-of-3' }">
-        <slot name="content" />
-      </cov-grid-cell>
-    </cov-grid>
+    <div class="cov-info-card__infos cov-info-card__counter-info cov-info-card__infos--sm-order-1">
+      <slot name="content" />
+    </div>
   </cov-card>
 </template>
 
 <script>
 import CovCard from '~/components/CovCard'
-import CovGrid from '~/components/CovGrid'
-import CovGridCell from '~/components/CovGridCell'
 
 export default {
   components: {
-    CovGrid,
-    CovGridCell,
     CovCard
   },
 
@@ -74,6 +68,8 @@ export default {
 
 <style lang="scss">
   .cov-info-card {
+    display: flex;
+
     &--green {
       background-color: lighten($green, 40%);
       color: $green;
@@ -92,6 +88,15 @@ export default {
     &--red {
       background-color: lighten($red, 25%);
       color: $red;
+    }
+
+    &__counter-info {
+      flex: 1 0 auto;
+    }
+
+    &__percent-info {
+      margin-right: 16px;
+      width: 150px;
     }
 
     &__percent-card {
@@ -120,6 +125,25 @@ export default {
 
     &__observation {
       color: rgba($white, 0.5);
+    }
+
+    @media (max-width: 480px) {
+      flex-direction: column;
+
+      &__percent-info {
+        margin: 16px 0 0 0;
+        width: 100%;
+      }
+
+      &__infos {
+        &--sm-order-1 {
+          order: 1;
+        }
+
+        &--sm-order-2 {
+          order: 2;
+        }
+      }
     }
   }
 </style>

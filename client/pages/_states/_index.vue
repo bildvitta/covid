@@ -119,7 +119,7 @@
           <!-- <cov-grid-cell :breakpoints="{ col: '1-of-2', sm: 'full', md: 'full' }"> -->
           <cov-grid-cell :breakpoints="{ sm: 'full' }">
             <cov-grid align-bottom gutter>
-              <cov-grid-cell :breakpoints="{ sm: 'full', md: '1-of-2', lg: '1-of-3' }">
+              <cov-grid-cell :breakpoints="{ sm: 'full', md: 'fill', lg: 'fill' }">
                 <div>
                   <h3 class="text-title">Número de casos na cidade</h3>
                   <div class="text-size-sm m-b-md">
@@ -127,10 +127,10 @@
                   </div>
 
                   <cov-grid v-if="dashboard.covid_cases" align-center gutter-small>
-                    <cov-grid-cell v-for="(item, key) in dashboard.covid_cases.cases" :key="key" :breakpoints="{ col: '1-of-3', sm: '1-of-3' }">
+                    <cov-grid-cell v-for="(item, key) in dashboard.covid_cases.cases" :key="key" :breakpoints="{ col: '1-of-3', sm: '1-of-3' }" class="cov-cases">
                       <cov-card :outlined="casesTypes[key].color">
                         <div class="text-size-sm">{{ casesTypes[key].label }}</div>
-                        <div class="text-bold text-size-lg" :class="casesTypes[key].classes">{{ formatCases(item) }}</div>
+                        <div class="text-bold text-size-md" :class="casesTypes[key].classes">{{ formatCases(item) }}</div>
                       </cov-card>
                     </cov-grid-cell>
                   </cov-grid>
@@ -140,7 +140,7 @@
                 </div>
               </cov-grid-cell>
 
-              <cov-grid-cell :breakpoints="{ sm: 'full', md: '1-of-2', lg: '1-of-3' }">
+              <cov-grid-cell :breakpoints="{ col: 'fit', sm: 'full', md: 'fit', lg: 'fit' }" class="cases__chart">
                 <div class="m-t-lg">
                   <cov-progress :content="casesProgress" />
                 </div>
@@ -754,6 +754,15 @@ export default {
       width: 1px;
     }
   }
+}
+
+.cov-cases {
+  min-width: 95px;
+}
+
+.cases__chart {
+  flex-grow: 1;
+  max-width: 500px;
 }
 
 @include breakpoint(min-width $small-screen) {

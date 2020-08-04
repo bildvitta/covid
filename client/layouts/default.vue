@@ -173,6 +173,10 @@ export default {
       font-size: 22px;
       text-align: center;
     }
+
+    &__select {
+      min-width: auto;
+    }
   }
 }
 
