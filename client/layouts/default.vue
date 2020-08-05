@@ -136,7 +136,7 @@ export default {
   box-shadow: $shadow;
   padding: 20px 0;
   position: relative;
-  z-index: 1001;
+  z-index: 8;
 
   &__container {
     align-items: center;
@@ -189,7 +189,7 @@ export default {
   background-color: $secondary-color;
   color: $text-color;
   padding: 30px;
-  z-index: 999999;
+  z-index: 9;
 
   .container {
     text-align: center;
