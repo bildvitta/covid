@@ -209,6 +209,7 @@ class PagesController < ApplicationController
     filters = {
       'public' => 1,
       'private' => 2,
+      'filantropic' => 3
     }
 
     hospital_slugs, hospital_types = [], []

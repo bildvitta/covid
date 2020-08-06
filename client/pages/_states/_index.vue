@@ -226,7 +226,8 @@ export default {
       defaultHospitalOptions: [
         { name: 'Todos', value: 'all', noUpdateLabel: true },
         { name: 'Público', value: 'public', noUpdateLabel: true },
-        { name: 'Privado', value: 'private', noUpdateLabel: true }
+        { name: 'Privado', value: 'private', noUpdateLabel: true },
+        { name: 'Filantrópico', value: 'filantropic', noUpdateLabel: true }
       ],
       filtered: false
     }
@@ -705,7 +706,7 @@ export default {
 
   &__content-title {
     white-space: normal;
-    width: calc(100% - 60px);
+    width: calc(100% - 75px);
   }
 }
 
