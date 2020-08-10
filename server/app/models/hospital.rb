@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class Hospital < ApplicationRecord
-  TYPES = [['Público', 1], ['Privado', 2], ['Filantrópico', 3]]
+  TYPES = [['Público', 1], ['Privado', 2], ['Filantrópico', 3]].freeze
 
   belongs_to :city
 
@@ -17,7 +19,7 @@ class Hospital < ApplicationRecord
     TYPES.to_h.key(hospital_type)
   end
 
-  def to_json
+  def to_json(*_args)
     total = busy = 0
 
     beds.each do |bed|
