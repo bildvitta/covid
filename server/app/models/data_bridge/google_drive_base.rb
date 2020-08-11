@@ -14,7 +14,7 @@ module DataBridge
     end
 
     def get_data_from_google_drive(spreadsheet_key)
-      spreadsheet = start_session('./leitos-covid19-d14ff7885476.json')
+      spreadsheet = start_session(Rails.application.credentials.google_drive_config)
       spreadsheet = spreadsheet.get_spreadsheet(spreadsheet_key)
 
       spreadsheet
