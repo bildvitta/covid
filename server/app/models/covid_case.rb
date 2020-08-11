@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CovidCase < ApplicationRecord
   belongs_to :city
 
@@ -11,9 +13,9 @@ class CovidCase < ApplicationRecord
 
   def self.populate_with_api
     city = (City.find_by slug: 'ribeirao-preto').id
-    covid = self.get_data_from_api
+    covid = get_data_from_api
     covid[:results].each do |data|
-      if (CovidCase.where("reference_date = :reference_date AND city_id = :city", {reference_date: data[:date], city: city}).count < 1)
+      if CovidCase.where('reference_date = :reference_date AND city_id = :city', { reference_date: data[:date], city: city }).count < 1
         CovidCase.find_or_initialize_by(city_id: city, reference_date: data[:date]).update(total: data[:confirmed], deaths: data[:deaths])
       end
     end
@@ -24,12 +26,14 @@ class CovidCase < ApplicationRecord
   end
 
   def self.google_drive_sheets
-    row = nil
+    # row = nil
     city = City.find_by_slug('ribeirao-preto')
     limit = 10.day.ago.to_date
     reference_date = Date.today - 1.day
+
     spreadsheet = DataBridge::GoogleDriveBase.new.start_session(Rails.application.credentials.google_drive_config)
     spreadsheet = spreadsheet.get_spreadsheet(Rails.application.credentials.spreadsheet_key)
+    
     worksheet = spreadsheet.worksheets[1]
 
     worksheet.num_rows.downto(1).each do |i|
