@@ -24,7 +24,7 @@ module DataBridge::CovidCases
       self.results = {
         find: {
           city: City.find_by_slug('paulinia'),
-          reference_date: Date.today - 1.day
+          reference_date: Date.today
         },
         data: {
           total: @worksheet[2, 2],

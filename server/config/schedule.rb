@@ -47,6 +47,6 @@ every 1.day, at: ['0:20', '6:24', '13:24', '19:24'] do
   runner 'DataBridge::Paulinia.new.get_data.save!'
 end
 
-every 1.day, at: ['0:20', '6:24', '13:24', '19:24'] do
+every '2 * * * *' do
   runner 'DataBridge::CovidCases::Paulinia.new.get_data.save!'
 end
