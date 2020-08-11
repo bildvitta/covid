@@ -229,7 +229,8 @@ export default {
         { name: 'Privado', value: 'private', noUpdateLabel: true },
         { name: 'Filantrópico', value: 'filantropic', noUpdateLabel: true }
       ],
-      filtered: false
+      filtered: false,
+      currentRoutePath: ''
     }
   },
 
@@ -584,7 +585,7 @@ export default {
     },
 
     fetch () {
-      return this.fetchDashboard({ ...this.$route.query })
+      return this.fetchDashboard({ ...this.$route.query, city: this.$route.params.index })
     },
 
     filter () {

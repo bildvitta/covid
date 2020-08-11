@@ -69,6 +69,7 @@ export default {
     },
 
     '$route.params.index' (value) {
+      EventBus.$emit('clear-hospital')
       this.fetch()
     }
   },
@@ -87,8 +88,6 @@ export default {
     },
 
     filter () {
-      EventBus.$emit('clear-hospital')
-
       return this.city && this.$router.push({ params: { index: this.city.value } })
     },
 
