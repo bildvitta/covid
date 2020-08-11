@@ -14,7 +14,6 @@
               Ocupação de leitos hospitalares
             </div>
           </cov-grid-cell>
-
           <cov-grid-cell :breakpoints="{ col:'full', sm: 'full', md: 'full', lg: 'fill' }">
             <cov-multi-select v-if="fetchSuccess" v-model="city" :allow-empty="true" class="header__select" deselect-label label="label" :options="dashboard.cities" placeholder :searchable="false" select-label selected-label track-by="value" @input="filter()" />
           </cov-grid-cell>
@@ -67,6 +66,10 @@ export default {
   watch: {
     fetchSuccess (value) {
       value && this.setSelect()
+    },
+
+    '$route.params.index' (value) {
+      this.fetch()
     }
   },
 
