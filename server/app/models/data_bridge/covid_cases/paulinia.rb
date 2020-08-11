@@ -33,7 +33,7 @@ module DataBridge::CovidCases
         }
       }
     rescue StandardError => e
-      puts "WARNING on generate CovidCase (reference date #{Date.today - 1.day}): #{e}"
+      puts "WARNING on generate CovidCase (reference date #{Date.today}): #{e}"
     end
   end
 end
