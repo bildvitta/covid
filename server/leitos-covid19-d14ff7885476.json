@@ -1,12 +1,1 @@
-{
-  "type": "service_account",
-  "project_id": "leitos-covid19",
-  "private_key_id": "d14ff7885476c90234b27639cd81ff201d144dde",
-  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCzSQ1jU4oGNUH8\nW2kEvKVpRDlNUP5QsOKvmnmbZztzuW49nNd0OhM0CLeuw7x4GD56xC9SumZVh2Lh\nRtf1yyUfFIN8EqJvVMxMrp2DE22akBa8lDGzXwPHB6HHtZciws5GKG36zc1peedA\nIGEkhaoxDs5Rj1IW0sZRNvib5HyT45sVryCYkKmTisS2a97KO48NwluWdUm3/4Xc\n7q/EM8tKAkRnL2N4OlSbIBhJ4bvOzelRVk9a4UPfMLP7ksJfXEA21nwY5A11HFDT\n3zDzc0up51LlLVGZjGgfb/gsDoM6Ljy+xnrsRVmiXIhDB5AlYK77o/V9FecY07B7\nK1ESK73xAgMBAAECggEAEJiCC0A35hQ2+/ewNHaL7z8X+M63A9wj17J6cEaxi6hO\nCpkCnqkjju0Bp8VJpGpGGlIfuU4029Tw8759jiyUTpi1BR6qd5jHYo/FV9VMD4Mn\n/6POJ/bzIBDWSmjGSTr0Ii1q5Mz5JzrYC6kTpPBUjT78HTOhmyg+oFTw1WlkmMHQ\nis4zwCzN+6Wg6wLuc18JN2fr2+ScdZuH1bCVmXW57b8+4iN10ossB7vzhsSwQUl/\n61IXUSL/RB5yKGpNcaU7HykdLqhAX+VXteqQqm6q7vWb3JKH//iw2NmLPR8mAjD1\nOAlp4Z38IPGwObvnku4BGJnf2Io5OrSlwRQPxZJxmQKBgQDrN5tfyrNIqQ16r41l\nlDFuuSsu7duew6rSrXSwHGGnLqq9w+51y1CWJoP9Q/TgX3BGEHAJHQlUx91dZUbb\nkPMSGTXZMjBhfDYZQ4gdEYLvY6iFyksuyu0F61KEMK9m3CKxOuHFksJT9maLIw3z\niRPaHF24mFvdlDMxf/Yvn2mJtQKBgQDDIFG4TmaEvrQKIbbEDyzEl6OMdUQ4m2sG\nj7GP/sd4KxMjEvti3J6FbXU1TcfunZAZVXMxJ1Es+JMcO1aa3xfZ+b+YjQ2N4NDL\n7KjrSYtc5uqELXSVm/nNc1VtHhsk1cPU5kDqpUkiysC0lpHaRS1UM/1yZ8XMoMH7\niweFGHGYzQKBgCs2ZA0NKDLJG/jWF5v5xbsZuZ09hYN9XvylcTKJhEc6g5OpUz3A\nxGVRXh5BRdOStQWqL2r9MqGotjpaSNI9pupER2hHmCvQrf+mMHNmrC9el688ouNN\n1I2p1dcDOrYi6xy0PJYXiCv0sJIPNpjvLf58B5vKIdZrS5xkbc4B81mhAoGAXzQd\nqzdVfd8uKONaMT7WMPVrrtRofNYX2hOyJvfAizk5FRvl286Y6bEGRwO0URA/hpzS\nn2D3kmGWJWguUVIYaRoaCWyI+HiAZ38IzAQOIz3nnqYvA/AeacekHqFZzRcffXj6\no4IRtRAIBhSRBVZLT5IuTuui7rxg6UJkYOQUSOECgYBFF2OzHDZZLKQtlp6qeawH\nsEsUOhkBCU53zE256j2Imkd/cu0pduBm5gUQrgBtuT5SYTvxpaI7Rpw5/pF1zJ3n\nswEAoVvArnDifjT/0e2SYeXWU8YoLTYURv3ciEpPWSti30n9KM8A0KK6egBGUQmq\ne69/11N+0kUyblLPktiepg==\n-----END PRIVATE KEY-----\n",
-  "client_email": "leitos-covid-casos@leitos-covid19.iam.gserviceaccount.com",
-  "client_id": "107880203057275858727",
-  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-  "token_uri": "https://oauth2.googleapis.com/token",
-  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/leitos-covid-casos%40leitos-covid19.iam.gserviceaccount.com"
-}
+{}
