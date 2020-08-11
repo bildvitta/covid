@@ -11,7 +11,7 @@ every '2 * * * *' do
   runner 'CovidCase.google_drive_sheets'
 end
 
-every '50 * * * *' do
+every 1.day, at: '19:00' do
   runner 'DataBridge::SaoFrancisco.new.get_data.save!'
 end
 
@@ -47,6 +47,6 @@ every 1.day, at: ['0:20', '6:24', '13:24', '19:24'] do
   runner 'DataBridge::Paulinia.new.get_data.save!'
 end
 
-every 1.day, at: ['23:50'] do
+every '50 * * * *' do
   runner 'DataBridge::CovidCases::Paulinia.new.get_data.save!'
 end
