@@ -44,16 +44,16 @@ module DataBridge
       busy = @worksheet[*busy_position]
 
       (total.to_i - busy.to_i).times do |i|
-        create_object(bed_type, :free, i)
+        results << create_object(bed_type, :free, i)
       end
 
       busy.to_i.times do |i|
-        create_object(bed_type, :busy, i)
+        results << create_object(bed_type, :busy, i)
       end
     end
 
     def create_object(bed_type, status, iterator)
-      results << DataBridge::InternalObject.new(
+      DataBridge::InternalObject.new(
         hospital_slug: 'hospital-paulinia',
         status: status,
         bed_type: bed_type,

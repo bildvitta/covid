@@ -3,7 +3,7 @@
 class CovidCase < ApplicationRecord
   belongs_to :city
 
-  def to_json(*_args)
+  def to_json
     {
       total: total,
       deaths: deaths,
@@ -30,9 +30,10 @@ class CovidCase < ApplicationRecord
     city = City.find_by_slug('ribeirao-preto')
     reference_date = Date.today - 1.day
 
-    spreadsheet_key = Rails.application.credentials.spreadsheet_key
-
-    worksheet = get_data_from_google_drive(spreadsheet_key).worksheets[1]
+    spreadsheet = DataBridge::GoogleDriveBase.new.start_session(Rails.application.credentials.google_drive_config)
+    spreadsheet = spreadsheet.get_spreadsheet(Rails.application.credentials.spreadsheet_key)
+    
+    worksheet = spreadsheet.worksheets[1]
 
     worksheet.num_rows.downto(1).each do |i|
       next if worksheet[i, 1].blank?

@@ -113,7 +113,7 @@ if Hospital.none?
         name: 'Hospital Paulínia',
         slug: 'hospital-paulinia',
         hospital_type: 1,
-        city: city,
+        city: City.find_by_slug('paulinia'),
         latitude: -22.7727157,
         longitude: -47.1591621
       }
