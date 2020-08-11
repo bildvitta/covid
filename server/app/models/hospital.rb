@@ -19,7 +19,7 @@ class Hospital < ApplicationRecord
     TYPES.to_h.key(hospital_type)
   end
 
-  def to_json(*_args)
+  def to_json
     total = busy = 0
 
     beds.each do |bed|

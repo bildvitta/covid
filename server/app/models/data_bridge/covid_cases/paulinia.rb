@@ -7,21 +7,15 @@ module DataBridge::CovidCases
     end
 
     def get_data
-      spreadsheet = get_data_from_google_drive
-      @worksheet = spreadsheet.worksheets[1]
+      spreadsheet_key = Rails.application.credentials.paulinia_spreadsheet_key
+
+      @worksheet = get_data_from_google_drive(spreadsheet_key).worksheets[1]
 
       process_cases
 
       Rails.cache.clear
 
       self
-    end
-
-    def get_data_from_google_drive
-      spreadsheet = DataBridge::GoogleDriveBase.new.start_session(Rails.application.credentials.google_drive_config)
-      spreadsheet = spreadsheet.get_spreadsheet(Rails.application.credentials.paulinia_spreadsheet_key)
-
-      spreadsheet
     end
 
     protected

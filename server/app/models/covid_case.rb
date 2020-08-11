@@ -26,15 +26,14 @@ class CovidCase < ApplicationRecord
   end
 
   def self.google_drive_sheets
-    row = nil
+    # row = nil
     city = City.find_by_slug('ribeirao-preto')
     reference_date = Date.today - 1.day
 
-    spreadsheet = DataBridge::GoogleDriveBase.new.start_session(Rails.application.credentials.google_drive_config)
-    spreadsheet = spreadsheet.get_spreadsheet(Rails.application.credentials.spreadsheet_key)
+    spreadsheet_key = Rails.application.credentials.spreadsheet_key
 
-    worksheet = spreadsheet.worksheets[1]
-    
+    worksheet = get_data_from_google_drive(spreadsheet_key).worksheets[1]
+
     worksheet.num_rows.downto(1).each do |i|
       next if worksheet[i, 1].blank?
 

@@ -2,7 +2,6 @@
 
 module DataBridge
   class Paulinia < DataBridge::GoogleDriveBase
-
     def save!
       Hospital.find_by_slug('hospital-paulinia').beds.destroy_all
 
@@ -10,7 +9,9 @@ module DataBridge
     end
 
     def get_data
-      @worksheet = get_data_from_google_drive.worksheets[0]
+      spreadsheet_key = Rails.application.credentials.paulinia_spreadsheet_key
+
+      @worksheet = get_data_from_google_drive(spreadsheet_key).worksheets[0]
 
       process_beds
 
@@ -19,13 +20,6 @@ module DataBridge
       Rails.cache.clear
 
       self
-    end
-
-    def get_data_from_google_drive
-      spreadsheet = DataBridge::GoogleDriveBase.new.start_session(Rails.application.credentials.google_drive_config)
-      spreadsheet = spreadsheet.get_spreadsheet(Rails.application.credentials.paulinia_spreadsheet_key)
-
-      spreadsheet
     end
 
     protected
@@ -50,24 +44,22 @@ module DataBridge
       busy = @worksheet[*busy_position]
 
       (total.to_i - busy.to_i).times do |i|
-        results << DataBridge::InternalObject.new(
-          hospital_slug: 'hospital-paulinia',
-          status: :free,
-          bed_type: bed_type,
-          slug: "hospital-paulinia-#{bed_type}-free-#{i}",
-          using_ventilator: false
-        )
+        create_object(bed_type, :free, i)
       end
 
       busy.to_i.times do |i|
-        results << DataBridge::InternalObject.new(
-          hospital_slug: 'hospital-paulinia',
-          status: :busy,
-          bed_type: bed_type,
-          slug: "hospital-paulinia-#{bed_type}-busy-#{i}",
-          using_ventilator: false
-        )
+        create_object(bed_type, :busy, i)
       end
+    end
+
+    def create_object(bed_type, status, iterator)
+      results << DataBridge::InternalObject.new(
+        hospital_slug: 'hospital-paulinia',
+        status: status,
+        bed_type: bed_type,
+        slug: "hospital-paulinia-#{bed_type}-#{status}-#{iterator}",
+        using_ventilator: false
+      )
     end
   end
 end
