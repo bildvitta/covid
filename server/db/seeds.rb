@@ -108,6 +108,14 @@ if Hospital.none?
         city: city,
         latitude: -21.1854888,
         longitude: -47.8096485
+      },
+      {
+        name: 'Hospital Paulínia',
+        slug: 'hospital-paulinia',
+        hospital_type: 1,
+        city: City.find_by_slug('paulinia'),
+        latitude: -22.7727157,
+        longitude: -47.1591621
       }
     ].each do |hospital|
       hospital = Hospital.create!(hospital)
