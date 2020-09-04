@@ -3,6 +3,10 @@
   flex-wrap: wrap;
 }
 
+.inline-flex {
+  display: inline-flex;
+}
+
 .no-wrap {
   flex-wrap: nowrap !important;
 }
