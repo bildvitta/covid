@@ -45,7 +45,7 @@
   font-weight: $font-weight-bold;
 }
 
-.text-weght-normal {
+.text-weight-normal {
   font-weight: normal;
 }
 
@@ -69,6 +69,10 @@
   font-size: $font-size-medium;
   font-weight: bold;
   text-transform: uppercase;
+}
+
+.text-transform-initial {
+  text-transform: initial;
 }
 
 // text size
