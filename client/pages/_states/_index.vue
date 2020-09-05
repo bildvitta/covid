@@ -101,7 +101,7 @@
 
         <div v-if="fetchSuccess" class="m-t-xl p-t-md">
           <h3 class="text-title m-b-md">Mapa de calor dos leitos</h3>
-          <cov-heatmap :markers="hospitals" :points="hospitalsHeatmap" />
+          <cov-heatmap :center="mapCenter" :markers="hospitals" :points="hospitalsHeatmap" />
         </div>
       </div>
 
@@ -229,7 +229,8 @@ export default {
         { name: 'Privado', value: 'private', noUpdateLabel: true },
         { name: 'Filantrópico', value: 'filantropic', noUpdateLabel: true }
       ],
-      filtered: false
+      filtered: false,
+      currentRoutePath: ''
     }
   },
 
@@ -533,6 +534,19 @@ export default {
         legend: { position: 'bottom' },
         tooltips: { mode: 'index', intersect: false }
       }
+    },
+
+    mapCenter () {
+      const positions = {
+        'ribeirao-preto': [-21.1775, -47.81028],
+        paulinia: [-22.7624246, -47.15619]
+      }
+
+      if (!this.$route.params.index) {
+        return positions['ribeirao-preto']
+      }
+
+      return positions[this.$route.params.index]
     }
   },
 
@@ -571,7 +585,7 @@ export default {
     },
 
     fetch () {
-      return this.fetchDashboard({ ...this.$route.query })
+      return this.fetchDashboard({ ...this.$route.query, city: this.$route.params.index })
     },
 
     filter () {

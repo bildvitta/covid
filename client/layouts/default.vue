@@ -14,7 +14,6 @@
               Ocupação de leitos hospitalares
             </div>
           </cov-grid-cell>
-
           <cov-grid-cell :breakpoints="{ col:'full', sm: 'full', md: 'full', lg: 'fill' }">
             <cov-multi-select v-if="fetchSuccess" v-model="city" :allow-empty="true" class="header__select" deselect-label label="label" :options="dashboard.cities" placeholder :searchable="false" select-label selected-label track-by="value" @input="filter()" />
           </cov-grid-cell>
@@ -28,6 +27,7 @@
 
     <footer class="footer">
       <div class="container">
+        <p v-if="!showAboutPageLink" class="page-about-link m-b-lg">Para informações sobre o projeto acesse <router-link class="link" to="/about">aqui</router-link></p>
         Este é um projeto <em>open source</em> feito com <img alt="coração" class="heart" src="~/assets/images/heart.svg" style="height: 16px;"> pelo time da <img alt="coração" src="~/assets/images/nave.svg" style="height: 14px;">.
         <div>Acesse o código-fonte na íntegra <a href="https://github.com/bildvitta/covid" target="_blank">aqui</a>.</div>
       </div>
@@ -61,12 +61,25 @@ export default {
     ...mapGetters({
       dashboard: 'dashboard/dashboard',
       fetchSuccess: 'dashboard/fetchSuccess'
-    })
+    }),
+
+    isAboutPage () {
+      return this.$route.name === 'about'
+    },
+
+    showAboutPageLink () {
+      return this.isAboutPage
+    }
   },
 
   watch: {
     fetchSuccess (value) {
       value && this.setSelect()
+    },
+
+    '$route.params.index' (value) {
+      EventBus.$emit('clear-hospital')
+      this.fetch()
     }
   },
 
@@ -84,8 +97,6 @@ export default {
     },
 
     filter () {
-      EventBus.$emit('clear-hospital')
-
       return this.city && this.$router.push({ params: { index: this.city.value } })
     },
 
@@ -198,5 +209,11 @@ export default {
 
 .heart {
   animation: heartbeat 1.4s infinite;
+}
+
+.page-about-link {
+  .link {
+    text-decoration: underline;
+  }
 }
 </style>

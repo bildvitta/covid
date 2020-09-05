@@ -7,7 +7,7 @@
       <div v-for="(item, index) in formattedContent" :key="`${index}-span`" class="cov-progress__text text-bold" :class="textClass(item)">
         <span class="cov-progress__ball m-r-sm" :class="backgroundClass(item)" />
         <span class="cov-progress__percent m-r-sm">{{ formatPercent(item.value) }}</span>
-        <span class="cov-progress__percent-name text-color text-weght-normal">{{ item.label }}</span>
+        <span class="cov-progress__percent-name text-color text-weight-normal">{{ item.label }}</span>
       </div>
     </div>
   </div>
