@@ -113,7 +113,7 @@ class PagesController < ApplicationController
 
   def historical_data
     cached_data :historical_data do
-      range_days = 30.days.ago.to_date..1.days.ago.to_date
+      range_days = '2020-03-01'.to_date..1.days.ago.to_date
       hospitals = @city.hospitals.distinct.where(filter_beds).reorder(id: :asc)
       bed_states = BedState.joins(:hospital, :details).where(date: range_days, hospital: hospitals).distinct
       bed_states = bed_states.includes(:details).distinct.map { |bed_state| [[bed_state.date.to_s, bed_state.hospital_id], bed_state.details] }.to_h
