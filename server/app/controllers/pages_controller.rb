@@ -111,9 +111,9 @@ class PagesController < ApplicationController
     }
   end
 
-  def historical_data
-    cached_data :historical_data do
-      range_days = '2020-03-01'.to_date..1.days.ago.to_date
+  def historical_data start_date = 30.days.ago
+    cached_data "historical_data_#{start_date.to_date.to_s}" do
+      range_days = start_date.to_date..1.days.ago.to_date
       hospitals = @city.hospitals.distinct.where(filter_beds).reorder(id: :asc)
       bed_states = BedState.joins(:hospital, :details).where(date: range_days, hospital: hospitals).distinct
       bed_states = bed_states.includes(:details).distinct.map { |bed_state| [[bed_state.date.to_s, bed_state.hospital_id], bed_state.details] }.to_h
@@ -169,7 +169,7 @@ class PagesController < ApplicationController
       'Hospital das Clínicas Unidade de Emergência' => 'H. das Clínicas Uni. de Emer.'
     }
 
-    historical_data.each do |date, values|
+    historical_data(Date.new(2020, 5, 21)).each do |date, values|
       values[:beds].each do |hash|
         params = [I18n.l(date.to_date)] + hash[:intensive_care_unit].values.map(&:values).flatten + hash[:nursing].values.map(&:values).flatten
         name = names[hash[:name]] || hash[:name]
