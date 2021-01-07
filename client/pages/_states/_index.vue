@@ -427,6 +427,7 @@ export default {
             borderColor: '#fa5252',
             borderDash: [8],
             borderWidth: 1,
+            hidden: true,
             data: this.historyBeds.intensive_care_unit?.normal?.busy
           },
           {
@@ -450,6 +451,7 @@ export default {
             borderColor: '#a3a1fb',
             borderDash: [8],
             borderWidth: 1,
+            hidden: true,
             data: this.historyBeds.nursing?.normal?.busy
           }
         ]
