@@ -29,25 +29,25 @@ export default {
   },
 
   computed: {
-    percentClasses () {
-      const percent = parseFloat(this.percent) * 100
+    formattedPercent () {
+      return this.percentTypes(parseFloat(this.percent) * 100)
+    },
 
+    percentClasses () {
       return {
-        'cov-info-card--red': percent >= 80,
-        'cov-info-card--orange': percent >= 75 && percent < 80,
-        'cov-info-card--yellow': percent >= 70 && percent < 75,
-        'cov-info-card--green': percent < 70
+        'cov-info-card--red': this.formattedPercent.red,
+        'cov-info-card--orange': this.formattedPercent.orange,
+        // 'cov-info-card--yellow': percent >= 70 && percent < 75,
+        'cov-info-card--green': this.formattedPercent.green
       }
     },
 
     percentCardClasses () {
-      const percent = parseFloat(this.percent) * 100
-
       return {
-        'cov-info-card__percent-card--red': percent >= 80,
-        'cov-info-card__percent-card--orange': percent >= 75 && percent < 80,
-        'cov-info-card__percent-card--yellow': percent >= 70 && percent < 75,
-        'cov-info-card__percent-card--green': percent < 70
+        'cov-info-card__percent-card--red': this.formattedPercent.red,
+        'cov-info-card__percent-card--orange': this.formattedPercent.orange,
+        // 'cov-info-card__percent-card--yellow': percent >= 70 && percent < 75,
+        'cov-info-card__percent-card--green': this.formattedPercent.green
       }
     }
   },
@@ -61,6 +61,14 @@ export default {
       })
 
       return format(number)
+    },
+
+    percentTypes (percent) {
+      return {
+        red: percent > 75,
+        orange: percent <= 75 && percent >= 70,
+        green: percent < 70
+      }
     }
   }
 }
