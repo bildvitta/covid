@@ -116,6 +116,14 @@ if Hospital.none?
         city: City.find_by_slug('paulinia'),
         latitude: -22.7727157,
         longitude: -47.1591621
+      },
+      {
+        name: 'Polo COVID - UPA Treze de Maio',
+        slug: 'polo-covid-upa-treze-de-maio',
+        hospital_type: 1,
+        city: city,
+        latitude: -21.1761612,
+        longitude: -47.7922277
       }
     ].each do |hospital|
       hospital = Hospital.create!(hospital)
