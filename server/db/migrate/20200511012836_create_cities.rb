@@ -2,23 +2,28 @@ class CreateCities < ActiveRecord::Migration[6.0]
   def migrate(direction)
     super
 
-    if direction == :up
-      print "\rCriando cidades..."+(' '*20)
+    return unless direction == :up
 
-      cities = JSON.parse(File.read(Rails.root.join('db', 'seeds', 'cities.json').to_s))
-      total_cities = cities.count
+    print "\rCriando cidades...#{' ' * 20}"
 
-      cities.each_with_index do |city,i|
-        print "\rCriando cidade #{i + 1}/#{total_cities}..."+ (' ' * 20)
+    cities = JSON.parse(File.read(Rails.root.join('db', 'seeds', 'cities.json').to_s))
+    total_cities = cities.count
 
-        break if Rails.env.development? && i > 50 
+    cities.each_with_index do |city, i|
+      print "\rCriando cidade #{i + 1}/#{total_cities}..." + (' ' * 20)
 
-        City.create!(name: city[0], state_id: city[1], latitude: city[2], longitude: city[3])
-      end
+      break if Rails.env.development? && i > 50
 
-      unless City.exists?(slug: 'ribeirao-preto')
-        City.create!(name: 'Ribeirão Preto', state_id: 25, latitude: -21.1699, longitude: -47.8099)
-      end
+      City.create!(json_to_params(city))
+    end
+
+    ['Ribeirão Preto', 'Paulínia'].each do |city_name|
+      next if City.exists?(name: city_name)
+
+      city_json = cities.find { |city_array| city_array.first == city_name }
+      next unless city_json
+
+      City.create!(json_to_params(city_json))
     end
   end
 
@@ -31,6 +36,15 @@ class CreateCities < ActiveRecord::Migration[6.0]
       t.float :longitude, index: true
 
       t.timestamps
+    end
+  end
+
+  private
+
+  def json_to_params(array)
+    %i[name state_id latitude
+       longitude].each_with_index.each_with_object({}) do |(key, index), memo|
+      memo[key] = array[index]
     end
   end
 end
