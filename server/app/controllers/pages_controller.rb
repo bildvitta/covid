@@ -199,32 +199,33 @@ class PagesController < ApplicationController
   def filter_params
     return @filter_params if @filter_params
 
-    @filter_params = params[:hospital].to_s.split(',').uniq
-    @filter_params = 'all' if @filter_params.blank? || @filter_params.include?('all')
+    @filter_params = {}
+
+    where_limitation = {
+      slug: Hospital.hospital_slugs,
+      hospital_type: Hospital::TYPE_ENUM.keys
+    }
+
+    # Intersects with possible values, so it won't cache wrong values
+    where_limitation.each do |key, values|
+      result = (params[:hospital].to_s.split(',') & values).sort
+      (@filter_params[:hospitals] ||= {})[key] = result if result.any?
+    end
 
     @filter_params
   end
 
   def filter_beds
-    filters = {
-      'public' => 1,
-      'private' => 2,
-      'filantropic' => 3
-    }
+    return @filter_beds if @filter_beds
 
-    hospital_slugs, hospital_types = [], []
+    hospital_table = Hospital.arel_table
 
-    return '' if filter_params == 'all'
-
-    filter_params.each do |filter|
-      filters.key?(filter) ? hospital_types << filters[filter] : hospital_slugs << filter
+    # Creating arel nodes to it
+    filter_params[:hospitals].to_h.each do |key, value|
+      statement = hospital_table[key].in(value)
+      @filter_beds = @filter_beds.nil? ? statement : @filter_beds.or(statement)
     end
 
-    query = [
-      ("hospitals.slug IN (#{hospital_slugs.map { |slug| "'#{slug}'" }.join(',') })" if hospital_slugs.any?),
-      ("hospitals.hospital_type IN (#{hospital_types.join(',')})" if hospital_types.any?)
-    ]
-
-    query.compact.join(' OR ')
+    @filter_beds
   end
 end
