@@ -254,7 +254,7 @@ class PagesController < ApplicationController
 
     # Creating arel nodes to it
     filter_params[:hospitals].to_h.each do |key, value|
-      # Since hospital key does not have literal values, we get its real values
+      # Since hospital type does not have literal values, we get its real values
       value = value.map { |set| Hospital::TYPE_ENUM[set] } if key == :hospital_type
       # hospital_table[key] is each of it's arel node and .in means IN statement on postgresql
       statement = hospital_table[key].in(value)
