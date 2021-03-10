@@ -9,7 +9,7 @@ class PagesController < ApplicationController
       beds: beds_data,
       hospitals: hospitals_data,
       covid_cases: cases_data,
-      historical: historical_data,
+      historical: historical_data(filter_params[:started_at], filter_params[:finished_at])
     )
   end
 
@@ -111,9 +111,12 @@ class PagesController < ApplicationController
     }
   end
 
-  def historical_data start_date = 30.days.ago
-    cached_data "historical_data_#{start_date.to_date.to_s}" do
-      range_days = start_date.to_date..1.days.ago.to_date
+  def historical_data started_at, finished_at
+    started_at ||= 30.days.ago
+    finished_at ||= 1.days.ago
+
+    cached_data "historical_data_#{started_at.to_date.to_s}_to_#{finished_at.to_date.to_s}" do
+      range_days = started_at.to_date..finished_at.to_date
       hospitals = @city.hospitals.distinct.where(filter_beds).reorder(id: :asc)
       bed_states = BedState.joins(:hospital, :details).where(date: range_days, hospital: hospitals).distinct
       bed_states = bed_states.includes(:details).distinct.map { |bed_state| [[bed_state.date.to_s, bed_state.hospital_id], bed_state.details] }.to_h
@@ -169,7 +172,9 @@ class PagesController < ApplicationController
       'Hospital das Clínicas Unidade de Emergência' => 'H. das Clínicas Uni. de Emer.'
     }
 
-    historical_data(Date.new(2020, 5, 21)).each do |date, values|
+    historical_data(
+      filter_params[:started_at] || Date.new(2020, 5, 21), filter_params[:finished_at]
+    ).each do |date, values|
       values[:beds].each do |hash|
         params = [I18n.l(date.to_date)] + hash[:intensive_care_unit].values.map(&:values).flatten + hash[:nursing].values.map(&:values).flatten
         name = names[hash[:name]] || hash[:name]
@@ -212,7 +217,23 @@ class PagesController < ApplicationController
       (@filter_params[:hospitals] ||= {})[key] = result if result.any?
     end
 
+    valid_date if params[:started_at] || params[:finished_at]
+
     @filter_params
+  end
+
+  def valid_date
+    [:started_at, :finished_at].each do |date|
+      filter_params[date] = begin
+        params[date].to_date
+      rescue
+        return render_json({error: 'Invalid Date'}, 401)
+      end
+    end
+
+    if (filter_params[:started_at] || 0) > (filter_params[:finished_at] || 0)
+      return render_json({error: 'Invalid Date Range'}, 401)
+    end
   end
 
   def filter_beds
