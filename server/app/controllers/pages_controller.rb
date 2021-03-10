@@ -225,9 +225,12 @@ class PagesController < ApplicationController
 
     result_set = params.permit(%i[started_at finished_at])
     result_set.each do |key, date|
+      # For each date we will get the possible values to this range
       actions = %i[min max].send(key.to_sym == :started_at ? :to_a : :reverse)
+      # It can't be lesser than the minimum and more than the last (that's why min and then max)
       filter_params[key.to_sym] = [date.to_date, bed_state_edges.send(actions[0])].send(actions[1])
     end
+    # If is more than 1, its a range, so it must be checked
     return unless result_set.to_h.length > 1
 
     raise 'Invalid date range' if filter_params[:started_at] >= filter_params[:finished_at]
@@ -238,6 +241,7 @@ class PagesController < ApplicationController
   end
 
   def bed_state_edges
+    # Gets the minimum value on the database and yesterday which is the maximum value we will show
     @bed_state_edges ||= cached_data('bed_state_edges') do
       [BedState.order(date: :asc).first.date, 1.days.ago]
     end
@@ -250,8 +254,11 @@ class PagesController < ApplicationController
 
     # Creating arel nodes to it
     filter_params[:hospitals].to_h.each do |key, value|
+      # Since hospital key does not have literal values, we get its real values
       value = value.map { |set| Hospital::TYPE_ENUM[set] } if key == :hospital_type
+      # hospital_table[key] is each of it's arel node and .in means IN statement on postgresql
       statement = hospital_table[key].in(value)
+      # If the statement does not exist, it's himself, otherwise, it joins it with an 'OR' statement
       @filter_beds = @filter_beds.nil? ? statement : @filter_beds.or(statement)
     end
 
