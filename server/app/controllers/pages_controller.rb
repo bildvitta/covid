@@ -172,9 +172,7 @@ class PagesController < ApplicationController
       'Hospital das Clínicas Unidade de Emergência' => 'H. das Clínicas Uni. de Emer.'
     }
 
-    historical_data(
-      filter_params[:started_at] || Date.new(2020, 5, 21), filter_params[:finished_at]
-    ).each do |date, values|
+    historical_data(bed_state_edges.min, bed_state_edges.max).each do |date, values|
       values[:beds].each do |hash|
         params = [I18n.l(date.to_date)] + hash[:intensive_care_unit].values.map(&:values).flatten + hash[:nursing].values.map(&:values).flatten
         name = names[hash[:name]] || hash[:name]
@@ -217,25 +215,30 @@ class PagesController < ApplicationController
       (@filter_params[:hospitals] ||= {})[key] = result if result.any?
     end
 
-    valid_date if params[:started_at] || params[:finished_at]
+    valid_date if (params.keys & %w[started_at finished_at]).any?
 
     @filter_params
   end
 
   def valid_date
-    [:started_at, :finished_at].each do |date|
-      filter_params[date] = begin
-        params[date].to_date
-      rescue
-        return render_json({ error: 'Invalid Date' }, 401)
-      end
-    end
+    error = nil
 
-    if filter_params[:started_at] >= filter_params[:finished_at]
-      return render_json({ error: 'Invalid Date Range' }, 401)
+    result_set = params.permit(%i[started_at finished_at])
+    result_set.each do |key, date|
+      actions = %i[min max].send(key.to_sym == :started_at ? :to_a : :reverse)
+      filter_params[key.to_sym] = [date.to_date, bed_state_edges.send(actions[0])].send(actions[1])
     end
+    return unless result_set.to_h.length > 1
 
-    filter_params[:finished_at] = Date.today if filter_params[:finished_at] > Date.today
+    raise 'Invalid date range' if filter_params[:started_at] >= filter_params[:finished_at]
+  rescue StandardError => e
+    error = e.to_s.capitalize
+  ensure
+    render_json({ error: error }, 400) if error
+  end
+
+  def bed_state_edges
+    @bed_state_edges ||= cached_data('bed_state_edges') { BedState.pluck(:date).minmax }
   end
 
   def filter_beds
