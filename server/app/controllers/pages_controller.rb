@@ -227,12 +227,12 @@ class PagesController < ApplicationController
       filter_params[date] = begin
         params[date].to_date
       rescue
-        return render_json({error: 'Invalid Date'}, 401)
+        return render_json({ error: 'Invalid Date' }, 401)
       end
     end
 
     if filter_params[:started_at] >= filter_params[:finished_at]
-      return render_json({error: 'Invalid Date Range'}, 401)
+      return render_json({ error: 'Invalid Date Range' }, 401)
     end
 
     filter_params[:finished_at] = Date.today if filter_params[:finished_at] > Date.today
