@@ -231,9 +231,11 @@ class PagesController < ApplicationController
       end
     end
 
-    if (filter_params[:started_at] || 0) > (filter_params[:finished_at] || 0)
+    if filter_params[:started_at] >= filter_params[:finished_at]
       return render_json({error: 'Invalid Date Range'}, 401)
     end
+
+    filter_params[:finished_at] = Date.today if filter_params[:finished_at] > Date.today
   end
 
   def filter_beds
