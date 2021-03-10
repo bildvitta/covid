@@ -250,6 +250,7 @@ class PagesController < ApplicationController
 
     # Creating arel nodes to it
     filter_params[:hospitals].to_h.each do |key, value|
+      value = value.map { |set| Hospital::TYPE_ENUM[set] } if key == :hospital_type
       statement = hospital_table[key].in(value)
       @filter_beds = @filter_beds.nil? ? statement : @filter_beds.or(statement)
     end
