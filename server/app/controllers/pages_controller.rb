@@ -238,7 +238,9 @@ class PagesController < ApplicationController
   end
 
   def bed_state_edges
-    @bed_state_edges ||= cached_data('bed_state_edges') { BedState.pluck(:date).minmax }
+    @bed_state_edges ||= cached_data('bed_state_edges') do
+      [BedState.order(date: :asc).first.date, 1.days.ago]
+    end
   end
 
   def filter_beds
