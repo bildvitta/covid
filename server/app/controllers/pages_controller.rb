@@ -172,7 +172,7 @@ class PagesController < ApplicationController
       'Hospital das Clínicas Unidade de Emergência' => 'H. das Clínicas Uni. de Emer.'
     }
 
-    historical_data(bed_state_edges.min, bed_state_edges.max).each do |date, values|
+    historical_data(bed_state_edges.min, nil).each do |date, values|
       values[:beds].each do |hash|
         params = [I18n.l(date.to_date)] + hash[:intensive_care_unit].values.map(&:values).flatten + hash[:nursing].values.map(&:values).flatten
         name = names[hash[:name]] || hash[:name]
