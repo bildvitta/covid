@@ -93,7 +93,17 @@
 
             <cov-box class="m-t-md">
               <client-only>
+                <!-- TODO criar filtros customizados -->
+                <!-- TODO criar data piker com range de data -->
+                <div class="m-b-md">
+                  <cov-date-filter :fields="dataFilter" @input="filterChart($event)" />
+                </div>
                 <cov-line-chart :chart-data="historyChartData" :options="historyChartOptions" />
+                <div class="flex">
+                  <div v-for="(button, index) in leitos" :key="index">
+                    <input :checked="button.values" class="m-r-sm m-l-sm m-b-sm m-t-sm" type="checkbox" @click="hidden(button.label)">{{ button.label }}
+                  </div>
+                </div>
               </client-only>
             </cov-box>
           </cov-grid-cell>
@@ -197,6 +207,22 @@ import CovLoading from '~/components/CovLoading'
 import CovMultiSelect from '~/components/CovMultiSelect'
 import CovProgress from '~/components/CovProgress'
 import CovSection from '~/components/CovSection'
+import CovDateFilter from '~/components/CovDateFilter'
+
+const leitos = [
+  { label: 'Total UTI COVID-19', values: true },
+  { label: 'UTI COVID-19', values: true },
+  { label: 'UTI não COVID-19', values: false },
+  { label: 'Total Enfermaria COVID-19', values: false },
+  { label: 'Enfermaria COVID-19', values: true },
+  { label: 'Enfermaria não COVID-19', values: false }
+]
+
+const dataFilter =
+  {
+    startedAt: '08/02/2021',
+    finishedAt: '15/02/2021'
+  }
 
 export default {
   components: {
@@ -213,7 +239,9 @@ export default {
     CovLoading,
     CovMultiSelect,
     CovProgress,
-    CovSection
+    CovSection,
+    CovDateFilter
+
   },
 
   validate ({ params }) {
@@ -222,6 +250,14 @@ export default {
 
   data () {
     return {
+      leitos,
+      dataFilter,
+      utiCovid19: false,
+      allUtiCovid19: false,
+      utiNotCovid19: true,
+      allNurseryCovid19: true,
+      nurseryCovid19: false,
+      nurseryNotCovid19: true,
       hospital: [],
       defaultHospitalOptions: [
         { name: 'Todos', value: 'all', noUpdateLabel: true },
@@ -412,13 +448,14 @@ export default {
             borderColor: '#fca8a8',
             borderDash: [1],
             borderWidth: 2,
-            hidden: true,
+            hidden: this.allUtiCovid19,
             data: this.historyBeds.intensive_care_unit?.covid?.total
           },
           {
             label: 'UTI COVID-19',
             fill: false,
             borderColor: '#fa5252',
+            hidden: this.utiCovid19,
             data: this.historyBeds.intensive_care_unit?.covid?.busy
           },
           {
@@ -427,7 +464,7 @@ export default {
             borderColor: '#fa5252',
             borderDash: [8],
             borderWidth: 1,
-            hidden: true,
+            hidden: this.utiNotCovid19,
             data: this.historyBeds.intensive_care_unit?.normal?.busy
           },
           {
@@ -436,13 +473,14 @@ export default {
             borderColor: '#d1d0fd',
             borderDash: [1],
             borderWidth: 2,
-            hidden: true,
+            hidden: this.allNurseryCovid19,
             data: this.historyBeds.nursing?.covid?.total
           },
           {
             label: 'Enfermaria COVID-19',
             fill: false,
             borderColor: '#a3a1fb',
+            hidden: this.nurseryCovid19,
             data: this.historyBeds.nursing?.covid?.busy
           },
           {
@@ -451,7 +489,7 @@ export default {
             borderColor: '#a3a1fb',
             borderDash: [8],
             borderWidth: 1,
-            hidden: true,
+            hidden: this.nurseryNotCovid19,
             data: this.historyBeds.nursing?.normal?.busy
           }
         ]
@@ -460,7 +498,9 @@ export default {
 
     historyChartOptions () {
       return {
-        legend: { position: 'bottom' },
+        legend: {
+          display: false
+        },
         tooltips: { mode: 'index', intersect: false }
       }
     },
@@ -578,6 +618,55 @@ export default {
       fetchDashboard: 'dashboard/fetch'
     }),
 
+    hidden (model) {
+      // UTI COVID-19
+      if (model === 'UTI COVID-19') {
+        this.utiCovid19 = !this.utiCovid19
+      }
+
+      if (model === 'Total UTI COVID-19') {
+        this.allUtiCovid19 = !this.allUtiCovid19
+      }
+
+      if (model === 'UTI não COVID-19') {
+        this.utiNotCovid19 = !this.utiNotCovid19
+      }
+
+      if (model === 'Total Enfermaria COVID-19') {
+        this.allNurseryCovid19 = !this.allNurseryCovid19
+      }
+
+      if (model === 'Enfermaria COVID-19') {
+        this.nurseryCovid19 = !this.nurseryCovid19
+      }
+
+      if (model === 'Enfermaria não COVID-19') {
+        this.nurseryNotCovid19 = !this.nurseryNotCovid19
+      }
+
+      // eslint-disable-next-line no-console
+      // return console.log(model)
+    },
+
+    filterChart (event) {
+      if (!this.filtered) {
+        event = ''
+        this.filtered = true
+        return null
+      }
+
+      const toQuery = []
+
+      for (const [key, value] of Object.entries(event)) {
+        // eslint-disable-next-line no-console
+        console.log(key + ':' + value)
+        toQuery.push(value)
+      }
+
+      const query = omitBy({ ...this.$route.query, started_at: toQuery[0], finished_at: toQuery[1] }, isEmpty)
+      this.$router.push({ query })
+    },
+
     badgesPercent ({ busy, total }) {
       return this.formatPercent((busy / total) || 0)
     },
@@ -589,7 +678,7 @@ export default {
     fetch () {
       return this.fetchDashboard({ ...this.$route.query, city: this.$route.params.index })
     },
-
+    // TODO estudar esse filtro
     filter () {
       const length = this.hospital.length - 1
 
@@ -706,9 +795,11 @@ export default {
     }
   }
 }
+
 </script>
 
 <style lang="scss">
+
 .cov-multiselect {
   &__checkbox {
     position: relative;
