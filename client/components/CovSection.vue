@@ -40,7 +40,7 @@ export default {
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-    height: 400px;
+    min-height: 400px;
   }
 }
 
@@ -48,10 +48,10 @@ export default {
   .cov-section {
     &__vaccine {
       background-image: url(../assets/images/vaccine.png);
-      background-position: -440px -90px;
+      background-position: center;
       background-repeat: no-repeat;
       background-size: auto;
-      height: 400px;
+      min-height: 400px;
     }
   }
 }

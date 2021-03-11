@@ -174,8 +174,8 @@
     <cov-section class="cov-section__vaccine flex items-center">
       <div class="container">
         <div class="vaccine">
-          <cov-grid-cell :breakpoints="{ sm:'10-of-12', col:'3-of-6'}">
-            <h2>A Prefeitura de Ribeirão Preto já está disponibilizando o agendamento para vacinação contra COVID-19</h2>
+          <cov-grid-cell :breakpoints="{ sm:'8-of-12', md:'12-of-12', lg:'3-of-6' }">
+            <h1>A Prefeitura de Ribeirão Preto já está disponibilizando o agendamento para vacinação contra COVID-19.</h1>
           </cov-grid-cell>
           <div class="vaccine__button">
             <cov-button class="cov-button--vaccine m-t-xl" href="https://www.ribeiraopreto.sp.gov.br/agendamento-vacinacao-covid/" label="Agende agora" />
@@ -817,7 +817,7 @@ export default {
   }
 }
 
-@media screen and (max-width: 480px) {
+@include breakpoint(max-width $small-screen) {
   .vaccine {
     display: flex;
     flex-direction: column;
