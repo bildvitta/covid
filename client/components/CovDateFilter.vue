@@ -8,20 +8,26 @@
         <!-- loop nos imput -->
         <!-- TODO fazer slot -->
         <input v-model="values.startedAt" class="data" placeholder="data inicial">
-        <input v-model="values.finishedAt" class="data" placeholder="data final" @input="filter">
+        <input v-model="values.finishedAt" class="data" placeholder="data final">
+      </div>
+      <!-- buttons filter -->
+      <div class="DateFilter__actions">
+        <!-- <cov-button label="filtrar"> -->
+        <button @click="clearFilter">Limpar filtros</button>
+        <button @click="filter">filtrar</button>
       </div>
     </div>
-    <!-- buttons filter -->
-    <!-- <div>
-      <button @click="clearFilter">Limpar filtros</button>
-      <button @click="filter">filtrar</button>
-    </div> -->
   </div>
 </template>
 
 <script>
-
+// import CovButton from '~/components/CovButton'
+import { mapGetters, mapActions } from 'vuex'
 export default {
+  // components: {
+  //   CovButton
+  // },
+
   props: {
     fields: {
       type: Object,
@@ -35,13 +41,25 @@ export default {
     }
   },
 
+  computed: {
+    ...mapGetters({
+      error: 'dashboard/error'
+    })
+  },
+
   created () {
     this.values = this.fields
   },
 
   methods: {
+    ...mapActions({
+      reset: 'dashboard/reset'
+    }),
+
     clearFilter () {
       this.values = {}
+      this.$emit('input', this.values)
+      this.reset()
     },
 
     filter () {
