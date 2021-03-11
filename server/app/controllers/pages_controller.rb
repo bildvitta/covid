@@ -9,7 +9,7 @@ class PagesController < ApplicationController
       beds: beds_data,
       hospitals: hospitals_data,
       covid_cases: cases_data,
-      historical: historical_data,
+      historical: historical_data(filter_params[:started_at], filter_params[:finished_at])
     )
   end
 
@@ -111,9 +111,12 @@ class PagesController < ApplicationController
     }
   end
 
-  def historical_data start_date = 30.days.ago
-    cached_data "historical_data_#{start_date.to_date.to_s}" do
-      range_days = start_date.to_date..1.days.ago.to_date
+  def historical_data started_at, finished_at
+    started_at ||= 30.days.ago
+    finished_at ||= 1.days.ago
+
+    cached_data "historical_data_#{started_at.to_date.to_s}_to_#{finished_at.to_date.to_s}" do
+      range_days = started_at.to_date..finished_at.to_date
       hospitals = @city.hospitals.distinct.where(filter_beds).reorder(id: :asc)
       bed_states = BedState.joins(:hospital, :details).where(date: range_days, hospital: hospitals).distinct
       bed_states = bed_states.includes(:details).distinct.map { |bed_state| [[bed_state.date.to_s, bed_state.hospital_id], bed_state.details] }.to_h
@@ -169,7 +172,7 @@ class PagesController < ApplicationController
       'Hospital das Clínicas Unidade de Emergência' => 'H. das Clínicas Uni. de Emer.'
     }
 
-    historical_data(Date.new(2020, 5, 21)).each do |date, values|
+    historical_data(bed_state_edges.min, nil).each do |date, values|
       values[:beds].each do |hash|
         params = [I18n.l(date.to_date)] + hash[:intensive_care_unit].values.map(&:values).flatten + hash[:nursing].values.map(&:values).flatten
         name = names[hash[:name]] || hash[:name]
@@ -199,32 +202,66 @@ class PagesController < ApplicationController
   def filter_params
     return @filter_params if @filter_params
 
-    @filter_params = params[:hospital].to_s.split(',').uniq
-    @filter_params = 'all' if @filter_params.blank? || @filter_params.include?('all')
+    @filter_params = {}
+
+    where_limitation = {
+      slug: Hospital.hospital_slugs,
+      hospital_type: Hospital::TYPE_ENUM.keys
+    }
+
+    # Intersects with possible values, so it won't cache wrong values
+    where_limitation.each do |key, values|
+      result = (params[:hospital].to_s.split(',') & values).sort
+      (@filter_params[:hospitals] ||= {})[key] = result if result.any?
+    end
+
+    valid_date if (params.keys & %w[started_at finished_at]).any?
 
     @filter_params
   end
 
+  def valid_date
+    error = nil
+
+    result_set = params.permit(%i[started_at finished_at])
+    result_set.each do |key, date|
+      # For each date we will get the possible values to this range
+      actions = %i[min max].send(key.to_sym == :started_at ? :to_a : :reverse)
+      # It can't be lesser than the minimum and more than the last (that's why min and then max)
+      filter_params[key.to_sym] = [date.to_date, bed_state_edges.send(actions[0])].send(actions[1])
+    end
+    # If is more than 1, its a range, so it must be checked
+    return unless result_set.to_h.length > 1
+
+    raise 'Invalid date range' if filter_params[:started_at] >= filter_params[:finished_at]
+  rescue StandardError => e
+    error = e.to_s.capitalize
+  ensure
+    render_json({ error: error }, 400) if error
+  end
+
+  def bed_state_edges
+    # Gets the minimum value on the database and yesterday which is the maximum value we will show
+    @bed_state_edges ||= cached_data('bed_state_edges') do
+      [BedState.order(date: :asc).first.date, 1.days.ago]
+    end
+  end
+
   def filter_beds
-    filters = {
-      'public' => 1,
-      'private' => 2,
-      'filantropic' => 3
-    }
+    return @filter_beds if @filter_beds
 
-    hospital_slugs, hospital_types = [], []
+    hospital_table = Hospital.arel_table
 
-    return '' if filter_params == 'all'
-
-    filter_params.each do |filter|
-      filters.key?(filter) ? hospital_types << filters[filter] : hospital_slugs << filter
+    # Creating arel nodes to it
+    filter_params[:hospitals].to_h.each do |key, value|
+      # Since hospital type does not have literal values, we get its real values
+      value = value.map { |set| Hospital::TYPE_ENUM[set] } if key == :hospital_type
+      # hospital_table[key] is each of it's arel node and .in means IN statement on postgresql
+      statement = hospital_table[key].in(value)
+      # If the statement does not exist, it's himself, otherwise, it joins it with an 'OR' statement
+      @filter_beds = @filter_beds.nil? ? statement : @filter_beds.or(statement)
     end
 
-    query = [
-      ("hospitals.slug IN (#{hospital_slugs.map { |slug| "'#{slug}'" }.join(',') })" if hospital_slugs.any?),
-      ("hospitals.hospital_type IN (#{hospital_types.join(',')})" if hospital_types.any?)
-    ]
-
-    query.compact.join(' OR ')
+    @filter_beds
   end
 end
