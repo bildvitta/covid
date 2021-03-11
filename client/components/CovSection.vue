@@ -48,7 +48,7 @@ export default {
   .cov-section {
     &__vaccine {
       background-image: url(../assets/images/vaccine.png);
-      background-position: center;
+      background-position: -440px -90px;
       background-repeat: no-repeat;
       background-size: auto;
       min-height: 400px;
