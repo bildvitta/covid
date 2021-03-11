@@ -1,7 +1,7 @@
 # frozen_string_literal: true
-
 class Hospital < ApplicationRecord
   TYPES = [['Público', 1], ['Privado', 2], ['Filantrópico', 3]].freeze
+  TYPE_ENUM = { 'public' => 1, 'private' => 2, 'filantropic' => 3 }.freeze
 
   belongs_to :city
 
@@ -14,6 +14,12 @@ class Hospital < ApplicationRecord
   friendly_id :name, use: :slugged
 
   default_scope { order(name: :asc) }
+
+  def self.hospital_slugs
+    Rails.cache.fetch('hospital_api_values', expires_in: 30.minutes) do
+      Hospital.pluck(:slug)
+    end
+  end
 
   def get_type
     TYPES.to_h.key(hospital_type)
