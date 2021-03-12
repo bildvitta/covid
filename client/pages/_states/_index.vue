@@ -171,7 +171,7 @@
       </div>
     </cov-section>
 
-    <cov-section class="cov-section__vaccine flex items-center">
+    <cov-section v-if="isRibeirao" class="cov-section__vaccine flex items-center">
       <div class="container">
         <div class="vaccine">
           <cov-grid-cell :breakpoints="{ sm:'10-of-12', md:'8-of-12', lg:'3-of-6' }">
@@ -272,6 +272,14 @@ export default {
         nursing: { label: 'Enfermaria' },
         ventilator: { label: 'Respiradores' }
       }
+    },
+
+    currentCity () {
+      return this.$route.params.index
+    },
+
+    isRibeirao () {
+      return this.currentCity === 'ribeirao-preto'
     },
 
     casesChartData () {
