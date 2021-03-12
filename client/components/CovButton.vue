@@ -67,5 +67,14 @@ export default {
     top: -1px;
     vertical-align: middle;
   }
+
+  &--vaccine {
+    background-color: $primary-color;
+    color: white;
+    font-weight: bold;
+    padding: 10px 12px 10px;
+    text-align: center;
+    width: 100%;
+  }
 }
 </style>
