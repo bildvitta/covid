@@ -59,7 +59,7 @@ class PagesController < ApplicationController
 
   def cases_data
     cached_data :cases_data do
-      covid_case = @city.covid_cases.order(reference_date: :desc).first || CovidCase.new
+      covid_case = @city.covid_cases.order(reference_date: :desc).where('total > 0').first || CovidCase.new
 
       {
         updated_at: covid_case.updated_at&.iso8601,
