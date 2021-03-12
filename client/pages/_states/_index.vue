@@ -171,7 +171,7 @@
       </div>
     </cov-section>
 
-    <cov-section class="cov-section__vaccine flex items-center">
+    <cov-section v-if="city()" class="cov-section__vaccine flex items-center">
       <div class="container">
         <div class="vaccine">
           <cov-grid-cell :breakpoints="{ sm:'10-of-12', md:'8-of-12', lg:'3-of-6' }">
@@ -591,6 +591,10 @@ export default {
     ...mapActions({
       fetchDashboard: 'dashboard/fetch'
     }),
+
+    city () {
+      return this.$route.params.index.includes('ribeirao-preto')
+    },
 
     badgesPercent ({ busy, total }) {
       return this.formatPercent((busy / total) || 0)
