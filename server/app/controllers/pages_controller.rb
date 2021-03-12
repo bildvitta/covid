@@ -9,7 +9,8 @@ class PagesController < ApplicationController
       beds: beds_data,
       hospitals: hospitals_data,
       covid_cases: cases_data,
-      historical: historical_data(filter_params[:started_at], filter_params[:finished_at])
+      historical: historical_data(filter_params[:started_at], filter_params[:finished_at]),
+      filters: available_filters
     )
   end
 
@@ -243,7 +244,14 @@ class PagesController < ApplicationController
   def bed_state_edges
     # Gets the minimum value on the database and yesterday which is the maximum value we will show
     @bed_state_edges ||= cached_data('bed_state_edges') do
-      [BedState.order(date: :asc).first.date, 1.days.ago]
+      [BedState.order(date: :asc).first.date, Date.yesterday]
+    end
+  end
+
+  def available_filters
+    Rails.cache.fetch('available_filters', expires_in: 30.minutes) do
+      states = bed_state_edges.dup
+      { started_at_gteq: states.shift, finished_at_lteq: states.shift }
     end
   end
 
