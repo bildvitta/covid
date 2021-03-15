@@ -70,8 +70,6 @@ export default {
   }
 
   &--filter {
-    color: $primary-color;
-    font-weight: bold;
     padding: 10px 10px 10px;
     text-align: center;
   }

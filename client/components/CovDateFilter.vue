@@ -2,15 +2,16 @@
   <div class="cov-date-filter">
     <div class="cov-date-filter__input-date">
       <date-picker v-model="values" class="cov-date-filter__date-picker" :clearable="false" :disabled-date="notBeforeToday" format="DD/MM/YYYY" placeholder="Filtrar por datas" prefix-class="xmx" range value-type="DD/MM/YYYY" />
-      <cov-button class="cov-date-filter__button-clear" label="Limpar filtro" @click="clearFilter" />
     </div>
-    <div>
+    <div class="text-right m-t-md">
       <transition name="fade">
-        <div v-if="hasError" class="cov-date-filter__error m-t-sm">
+        <div v-if="hasError" class="cov-date-filter__error m-t-sm text-start">
           {{ errorMessage }}
         </div>
       </transition>
+      <cov-button class="cov-button--filter" label="Limpar filtro" @click="clearFilter" />
     </div>
+    <div />
   </div>
 </template>
 
@@ -132,13 +133,11 @@ $namespace: 'xmx';
     }
   }
 
-  &__button-clear {
-    width: 120px;
-  }
-
   &__error {
     color: $red;
+    display: flex;
     font-size: 12px;
+    justify-content: start;
   }
 }
 
@@ -150,18 +149,6 @@ $namespace: 'xmx';
 .fade-enter,
 .fade-leave-to {
   opacity: 0;
-  transform: translateY(-100%);
-}
-
-@keyframes show {
-  0% {
-    opacity: 0;
-    transform: translateY(-40px);
-  }
-
-  100% {
-    opacity: 1;
-    transform: translateY(100%);
-  }
+  transform: translateY(-50%);
 }
 </style>

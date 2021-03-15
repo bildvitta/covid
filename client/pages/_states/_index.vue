@@ -43,12 +43,12 @@
                     <template v-slot:content>
                       <div class="beds__title">{{ bedsTypes[key].label }} <span class="text-caption">COVID-19</span></div>
                       <div class="beds__box m-t-md">
-                        <span class="text-black text-bold">Total</span>
+                        <span class="text-black text-bold">Total de leitos</span>
                         <span class="text-bold">{{ item.covid.total }}</span>
                       </div>
 
                       <div class="beds__box">
-                        <span class="text-black text-bold">Ocupados</span>
+                        <span class="text-black text-bold">Leitos ocupados</span>
                         <span class="text-bold">{{ item.covid.busy }}</span>
                       </div>
 
@@ -62,18 +62,18 @@
 
                   <cov-card class="beds__small m-t-md">
                     <cov-grid gutter justify-between>
-                      <cov-grid-cell :breakpoints="{ col: 'full' }">
+                      <cov-grid-cell :breakpoints="{ sm: 'full', col: 'full' }">
                         <span class="beds__title text-primary">{{ bedsTypes[key].label }}</span>
                         <span class="text-caption">Outros</span>
                       </cov-grid-cell>
 
-                      <cov-grid-cell :breakpoints="{ col: 'full' }" class="beds__content">
+                      <cov-grid-cell :breakpoints="{ sm: 'full', col: 'full' }" class="beds__content">
                         <div class="beds__box">
-                          <span>Total</span>
+                          <span>Total de leitos </span>
                           <span class="text-bold text-primary">{{ item.normal.total }}</span>
                         </div>
                         <div class="beds__box">
-                          <span>Ocupados</span>
+                          <span>Leitos ocupados</span>
                           <span class="text-bold text-primary">{{ item.normal.busy }}</span>
                         </div>
                         <div class="beds__box">
@@ -96,7 +96,7 @@
                   <cov-date-filter v-model="datePickerModel" :avaliable-date="dashboard.filters" @clear-filter="filterChart" />
                 </div>
                 <cov-line-chart :chart-data="historyChartData" :options="historyChartOptions" />
-                <div class="flex">
+                <div class="legendBeds">
                   <div v-for="(button, key) in leitos" :key="key">
                     <div class="m-r-xs m-l-xs align-center items-center column">
                       <cov-checkbox :id="`item-${key}`" v-model="button.value" class="m-r-xs m-t-sm cov-checkbox--legend" />
@@ -180,10 +180,10 @@
                   <cov-date-filter v-model="datePickerModel" :avaliable-date="dashboard.filters" @clear-filter="filterChart" />
                 </div>
                 <cov-line-chart :chart-data="casesChartData" :options="casesChartOptions" />
-                <div class="flex justify-center">
+                <div class="legendCases">
                   <div v-for="(button, key) in casos" :key="key">
                     <div class="m-r-xs m-l-xs align-center items-center column">
-                      <cov-checkbox :id="`item-second-${key}`" :checked="isCheckedChart(button.label)" class="m-r-xs m-t-sm cov-checkbox--legend" @click="hidden(button.label)" />
+                      <cov-checkbox :id="`item-second-${key}`" v-model="button.value" class="m-r-xs m-t-sm cov-checkbox--legend" />
                       <label :for="`item-second-${key}`">{{ button.label }}</label>
                       <div class="m-l-lg">
                         <img :src="require(`~/assets/images/${button.img}`)">
@@ -226,12 +226,6 @@ import CovProgress from '~/components/CovProgress'
 import CovSection from '~/components/CovSection'
 import CovDateFilter from '~/components/CovDateFilter'
 
-const casos = [
-  { label: 'Confirmados', img: 'Grupo01.svg', values: true },
-  { label: 'Recuperados', img: 'Grupo01.svg', values: true },
-  { label: 'Óbitos', img: 'Grupo01.svg', values: true }
-]
-
 export default {
   components: {
     CovBadge,
@@ -258,17 +252,7 @@ export default {
 
   data () {
     return {
-      casos,
       datePickerModel: [],
-      utiCovid19: false,
-      allUtiCovid19: false,
-      utiNotCovid19: true,
-      allNurseryCovid19: true,
-      nurseryCovid19: false,
-      nurseryNotCovid19: true,
-      confirmed: false,
-      recovered: false,
-      deaths: false,
       hospital: [],
       defaultHospitalOptions: [
         { name: 'Todos', value: 'all', noUpdateLabel: true },
@@ -279,12 +263,17 @@ export default {
       filtered: false,
       currentRoutePath: '',
       leitos: {
-        totalUTICovid: { label: 'Total UTI COVID-19', img: 'Grupo01.svg', value: true },
+        totalUTICovid: { label: 'Total UTI COVID-19', img: 'Grupo01.svg', value: false },
         UTICovid: { label: 'UTI COVID-19', img: 'Grupo02.svg', value: true },
         notUTICovid: { label: 'UTI não COVID-19', img: 'Grupo03.svg', value: false },
         totalNurseryCovid: { label: 'Total Enfermaria COVID-19', img: 'Grupo04.svg', value: false },
         nurseryCovid: { label: 'Enfermaria COVID-19', img: 'Grupo05.svg', value: true },
         notNurseryCovid: { label: 'Enfermaria não COVID-19', img: 'Grupo05.svg', value: false }
+      },
+      casos: {
+        confirmed: { label: 'Confirmados', img: 'purple-line.svg', value: true },
+        recovered: { label: 'Recuperados', img: 'green-line.svg', value: true },
+        deaths: { label: 'Óbitos', img: 'red-line.svg', value: true }
       }
     }
   },
@@ -324,21 +313,21 @@ export default {
             label: 'Confirmados',
             fill: false,
             borderColor: '#a3a1fb',
-            hidden: this.confirmed,
+            hidden: !this.casos.confirmed.value,
             data: this.historyCases.total
           },
           {
             label: 'Recuperados',
             fill: false,
             borderColor: '#34c360',
-            hidden: this.recovered,
+            hidden: !this.casos.recovered.value,
             data: this.historyCases.cureds
           },
           {
             label: 'Óbitos',
             fill: false,
             borderColor: '#fa5252',
-            hidden: this.deaths,
+            hidden: !this.casos.deaths.value,
             data: this.historyCases.deaths
           }
         ]
@@ -394,10 +383,6 @@ export default {
         }
       }
     },
-
-    // leitos2 () {
-    //   return leitos2
-    // },
 
     hasError () {
       return !!this.error
@@ -474,14 +459,14 @@ export default {
             borderColor: '#fca8a8',
             borderDash: [1],
             borderWidth: 2,
-            hidden: this.allUtiCovid19,
+            hidden: !this.leitos.totalUTICovid.value,
             data: this.historyBeds.intensive_care_unit?.covid?.total
           },
           {
             label: 'UTI COVID-19',
             fill: false,
             borderColor: '#fa5252',
-            hidden: this.utiCovid19,
+            hidden: !this.leitos.UTICovid.value,
             data: this.historyBeds.intensive_care_unit?.covid?.busy
           },
           {
@@ -490,7 +475,7 @@ export default {
             borderColor: '#fa5252',
             borderDash: [8],
             borderWidth: 1,
-            hidden: this.utiNotCovid19,
+            hidden: !this.leitos.notUTICovid.value,
             data: this.historyBeds.intensive_care_unit?.normal?.busy
           },
           {
@@ -499,14 +484,14 @@ export default {
             borderColor: '#d1d0fd',
             borderDash: [1],
             borderWidth: 2,
-            hidden: this.allNurseryCovid19,
+            hidden: !this.leitos.totalNurseryCovid.value,
             data: this.historyBeds.nursing?.covid?.total
           },
           {
             label: 'Enfermaria COVID-19',
             fill: false,
             borderColor: '#a3a1fb',
-            hidden: this.nurseryCovid19,
+            hidden: !this.leitos.nurseryCovid.value,
             data: this.historyBeds.nursing?.covid?.busy
           },
           {
@@ -515,7 +500,7 @@ export default {
             borderColor: '#a3a1fb',
             borderDash: [8],
             borderWidth: 1,
-            hidden: this.nurseryNotCovid19,
+            hidden: !this.leitos.notNurseryCovid.value,
             data: this.historyBeds.nursing?.normal?.busy
           }
         ]
@@ -652,44 +637,6 @@ export default {
       fetchDashboard: 'dashboard/fetch'
     }),
 
-    hidden (model) {
-      if (model === 'UTI COVID-19') {
-        this.utiCovid19 = !this.utiCovid19
-      }
-
-      if (model === 'Total UTI COVID-19') {
-        this.allUtiCovid19 = !this.allUtiCovid19
-      }
-
-      if (model === 'UTI não COVID-19') {
-        this.utiNotCovid19 = !this.utiNotCovid19
-      }
-
-      if (model === 'Total Enfermaria COVID-19') {
-        this.allNurseryCovid19 = !this.allNurseryCovid19
-      }
-
-      if (model === 'Enfermaria COVID-19') {
-        this.nurseryCovid19 = !this.nurseryCovid19
-      }
-
-      if (model === 'Enfermaria não COVID-19') {
-        this.nurseryNotCovid19 = !this.nurseryNotCovid19
-      }
-
-      if (model === 'Confirmados') {
-        this.confirmed = !this.confirmed
-      }
-
-      if (model === 'Recuperados') {
-        this.recovered = !this.recovered
-      }
-
-      if (model === 'Óbitos') {
-        this.deaths = !this.deaths
-      }
-    },
-
     filterChart (event) {
       const query = omitBy(
         { ...this.$route.query, started_at: event[0], finished_at: event[1] },
@@ -825,44 +772,6 @@ export default {
       return this.hospital && !!this.hospital.find(item => item.value === value)
     },
 
-    isCheckedChart (model) {
-      if (model === 'UTI COVID-19') {
-        return !this.utiCovid19
-      }
-
-      if (model === 'Total UTI COVID-19') {
-        return !this.allUtiCovid19
-      }
-
-      if (model === 'UTI não COVID-19') {
-        return !this.utiNotCovid19
-      }
-
-      if (model === 'Total Enfermaria COVID-19') {
-        return !this.allNurseryCovid19
-      }
-
-      if (model === 'Enfermaria COVID-19') {
-        return !this.nurseryCovid19
-      }
-
-      if (model === 'Enfermaria não COVID-19') {
-        return !this.nurseryNotCovid19
-      }
-
-      if (model === 'Confirmados') {
-        return !this.confirmed
-      }
-
-      if (model === 'Recuperados') {
-        return !this.recovered
-      }
-
-      if (model === 'Óbitos') {
-        return !this.deaths
-      }
-    },
-
     multiSelectCheckboxClass ({ noUpdateLabel }) {
       return !noUpdateLabel ? 'cov-multiselect__checkbox' : ''
     }
@@ -952,6 +861,17 @@ export default {
   max-width: 500px;
 }
 
+.legendBeds {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.legendCases {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
 @include breakpoint(min-width $small-screen) {
   .beds {
     &__content {
@@ -959,6 +879,18 @@ export default {
         border-left: 1px solid $tertiary-color;
       }
     }
+  }
+}
+
+@include breakpoint(max-width $small-screen) {
+  .legendCases {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .legendBeds {
+    display: flex;
+    flex-direction: column;
   }
 }
 </style>
