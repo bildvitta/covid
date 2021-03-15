@@ -24,16 +24,11 @@ const actions = {
       commit('setDashboard', { data, params })
       return data
     } catch (error) {
-      commit('setError', error.response.data)
-      throw error
+      commit('setError', error)
+      throw new Error('Error fetching "dashboard" data.', error)
     } finally {
       commit('fetchStart', false)
     }
-  },
-
-  reset ({ commit }) {
-    const error = {}
-    commit('reset', error)
   }
 }
 
@@ -42,10 +37,6 @@ const mutations = {
     state.dashboard = data
     state.params = { ...params }
     state.fetchSuccess = true
-  },
-
-  reset (state, error) {
-    state.error = error
   },
 
   setError (state, error) {

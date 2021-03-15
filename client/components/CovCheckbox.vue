@@ -33,7 +33,7 @@ export default {
   },
 
   mounted () {
-    if (this.value) {
+    if (this.value || this.$attrs.checked) {
       this.$el.classList.add('js-checked')
     }
   }

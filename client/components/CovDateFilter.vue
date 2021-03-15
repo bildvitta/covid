@@ -16,7 +16,6 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
 import DatePicker from 'vue2-datepicker'
 import CovButton from '~/components/CovButton'
 
@@ -72,10 +71,6 @@ export default {
   },
 
   methods: {
-    ...mapActions({
-      reset: 'dashboard/reset'
-    }),
-
     notBeforeToday (date) {
       const startedDate = new Date(this.avaliableDate.started_at_gteq)
       startedDate.setHours(0, 0, 0, 0)

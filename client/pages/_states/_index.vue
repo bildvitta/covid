@@ -96,8 +96,8 @@
                   <cov-date-filter v-model="datePickerModel" :avaliable-date="dashboard.filters" @clear-filter="filterChart" />
                 </div>
                 <cov-line-chart :chart-data="historyChartData" :options="historyChartOptions" />
-                <div class="legendBeds">
-                  <div v-for="(button, key) in leitos" :key="key">
+                <div class="legend-beds">
+                  <div v-for="(button, key) in bedsChart" :key="key">
                     <div class="m-r-xs m-l-xs align-center items-center column">
                       <cov-checkbox :id="`item-${key}`" v-model="button.value" class="m-r-xs m-t-sm cov-checkbox--legend" />
                       <label :for="`item-${key}`">{{ button.label }}</label>
@@ -180,8 +180,8 @@
                   <cov-date-filter v-model="datePickerModel" :avaliable-date="dashboard.filters" @clear-filter="filterChart" />
                 </div>
                 <cov-line-chart :chart-data="casesChartData" :options="casesChartOptions" />
-                <div class="legendCases">
-                  <div v-for="(button, key) in casos" :key="key">
+                <div class="legend-cases">
+                  <div v-for="(button, key) in casesChart" :key="key">
                     <div class="m-r-xs m-l-xs align-center items-center column">
                       <cov-checkbox :id="`item-second-${key}`" v-model="button.value" class="m-r-xs m-t-sm cov-checkbox--legend" />
                       <label :for="`item-second-${key}`">{{ button.label }}</label>
@@ -243,7 +243,6 @@ export default {
     CovProgress,
     CovSection,
     CovDateFilter
-
   },
 
   validate ({ params }) {
@@ -262,7 +261,7 @@ export default {
       ],
       filtered: false,
       currentRoutePath: '',
-      leitos: {
+      bedsChart: {
         totalUTICovid: { label: 'Total UTI COVID-19', img: 'Grupo01.svg', value: false },
         UTICovid: { label: 'UTI COVID-19', img: 'Grupo02.svg', value: true },
         notUTICovid: { label: 'UTI não COVID-19', img: 'Grupo03.svg', value: false },
@@ -270,7 +269,7 @@ export default {
         nurseryCovid: { label: 'Enfermaria COVID-19', img: 'Grupo05.svg', value: true },
         notNurseryCovid: { label: 'Enfermaria não COVID-19', img: 'Grupo05.svg', value: false }
       },
-      casos: {
+      casesChart: {
         confirmed: { label: 'Confirmados', img: 'purple-line.svg', value: true },
         recovered: { label: 'Recuperados', img: 'green-line.svg', value: true },
         deaths: { label: 'Óbitos', img: 'red-line.svg', value: true }
@@ -313,21 +312,21 @@ export default {
             label: 'Confirmados',
             fill: false,
             borderColor: '#a3a1fb',
-            hidden: !this.casos.confirmed.value,
+            hidden: !this.casesChart.confirmed.value,
             data: this.historyCases.total
           },
           {
             label: 'Recuperados',
             fill: false,
             borderColor: '#34c360',
-            hidden: !this.casos.recovered.value,
+            hidden: !this.casesChart.recovered.value,
             data: this.historyCases.cureds
           },
           {
             label: 'Óbitos',
             fill: false,
             borderColor: '#fa5252',
-            hidden: !this.casos.deaths.value,
+            hidden: !this.casesChart.deaths.value,
             data: this.historyCases.deaths
           }
         ]
@@ -431,7 +430,7 @@ export default {
         }
       )
     },
-    // TODO resolver dados quando vem null
+
     historyCases () {
       const { historical } = this.dashboard
       const types = {}
@@ -459,14 +458,14 @@ export default {
             borderColor: '#fca8a8',
             borderDash: [1],
             borderWidth: 2,
-            hidden: !this.leitos.totalUTICovid.value,
+            hidden: !this.bedsChart.totalUTICovid.value,
             data: this.historyBeds.intensive_care_unit?.covid?.total
           },
           {
             label: 'UTI COVID-19',
             fill: false,
             borderColor: '#fa5252',
-            hidden: !this.leitos.UTICovid.value,
+            hidden: !this.bedsChart.UTICovid.value,
             data: this.historyBeds.intensive_care_unit?.covid?.busy
           },
           {
@@ -475,7 +474,7 @@ export default {
             borderColor: '#fa5252',
             borderDash: [8],
             borderWidth: 1,
-            hidden: !this.leitos.notUTICovid.value,
+            hidden: !this.bedsChart.notUTICovid.value,
             data: this.historyBeds.intensive_care_unit?.normal?.busy
           },
           {
@@ -484,14 +483,14 @@ export default {
             borderColor: '#d1d0fd',
             borderDash: [1],
             borderWidth: 2,
-            hidden: !this.leitos.totalNurseryCovid.value,
+            hidden: !this.bedsChart.totalNurseryCovid.value,
             data: this.historyBeds.nursing?.covid?.total
           },
           {
             label: 'Enfermaria COVID-19',
             fill: false,
             borderColor: '#a3a1fb',
-            hidden: !this.leitos.nurseryCovid.value,
+            hidden: !this.bedsChart.nurseryCovid.value,
             data: this.historyBeds.nursing?.covid?.busy
           },
           {
@@ -500,7 +499,7 @@ export default {
             borderColor: '#a3a1fb',
             borderDash: [8],
             borderWidth: 1,
-            hidden: !this.leitos.notNurseryCovid.value,
+            hidden: !this.bedsChart.notNurseryCovid.value,
             data: this.historyBeds.nursing?.normal?.busy
           }
         ]
@@ -861,12 +860,12 @@ export default {
   max-width: 500px;
 }
 
-.legendBeds {
+.legend-beds {
   display: flex;
   flex-wrap: wrap;
 }
 
-.legendCases {
+.legend-cases {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -883,12 +882,12 @@ export default {
 }
 
 @include breakpoint(max-width $small-screen) {
-  .legendCases {
+  .legend-cases {
     display: flex;
     flex-direction: column;
   }
 
-  .legendBeds {
+  .legend-beds {
     display: flex;
     flex-direction: column;
   }
