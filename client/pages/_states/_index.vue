@@ -360,10 +360,7 @@ export default {
 
     casesChartOptions () {
       return {
-        legend: {
-          position: 'top',
-          onClick: null
-        },
+        legend: { display: false },
         tooltips: { mode: 'index', intersect: false }
       }
     },
@@ -536,10 +533,7 @@ export default {
 
     historyChartOptions () {
       return {
-        legend: {
-          position: 'top',
-          onClick: null
-        },
+        legend: { display: false },
         tooltips: { mode: 'index', intersect: false }
       }
     },
@@ -642,7 +636,6 @@ export default {
 
     datePickerModel: {
       handler (value) {
-        console.log(value, '>> mds')
         value.length && this.filterChart(value)
       },
 
