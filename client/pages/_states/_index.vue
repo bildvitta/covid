@@ -90,18 +90,16 @@
 
           <cov-grid-cell :breakpoints="{ sm: 'full' }">
             <h3 class="text-title m-t-lg">Gráfico de leitos</h3>
-            {{ datePickerModel }}
-
             <cov-box class="m-t-md">
               <client-only>
                 <div class="m-b-md">
-                  <cov-date-filter v-model="datePickerModel" :avaliable-date="dashboard.filters" />
+                  <cov-date-filter v-model="datePickerModel" :avaliable-date="dashboard.filters" @clear-filter="filterChart" />
                 </div>
                 <cov-line-chart :chart-data="historyChartData" :options="historyChartOptions" />
                 <div class="flex">
                   <div v-for="(button, key) in leitos" :key="key">
                     <div class="m-r-xs m-l-xs align-center items-center column">
-                      <cov-checkbox :id="`item-${key}`" :checked="isCheckedChart(button.label)" class="m-r-xs m-t-sm cov-checkbox--legend" @click="hidden(button.label)" />
+                      <cov-checkbox :id="`item-${key}`" v-model="button.value" class="m-r-xs m-t-sm cov-checkbox--legend" />
                       <label :for="`item-${key}`">{{ button.label }}</label>
                       <div class="m-l-lg">
                         <img :src="require(`~/assets/images/${button.img}`)">
@@ -179,7 +177,7 @@
             <cov-box class="m-t-md">
               <client-only>
                 <div class="m-b-md">
-                  <cov-date-filter v-model="datePickerModel" :avaliable-date="dashboard.filters " />
+                  <cov-date-filter v-model="datePickerModel" :avaliable-date="dashboard.filters" @clear-filter="filterChart" />
                 </div>
                 <cov-line-chart :chart-data="casesChartData" :options="casesChartOptions" />
                 <div class="flex justify-center">
@@ -228,29 +226,11 @@ import CovProgress from '~/components/CovProgress'
 import CovSection from '~/components/CovSection'
 import CovDateFilter from '~/components/CovDateFilter'
 
-const leitos = [
-  { label: 'Total UTI COVID-19', img: 'Grupo01.svg', values: true },
-  { label: 'UTI COVID-19', img: 'Grupo02.svg', values: true },
-  { label: 'UTI não COVID-19', img: 'Grupo03.svg', values: false },
-  { label: 'Total Enfermaria COVID-19', img: 'Grupo04.svg', values: false },
-  { label: 'Enfermaria COVID-19', img: 'Grupo05.svg', values: true },
-  { label: 'Enfermaria não COVID-19', img: 'Grupo06.svg', values: false }
-]
-
 const casos = [
   { label: 'Confirmados', img: 'Grupo01.svg', values: true },
   { label: 'Recuperados', img: 'Grupo01.svg', values: true },
   { label: 'Óbitos', img: 'Grupo01.svg', values: true }
 ]
-
-// const leitos2 = {
-//   totalUTICovid: { label: 'Total UTI COVID-19', values: true },
-//   UTICovid: { label: 'UTI COVID-19', values: true },
-//   notUTICovid: { label: 'UTI não COVID-19', values: false },
-//   totalNurseryCovid: { label: 'Total Enfermaria COVID-19', values: false },
-//   nurseryCovid: { label: 'Enfermaria COVID-19', values: true },
-//   notNurseryCovid: { label: 'Enfermaria não COVID-19', values: false }
-// }
 
 export default {
   components: {
@@ -278,7 +258,6 @@ export default {
 
   data () {
     return {
-      leitos,
       casos,
       datePickerModel: [],
       utiCovid19: false,
@@ -298,7 +277,15 @@ export default {
         { name: 'Filantrópico', value: 'filantropic', noUpdateLabel: true }
       ],
       filtered: false,
-      currentRoutePath: ''
+      currentRoutePath: '',
+      leitos: {
+        totalUTICovid: { label: 'Total UTI COVID-19', img: 'Grupo01.svg', value: true },
+        UTICovid: { label: 'UTI COVID-19', img: 'Grupo02.svg', value: true },
+        notUTICovid: { label: 'UTI não COVID-19', img: 'Grupo03.svg', value: false },
+        totalNurseryCovid: { label: 'Total Enfermaria COVID-19', img: 'Grupo04.svg', value: false },
+        nurseryCovid: { label: 'Enfermaria COVID-19', img: 'Grupo05.svg', value: true },
+        notNurseryCovid: { label: 'Enfermaria não COVID-19', img: 'Grupo05.svg', value: false }
+      }
     }
   },
 
@@ -407,6 +394,10 @@ export default {
         }
       }
     },
+
+    // leitos2 () {
+    //   return leitos2
+    // },
 
     hasError () {
       return !!this.error

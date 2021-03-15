@@ -2,6 +2,7 @@
   <div class="cov-date-filter">
     <div class="cov-date-filter__input-date">
       <date-picker v-model="values" class="cov-date-filter__date-picker" :clearable="false" :disabled-date="notBeforeToday" format="DD/MM/YYYY" placeholder="Filtrar por datas" prefix-class="xmx" range value-type="DD/MM/YYYY" />
+      <cov-button class="cov-date-filter__button-clear" label="Limpar filtro" @click="clearFilter" />
     </div>
     <div>
       <transition name="fade">
@@ -9,10 +10,6 @@
           {{ errorMessage }}
         </div>
       </transition>
-      <div class="text-right justify-between m-t-sm">
-        <cov-button label="Limpar filtro" @click="clearFilter" />
-        <cov-button class="cov-button--filter" label="Filtrar" @click="filter" />
-      </div>
     </div>
   </div>
 </template>
@@ -89,16 +86,15 @@ export default {
       this.values = []
       this.$emit('input', this.values)
       this.hasError = false
+      this.$emit('clear-filter', [])
     },
 
     filter () {
       const values = this.values.filter(Boolean)
 
-      if (values[0] === values[1]) {
+      if (values[0] === values[1] && values.length) {
         this.hasError = true
-        this.errorMessage = Object.keys(values).length
-          ? 'A data inicial e a data final não podem ser a mesma.'
-          : 'Selecione uma data.'
+        this.errorMessage = 'A data inicial e a data final não podem ser a mesma.'
 
         return
       }
@@ -120,6 +116,7 @@ $namespace: 'xmx';
     align-items: center;
     display: flex;
     justify-content: center;
+    width: 100%;
   }
 
   &__date-picker {
@@ -135,21 +132,18 @@ $namespace: 'xmx';
     }
   }
 
+  &__button-clear {
+    width: 120px;
+  }
+
   &__error {
-    // animation: show 0.5s linear;
-    // animation-fill-mode: forwards;
     color: $red;
     font-size: 12px;
-    // display: block;
-    // margin-left: 5px;
-    // margin-top: 10px;
-    // position: absolute;
   }
 }
 
 .fade-enter-active,
 .fade-leave-active {
-  // transform: translateY(100%);
   transition: opacity 0.5s;
 }
 

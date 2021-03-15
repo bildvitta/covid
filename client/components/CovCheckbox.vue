@@ -1,5 +1,5 @@
 <template>
-  <input v-model="model" v-bind="$attrs" class="cov-checkbox" type="checkbox" v-on="$listeners">
+  <input v-model="model" v-bind="$attrs" class="cov-checkbox" type="checkbox">
 </template>
 
 <script>
@@ -24,6 +24,10 @@ export default {
 
   watch: {
     '$attrs.checked' (value) {
+      this.$el.classList.toggle('js-checked')
+    },
+
+    value () {
       this.$el.classList.toggle('js-checked')
     }
   },
