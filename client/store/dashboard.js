@@ -25,7 +25,7 @@ const actions = {
       return data
     } catch (error) {
       commit('setError', error.response.data)
-      throw error.response.data
+      throw error
     } finally {
       commit('fetchStart', false)
     }
@@ -50,7 +50,7 @@ const mutations = {
 
   setError (state, error) {
     state.error = error
-    // state.fetchSuccess = false
+    state.fetchSuccess = false
   },
 
   fetchStart (state, start) {

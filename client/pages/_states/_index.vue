@@ -90,17 +90,19 @@
 
           <cov-grid-cell :breakpoints="{ sm: 'full' }">
             <h3 class="text-title m-t-lg">Gráfico de leitos</h3>
+            {{ datePickerModel }}
 
             <cov-box class="m-t-md">
               <client-only>
                 <div class="m-b-md">
-                  <cov-date-filter :avaliable-date="dashboard.filters " @input="filterChart($event)" />
+                  <cov-date-filter v-model="datePickerModel" :avaliable-date="dashboard.filters" />
                 </div>
                 <cov-line-chart :chart-data="historyChartData" :options="historyChartOptions" />
                 <div class="flex">
                   <div v-for="(button, key) in leitos" :key="key">
                     <div class="m-r-xs m-l-xs align-center items-center column">
-                      <cov-checkbox :checked="isCheckedChart(button.label)" class="m-r-xs m-t-sm cov-checkbox--legend" @click="hidden(button.label)" />{{ button.label }}
+                      <cov-checkbox :id="`item-${key}`" :checked="isCheckedChart(button.label)" class="m-r-xs m-t-sm cov-checkbox--legend" @click="hidden(button.label)" />
+                      <label :for="`item-${key}`">{{ button.label }}</label>
                       <div class="m-l-lg">
                         <img :src="require(`~/assets/images/${button.img}`)">
                       </div>
@@ -177,13 +179,14 @@
             <cov-box class="m-t-md">
               <client-only>
                 <div class="m-b-md">
-                  <cov-date-filter :avaliable-date="dashboard.filters " @input="filterChart($event)" />
+                  <cov-date-filter v-model="datePickerModel" :avaliable-date="dashboard.filters " />
                 </div>
                 <cov-line-chart :chart-data="casesChartData" :options="casesChartOptions" />
                 <div class="flex justify-center">
                   <div v-for="(button, key) in casos" :key="key">
                     <div class="m-r-xs m-l-xs align-center items-center column">
-                      <cov-checkbox :checked="isCheckedChart(button.label)" class="m-r-xs m-t-sm cov-checkbox--legend" @click="hidden(button.label)" />{{ button.label }}
+                      <cov-checkbox :id="`item-second-${key}`" :checked="isCheckedChart(button.label)" class="m-r-xs m-t-sm cov-checkbox--legend" @click="hidden(button.label)" />
+                      <label :for="`item-second-${key}`">{{ button.label }}</label>
                       <div class="m-l-lg">
                         <img :src="require(`~/assets/images/${button.img}`)">
                       </div>
@@ -277,6 +280,7 @@ export default {
     return {
       leitos,
       casos,
+      datePickerModel: [],
       utiCovid19: false,
       allUtiCovid19: false,
       utiNotCovid19: true,
@@ -634,6 +638,15 @@ export default {
 
     fetchSuccess (value) {
       value && this.setSelect()
+    },
+
+    datePickerModel: {
+      handler (value) {
+        console.log(value, '>> mds')
+        value.length && this.filterChart(value)
+      },
+
+      immediate: true
     }
   },
 
@@ -646,6 +659,8 @@ export default {
     const unwatchIsLiveProp = this.$watch('hospital', (newValue) => {
       unwatchIsLiveProp()
     })
+
+    this.setDatePickerModel()
   },
 
   methods: {
@@ -692,20 +707,21 @@ export default {
     },
 
     filterChart (event) {
-      if (!this.filtered) {
-        event = ''
-        this.filtered = true
-        return null
-      }
+      const query = omitBy(
+        { ...this.$route.query, started_at: event[0], finished_at: event[1] },
+        isEmpty
+      )
 
-      const toQuery = []
-
-      for (const value in event) {
-        toQuery.push(event[value])
-      }
-
-      const query = omitBy({ ...this.$route.query, started_at: toQuery[0], finished_at: toQuery[1] }, isEmpty)
       this.$router.push({ query })
+    },
+
+    setDatePickerModel () {
+      const {
+        started_at: startedAt,
+        finished_at: finishedAt
+      } = this.$route.query
+
+      this.datePickerModel = [startedAt, finishedAt].filter(Boolean)
     },
 
     badgesPercent ({ busy, total }) {
