@@ -52,6 +52,7 @@ export default {
   display: inline-block;
   font-family: inherit;
   font-size: 14px;
+  outline: none;
   padding: 10px 12px 8px;
   text-decoration: none;
   // text-transform: uppercase;
@@ -66,6 +67,13 @@ export default {
     position: relative;
     top: -1px;
     vertical-align: middle;
+  }
+
+  &--filter {
+    color: $primary-color;
+    font-weight: bold;
+    padding: 10px 10px 10px;
+    text-align: center;
   }
 }
 </style>

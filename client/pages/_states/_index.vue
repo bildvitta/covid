@@ -93,15 +93,18 @@
 
             <cov-box class="m-t-md">
               <client-only>
-                <!-- TODO criar filtros customizados -->
-                <!-- TODO criar data piker com range de data -->
                 <div class="m-b-md">
-                  <cov-date-filter :fields="dataFilter" @input="filterChart($event)" />
+                  <cov-date-filter :avaliable-date="dashboard.filters " @input="filterChart($event)" />
                 </div>
                 <cov-line-chart :chart-data="historyChartData" :options="historyChartOptions" />
                 <div class="flex">
-                  <div v-for="(button, index) in leitos" :key="index">
-                    <input :checked="button.values" class="m-r-sm m-l-sm m-b-sm m-t-sm" type="checkbox" @click="hidden(button.label)">{{ button.label }}
+                  <div v-for="(button, key) in leitos" :key="key">
+                    <div class="m-r-xs m-l-xs align-center items-center column">
+                      <cov-checkbox :checked="isCheckedChart(button.label)" class="m-r-xs m-t-sm cov-checkbox--legend" @click="hidden(button.label)" />{{ button.label }}
+                      <div class="m-l-lg">
+                        <img :src="require(`~/assets/images/${button.img}`)">
+                      </div>
+                    </div>
                   </div>
                 </div>
               </client-only>
@@ -173,7 +176,20 @@
 
             <cov-box class="m-t-md">
               <client-only>
+                <div class="m-b-md">
+                  <cov-date-filter :avaliable-date="dashboard.filters " @input="filterChart($event)" />
+                </div>
                 <cov-line-chart :chart-data="casesChartData" :options="casesChartOptions" />
+                <div class="flex justify-center">
+                  <div v-for="(button, key) in casos" :key="key">
+                    <div class="m-r-xs m-l-xs align-center items-center column">
+                      <cov-checkbox :checked="isCheckedChart(button.label)" class="m-r-xs m-t-sm cov-checkbox--legend" @click="hidden(button.label)" />{{ button.label }}
+                      <div class="m-l-lg">
+                        <img :src="require(`~/assets/images/${button.img}`)">
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </client-only>
             </cov-box>
           </cov-grid-cell>
@@ -210,19 +226,28 @@ import CovSection from '~/components/CovSection'
 import CovDateFilter from '~/components/CovDateFilter'
 
 const leitos = [
-  { label: 'Total UTI COVID-19', values: true },
-  { label: 'UTI COVID-19', values: true },
-  { label: 'UTI não COVID-19', values: false },
-  { label: 'Total Enfermaria COVID-19', values: false },
-  { label: 'Enfermaria COVID-19', values: true },
-  { label: 'Enfermaria não COVID-19', values: false }
+  { label: 'Total UTI COVID-19', img: 'Grupo01.svg', values: true },
+  { label: 'UTI COVID-19', img: 'Grupo02.svg', values: true },
+  { label: 'UTI não COVID-19', img: 'Grupo03.svg', values: false },
+  { label: 'Total Enfermaria COVID-19', img: 'Grupo04.svg', values: false },
+  { label: 'Enfermaria COVID-19', img: 'Grupo05.svg', values: true },
+  { label: 'Enfermaria não COVID-19', img: 'Grupo06.svg', values: false }
 ]
 
-const dataFilter =
-  {
-    startedAt: '08/02/2021',
-    finishedAt: '15/02/2021'
-  }
+const casos = [
+  { label: 'Confirmados', img: 'Grupo01.svg', values: true },
+  { label: 'Recuperados', img: 'Grupo01.svg', values: true },
+  { label: 'Óbitos', img: 'Grupo01.svg', values: true }
+]
+
+// const leitos2 = {
+//   totalUTICovid: { label: 'Total UTI COVID-19', values: true },
+//   UTICovid: { label: 'UTI COVID-19', values: true },
+//   notUTICovid: { label: 'UTI não COVID-19', values: false },
+//   totalNurseryCovid: { label: 'Total Enfermaria COVID-19', values: false },
+//   nurseryCovid: { label: 'Enfermaria COVID-19', values: true },
+//   notNurseryCovid: { label: 'Enfermaria não COVID-19', values: false }
+// }
 
 export default {
   components: {
@@ -251,13 +276,16 @@ export default {
   data () {
     return {
       leitos,
-      dataFilter,
+      casos,
       utiCovid19: false,
       allUtiCovid19: false,
       utiNotCovid19: true,
       allNurseryCovid19: true,
       nurseryCovid19: false,
       nurseryNotCovid19: true,
+      confirmed: false,
+      recovered: false,
+      deaths: false,
       hospital: [],
       defaultHospitalOptions: [
         { name: 'Todos', value: 'all', noUpdateLabel: true },
@@ -305,18 +333,21 @@ export default {
             label: 'Confirmados',
             fill: false,
             borderColor: '#a3a1fb',
+            hidden: this.confirmed,
             data: this.historyCases.total
           },
           {
             label: 'Recuperados',
             fill: false,
             borderColor: '#34c360',
+            hidden: this.recovered,
             data: this.historyCases.cureds
           },
           {
             label: 'Óbitos',
             fill: false,
             borderColor: '#fa5252',
+            hidden: this.deaths,
             data: this.historyCases.deaths
           }
         ]
@@ -325,7 +356,10 @@ export default {
 
     casesChartOptions () {
       return {
-        legend: { position: 'bottom' },
+        legend: {
+          position: 'top',
+          onClick: null
+        },
         tooltips: { mode: 'index', intersect: false }
       }
     },
@@ -420,7 +454,7 @@ export default {
         }
       )
     },
-
+    // TODO resolver dados quando vem null
     historyCases () {
       const { historical } = this.dashboard
       const types = {}
@@ -499,7 +533,8 @@ export default {
     historyChartOptions () {
       return {
         legend: {
-          display: false
+          position: 'top',
+          onClick: null
         },
         tooltips: { mode: 'index', intersect: false }
       }
@@ -619,7 +654,6 @@ export default {
     }),
 
     hidden (model) {
-      // UTI COVID-19
       if (model === 'UTI COVID-19') {
         this.utiCovid19 = !this.utiCovid19
       }
@@ -644,8 +678,17 @@ export default {
         this.nurseryNotCovid19 = !this.nurseryNotCovid19
       }
 
-      // eslint-disable-next-line no-console
-      // return console.log(model)
+      if (model === 'Confirmados') {
+        this.confirmed = !this.confirmed
+      }
+
+      if (model === 'Recuperados') {
+        this.recovered = !this.recovered
+      }
+
+      if (model === 'Óbitos') {
+        this.deaths = !this.deaths
+      }
     },
 
     filterChart (event) {
@@ -657,10 +700,8 @@ export default {
 
       const toQuery = []
 
-      for (const [key, value] of Object.entries(event)) {
-        // eslint-disable-next-line no-console
-        console.log(key + ':' + value)
-        toQuery.push(value)
+      for (const value in event) {
+        toQuery.push(event[value])
       }
 
       const query = omitBy({ ...this.$route.query, started_at: toQuery[0], finished_at: toQuery[1] }, isEmpty)
@@ -678,7 +719,7 @@ export default {
     fetch () {
       return this.fetchDashboard({ ...this.$route.query, city: this.$route.params.index })
     },
-    // TODO estudar esse filtro
+
     filter () {
       const length = this.hospital.length - 1
 
@@ -782,6 +823,44 @@ export default {
 
     isChecked (value) {
       return this.hospital && !!this.hospital.find(item => item.value === value)
+    },
+
+    isCheckedChart (model) {
+      if (model === 'UTI COVID-19') {
+        return !this.utiCovid19
+      }
+
+      if (model === 'Total UTI COVID-19') {
+        return !this.allUtiCovid19
+      }
+
+      if (model === 'UTI não COVID-19') {
+        return !this.utiNotCovid19
+      }
+
+      if (model === 'Total Enfermaria COVID-19') {
+        return !this.allNurseryCovid19
+      }
+
+      if (model === 'Enfermaria COVID-19') {
+        return !this.nurseryCovid19
+      }
+
+      if (model === 'Enfermaria não COVID-19') {
+        return !this.nurseryNotCovid19
+      }
+
+      if (model === 'Confirmados') {
+        return !this.confirmed
+      }
+
+      if (model === 'Recuperados') {
+        return !this.recovered
+      }
+
+      if (model === 'Óbitos') {
+        return !this.deaths
+      }
     },
 
     multiSelectCheckboxClass ({ noUpdateLabel }) {
