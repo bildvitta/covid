@@ -1,5 +1,5 @@
 <template>
-  <input v-model="model" v-bind="$attrs" class="cov-checkbox" type="checkbox" v-on="$listeners">
+  <input v-model="model" v-bind="$attrs" class="cov-checkbox" type="checkbox">
 </template>
 
 <script>
@@ -25,11 +25,15 @@ export default {
   watch: {
     '$attrs.checked' (value) {
       this.$el.classList.toggle('js-checked')
+    },
+
+    value () {
+      this.$el.classList.toggle('js-checked')
     }
   },
 
   mounted () {
-    if (this.$attrs.checked) {
+    if (this.value || this.$attrs.checked) {
       this.$el.classList.add('js-checked')
     }
   }
@@ -50,9 +54,22 @@ export default {
   width: 16px;
 
   &.js-checked {
-    background-image: url('../assets/images/check.svg');
+    background-color: $primary-color;
+    background-image: url('../assets/images/check-white.svg');
     background-position: center;
     background-size: 14px;
+    height: 18px;
+    width: 18px;
+  }
+
+  &--legend {
+    background-color: white;
+    border-radius: 5px;
+    height: 18px;
+    outline: 0;
+    position: relative;
+    top: 4px;
+    width: 18px;
   }
 }
 </style>
