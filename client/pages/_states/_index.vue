@@ -197,6 +197,18 @@
         </cov-grid>
       </div>
     </cov-section>
+    <cov-section v-if="isRibeirao" class="cov-section__vaccine flex items-center">
+      <div class="container">
+        <div class="vaccine">
+          <cov-grid-cell :breakpoints="{ sm:'10-of-12', md:'8-of-12', lg:'3-of-6' }">
+            <h2>A Prefeitura de Ribeirão Preto já está disponibilizando o agendamento para vacinação contra COVID-19.</h2>
+          </cov-grid-cell>
+          <div class="vaccine__button">
+            <cov-button class="cov-button--vaccine m-t-xl" href="https://www.ribeiraopreto.sp.gov.br/agendamento-vacinacao-covid/" label="Agende agora" />
+          </div>
+        </div>
+      </div>
+    </cov-section>
     <cov-loading :showing="isFetching" />
   </div>
 </template>
@@ -285,6 +297,14 @@ export default {
       isFetching: 'dashboard/isFetching',
       params: 'dashboard/params'
     }),
+
+    currentCity () {
+      return this.$route.params.index
+    },
+
+    isRibeirao () {
+      return this.currentCity === 'ribeirao-preto'
+    },
 
     beds () {
       if (this.dashboard.beds) {
@@ -851,6 +871,13 @@ export default {
   }
 }
 
+.vaccine {
+  &__button {
+    filter: drop-shadow(0 0 0.75rem $primary-color);
+    width: 200px;
+  }
+}
+
 .cov-cases {
   min-width: 95px;
 }
@@ -883,6 +910,16 @@ export default {
   .chart-legend {
     display: flex;
     flex-direction: column;
+  }
+
+  .vaccine {
+    &__button {
+      align-self: center;
+      display: flex;
+      filter: drop-shadow(0 0 0.75rem $primary-color);
+      justify-content: center;
+      width: 100%;
+    }
   }
 }
 </style>
