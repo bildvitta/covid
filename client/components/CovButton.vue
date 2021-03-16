@@ -55,7 +55,6 @@ export default {
   outline: none;
   padding: 10px 12px 8px;
   text-decoration: none;
-  // text-transform: uppercase;
 
   &:hover {
     background-color: rgba($primary-color, 0.25);
@@ -73,5 +72,15 @@ export default {
     padding: 10px 10px 10px;
     text-align: center;
   }
+
+  &--vaccine {
+    background-color: $primary-color;
+    color: white;
+    font-weight: bold;
+    padding: 10px 12px 10px;
+    text-align: center;
+    width: 100%;
+  }
 }
+
 </style>

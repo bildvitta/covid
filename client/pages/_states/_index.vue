@@ -96,9 +96,9 @@
                   <cov-date-filter v-model="datePickerModel" :avaliable-date="dashboard.filters" @clear-filter="filterChart" />
                 </div>
                 <cov-line-chart :chart-data="historyChartData" :options="historyChartOptions" />
-                <div class="legend-beds">
+                <div class="chart-legend">
                   <div v-for="(button, key) in bedsChart" :key="key">
-                    <div class="m-r-xs m-l-xs align-center items-center column">
+                    <div class="m-r-xs m-l-xs align-center items-center">
                       <cov-checkbox :id="`item-${key}`" v-model="button.value" class="m-r-xs m-t-sm cov-checkbox--legend" />
                       <label :for="`item-${key}`">{{ button.label }}</label>
                       <div class="m-l-lg">
@@ -180,9 +180,9 @@
                   <cov-date-filter v-model="datePickerModel" :avaliable-date="dashboard.filters" @clear-filter="filterChart" />
                 </div>
                 <cov-line-chart :chart-data="casesChartData" :options="casesChartOptions" />
-                <div class="legend-cases">
+                <div class="chart-legend chart-legend--center">
                   <div v-for="(button, key) in casesChart" :key="key">
-                    <div class="m-r-xs m-l-xs align-center items-center column">
+                    <div class="m-r-xs m-l-xs align-center items-center">
                       <cov-checkbox :id="`item-second-${key}`" v-model="button.value" class="m-r-xs m-t-sm cov-checkbox--legend" />
                       <label :for="`item-second-${key}`">{{ button.label }}</label>
                       <div class="m-l-lg">
@@ -430,7 +430,7 @@ export default {
         }
       )
     },
-
+    // TODO resolver dados quando vem null
     historyCases () {
       const { historical } = this.dashboard
       const types = {}
@@ -860,15 +860,13 @@ export default {
   max-width: 500px;
 }
 
-.legend-beds {
+.chart-legend {
   display: flex;
   flex-wrap: wrap;
-}
 
-.legend-cases {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  &--center {
+    justify-content: center;
+  }
 }
 
 @include breakpoint(min-width $small-screen) {
@@ -882,12 +880,7 @@ export default {
 }
 
 @include breakpoint(max-width $small-screen) {
-  .legend-cases {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .legend-beds {
+  .chart-legend {
     display: flex;
     flex-direction: column;
   }

@@ -3,6 +3,11 @@
   flex-wrap: wrap;
 }
 
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
 .inline-flex {
   display: inline-flex;
 }
@@ -19,10 +24,18 @@
   align-items: flex-start;
 }
 
+.align-self-center {
+  align-self: center;
+}
+
 .justify-between {
   justify-content: space-between;
 }
 
 .justify-center {
   justify-content: center;
+}
+
+.justify-self-center {
+  justify-self: center;
 }
