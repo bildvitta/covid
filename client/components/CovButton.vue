@@ -52,9 +52,9 @@ export default {
   display: inline-block;
   font-family: inherit;
   font-size: 14px;
+  outline: none;
   padding: 10px 12px 8px;
   text-decoration: none;
-  // text-transform: uppercase;
 
   &:hover {
     background-color: rgba($primary-color, 0.25);
@@ -68,6 +68,11 @@ export default {
     vertical-align: middle;
   }
 
+  &--filter {
+    padding: 10px 10px 10px;
+    text-align: center;
+  }
+
   &--vaccine {
     background-color: $primary-color;
     color: white;
@@ -77,4 +82,5 @@ export default {
     width: 100%;
   }
 }
+
 </style>

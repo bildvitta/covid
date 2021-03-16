@@ -43,12 +43,12 @@
                     <template v-slot:content>
                       <div class="beds__title">{{ bedsTypes[key].label }} <span class="text-caption">COVID-19</span></div>
                       <div class="beds__box m-t-md">
-                        <span class="text-black text-bold">Total</span>
+                        <span class="text-black text-bold">Total de leitos</span>
                         <span class="text-bold">{{ item.covid.total }}</span>
                       </div>
 
                       <div class="beds__box">
-                        <span class="text-black text-bold">Ocupados</span>
+                        <span class="text-black text-bold">Leitos ocupados</span>
                         <span class="text-bold">{{ item.covid.busy }}</span>
                       </div>
 
@@ -62,18 +62,18 @@
 
                   <cov-card class="beds__small m-t-md">
                     <cov-grid gutter justify-between>
-                      <cov-grid-cell :breakpoints="{ col: 'full' }">
+                      <cov-grid-cell :breakpoints="{ sm: 'full', col: 'full' }">
                         <span class="beds__title text-primary">{{ bedsTypes[key].label }}</span>
                         <span class="text-caption">Outros</span>
                       </cov-grid-cell>
 
-                      <cov-grid-cell :breakpoints="{ col: 'full' }" class="beds__content">
+                      <cov-grid-cell :breakpoints="{ sm: 'full', col: 'full' }" class="beds__content">
                         <div class="beds__box">
-                          <span>Total</span>
+                          <span>Total de leitos </span>
                           <span class="text-bold text-primary">{{ item.normal.total }}</span>
                         </div>
                         <div class="beds__box">
-                          <span>Ocupados</span>
+                          <span>Leitos ocupados</span>
                           <span class="text-bold text-primary">{{ item.normal.busy }}</span>
                         </div>
                         <div class="beds__box">
@@ -90,10 +90,23 @@
 
           <cov-grid-cell :breakpoints="{ sm: 'full' }">
             <h3 class="text-title m-t-lg">Gráfico de leitos</h3>
-
             <cov-box class="m-t-md">
               <client-only>
+                <div class="m-b-md">
+                  <cov-date-filter v-model="datePickerModel" :avaliable-date="dashboard.filters" @clear-filter="filterChart" />
+                </div>
                 <cov-line-chart :chart-data="historyChartData" :options="historyChartOptions" />
+                <div class="chart-legend">
+                  <div v-for="(button, key) in bedsChart" :key="key">
+                    <div class="m-r-xs m-l-xs align-center items-center">
+                      <cov-checkbox :id="`item-${key}`" v-model="button.value" class="m-r-xs m-t-sm cov-checkbox--legend" />
+                      <label :for="`item-${key}`">{{ button.label }}</label>
+                      <div class="m-l-lg">
+                        <img :src="require(`~/assets/images/${button.img}`)">
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </client-only>
             </cov-box>
           </cov-grid-cell>
@@ -163,14 +176,27 @@
 
             <cov-box class="m-t-md">
               <client-only>
+                <div class="m-b-md">
+                  <cov-date-filter v-model="datePickerModel" :avaliable-date="dashboard.filters" @clear-filter="filterChart" />
+                </div>
                 <cov-line-chart :chart-data="casesChartData" :options="casesChartOptions" />
+                <div class="chart-legend chart-legend--center">
+                  <div v-for="(button, key) in casesChart" :key="key">
+                    <div class="m-r-xs m-l-xs align-center items-center">
+                      <cov-checkbox :id="`item-second-${key}`" v-model="button.value" class="m-r-xs m-t-sm cov-checkbox--legend" />
+                      <label :for="`item-second-${key}`">{{ button.label }}</label>
+                      <div class="m-l-lg">
+                        <img :src="require(`~/assets/images/${button.img}`)">
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </client-only>
             </cov-box>
           </cov-grid-cell>
         </cov-grid>
       </div>
     </cov-section>
-
     <cov-section v-if="isRibeirao" class="cov-section__vaccine flex items-center">
       <div class="container">
         <div class="vaccine">
@@ -210,6 +236,7 @@ import CovLoading from '~/components/CovLoading'
 import CovMultiSelect from '~/components/CovMultiSelect'
 import CovProgress from '~/components/CovProgress'
 import CovSection from '~/components/CovSection'
+import CovDateFilter from '~/components/CovDateFilter'
 
 export default {
   components: {
@@ -226,8 +253,8 @@ export default {
     CovLoading,
     CovMultiSelect,
     CovProgress,
-    CovSection
-
+    CovSection,
+    CovDateFilter
   },
 
   validate ({ params }) {
@@ -236,6 +263,7 @@ export default {
 
   data () {
     return {
+      datePickerModel: [],
       hospital: [],
       defaultHospitalOptions: [
         { name: 'Todos', value: 'all', noUpdateLabel: true },
@@ -244,7 +272,20 @@ export default {
         { name: 'Filantrópico', value: 'filantropic', noUpdateLabel: true }
       ],
       filtered: false,
-      currentRoutePath: ''
+      currentRoutePath: '',
+      bedsChart: {
+        totalUTICovid: { label: 'Total UTI COVID-19', img: 'Grupo01.svg', value: false },
+        UTICovid: { label: 'UTI COVID-19', img: 'Grupo02.svg', value: true },
+        notUTICovid: { label: 'UTI não COVID-19', img: 'Grupo03.svg', value: false },
+        totalNurseryCovid: { label: 'Total Enfermaria COVID-19', img: 'Grupo04.svg', value: false },
+        nurseryCovid: { label: 'Enfermaria COVID-19', img: 'Grupo05.svg', value: true },
+        notNurseryCovid: { label: 'Enfermaria não COVID-19', img: 'Grupo05.svg', value: false }
+      },
+      casesChart: {
+        confirmed: { label: 'Confirmados', img: 'purple-line.svg', value: true },
+        recovered: { label: 'Recuperados', img: 'green-line.svg', value: true },
+        deaths: { label: 'Óbitos', img: 'red-line.svg', value: true }
+      }
     }
   },
 
@@ -256,6 +297,14 @@ export default {
       isFetching: 'dashboard/isFetching',
       params: 'dashboard/params'
     }),
+
+    currentCity () {
+      return this.$route.params.index
+    },
+
+    isRibeirao () {
+      return this.currentCity === 'ribeirao-preto'
+    },
 
     beds () {
       if (this.dashboard.beds) {
@@ -274,14 +323,6 @@ export default {
       }
     },
 
-    currentCity () {
-      return this.$route.params.index
-    },
-
-    isRibeirao () {
-      return this.currentCity === 'ribeirao-preto'
-    },
-
     casesChartData () {
       return {
         labels: this.historyDates,
@@ -291,18 +332,21 @@ export default {
             label: 'Confirmados',
             fill: false,
             borderColor: '#a3a1fb',
+            hidden: !this.casesChart.confirmed.value,
             data: this.historyCases.total
           },
           {
             label: 'Recuperados',
             fill: false,
             borderColor: '#34c360',
+            hidden: !this.casesChart.recovered.value,
             data: this.historyCases.cureds
           },
           {
             label: 'Óbitos',
             fill: false,
             borderColor: '#fa5252',
+            hidden: !this.casesChart.deaths.value,
             data: this.historyCases.deaths
           }
         ]
@@ -311,7 +355,7 @@ export default {
 
     casesChartOptions () {
       return {
-        legend: { position: 'bottom' },
+        legend: { display: false },
         tooltips: { mode: 'index', intersect: false }
       }
     },
@@ -406,7 +450,7 @@ export default {
         }
       )
     },
-
+    // TODO resolver dados quando vem null
     historyCases () {
       const { historical } = this.dashboard
       const types = {}
@@ -434,13 +478,14 @@ export default {
             borderColor: '#fca8a8',
             borderDash: [1],
             borderWidth: 2,
-            hidden: true,
+            hidden: !this.bedsChart.totalUTICovid.value,
             data: this.historyBeds.intensive_care_unit?.covid?.total
           },
           {
             label: 'UTI COVID-19',
             fill: false,
             borderColor: '#fa5252',
+            hidden: !this.bedsChart.UTICovid.value,
             data: this.historyBeds.intensive_care_unit?.covid?.busy
           },
           {
@@ -449,7 +494,7 @@ export default {
             borderColor: '#fa5252',
             borderDash: [8],
             borderWidth: 1,
-            hidden: true,
+            hidden: !this.bedsChart.notUTICovid.value,
             data: this.historyBeds.intensive_care_unit?.normal?.busy
           },
           {
@@ -458,13 +503,14 @@ export default {
             borderColor: '#d1d0fd',
             borderDash: [1],
             borderWidth: 2,
-            hidden: true,
+            hidden: !this.bedsChart.totalNurseryCovid.value,
             data: this.historyBeds.nursing?.covid?.total
           },
           {
             label: 'Enfermaria COVID-19',
             fill: false,
             borderColor: '#a3a1fb',
+            hidden: !this.bedsChart.nurseryCovid.value,
             data: this.historyBeds.nursing?.covid?.busy
           },
           {
@@ -473,7 +519,7 @@ export default {
             borderColor: '#a3a1fb',
             borderDash: [8],
             borderWidth: 1,
-            hidden: true,
+            hidden: !this.bedsChart.notNurseryCovid.value,
             data: this.historyBeds.nursing?.normal?.busy
           }
         ]
@@ -482,7 +528,7 @@ export default {
 
     historyChartOptions () {
       return {
-        legend: { position: 'bottom' },
+        legend: { display: false },
         tooltips: { mode: 'index', intersect: false }
       }
     },
@@ -581,6 +627,14 @@ export default {
 
     fetchSuccess (value) {
       value && this.setSelect()
+    },
+
+    datePickerModel: {
+      handler (value) {
+        value.length && this.filterChart(value)
+      },
+
+      immediate: true
     }
   },
 
@@ -593,12 +647,32 @@ export default {
     const unwatchIsLiveProp = this.$watch('hospital', (newValue) => {
       unwatchIsLiveProp()
     })
+
+    this.setDatePickerModel()
   },
 
   methods: {
     ...mapActions({
       fetchDashboard: 'dashboard/fetch'
     }),
+
+    filterChart (event) {
+      const query = omitBy(
+        { ...this.$route.query, started_at: event[0], finished_at: event[1] },
+        isEmpty
+      )
+
+      this.$router.push({ query })
+    },
+
+    setDatePickerModel () {
+      const {
+        started_at: startedAt,
+        finished_at: finishedAt
+      } = this.$route.query
+
+      this.datePickerModel = [startedAt, finishedAt].filter(Boolean)
+    },
 
     badgesPercent ({ busy, total }) {
       return this.formatPercent((busy / total) || 0)
@@ -728,9 +802,11 @@ export default {
     }
   }
 }
+
 </script>
 
 <style lang="scss">
+
 .cov-multiselect {
   &__checkbox {
     position: relative;
@@ -795,6 +871,13 @@ export default {
   }
 }
 
+.vaccine {
+  &__button {
+    filter: drop-shadow(0 0 0.75rem $primary-color);
+    width: 200px;
+  }
+}
+
 .cov-cases {
   min-width: 95px;
 }
@@ -804,10 +887,12 @@ export default {
   max-width: 500px;
 }
 
-.vaccine {
-  &__button {
-    filter: drop-shadow(0 0 0.75rem $primary-color);
-    width: 200px;
+.chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+
+  &--center {
+    justify-content: center;
   }
 }
 
@@ -822,6 +907,11 @@ export default {
 }
 
 @include breakpoint(max-width $small-screen) {
+  .chart-legend {
+    display: flex;
+    flex-direction: column;
+  }
+
   .vaccine {
     &__button {
       align-self: center;
