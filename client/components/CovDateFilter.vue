@@ -107,6 +107,23 @@ $namespace: 'xmx';
 
 @import '~vue2-datepicker/scss/index.scss';
 
+.xmx-input {
+  background-color: #fff;
+  border: 1px solid $input-border-color;
+  border-radius: $radius;
+  border-style: none;
+  box-shadow: $shadow;
+  box-sizing: border-box;
+  color: $input-color;
+  display: inline-block;
+  font-size: 14px;
+  height: 34px;
+  line-height: 1.4;
+  padding: 6px 30px;
+  padding-left: 10px;
+  width: 100%;
+}
+
 .cov-date-filter {
   &__input-date {
     align-items: center;
