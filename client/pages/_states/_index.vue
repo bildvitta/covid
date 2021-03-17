@@ -460,7 +460,7 @@ export default {
 
         // Une vários objetos em um único, agrupando em matrizes.
         for (const key of Object.keys(data)) {
-          if (data.cureds > 0) {
+          if (data.cureds) {
             types[key] ? types[key].push(data[key]) : types[key] = [data[key]]
           }
         }
@@ -535,40 +535,38 @@ export default {
       }
     },
 
-    // TODO aqui
     historyDates () {
       const { historical } = this.dashboard
       const dates = []
+
       for (const key in historical) {
-        if (historical[key].beds[0].intensive_care_unit.covid.busy > 0) {
+        if (historical[key].beds[0].intensive_care_unit.covid.busy) {
           dates.push(key)
         }
       }
 
-      return dates.map(
-        date => format(new Date(date), 'dd/MM/yyyy')
-      )
+      return dates.map(date => format(new Date(date), 'dd/MM/yyyy'))
     },
 
     dateCases () {
       const { historical } = this.dashboard
       const cases = []
+
       for (const key in historical) {
-        if (historical[key].covid_cases.cureds > 0) {
+        if (historical[key].covid_cases.cureds) {
           cases.push(key)
         }
       }
 
-      return cases.map(
-        date => format(new Date(date), 'dd/MM/yyyy')
-      )
+      return cases.map(date => format(new Date(date), 'dd/MM/yyyy'))
     },
 
     historyKeys () {
       const { historical } = this.dashboard
       const label = []
+
       for (const key in historical) {
-        if (historical[key].covid_cases.cureds > 0) {
+        if (historical[key].covid_cases.cureds) {
           label.push(key)
         }
       }
