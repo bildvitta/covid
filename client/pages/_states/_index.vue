@@ -102,7 +102,7 @@
                       <cov-checkbox :id="`item-${key}`" v-model="button.value" class="m-r-xs m-t-sm cov-checkbox--legend" />
                       <label :for="`item-${key}`">{{ button.label }}</label>
                       <div class="m-l-lg">
-                        <img :src="require(`~/assets/images/${button.img}`)">
+                        <img class="chart-legend__svg" :src="require(`~/assets/images/${button.img}`)">
                       </div>
                     </div>
                   </div>
@@ -186,7 +186,7 @@
                       <cov-checkbox :id="`item-second-${key}`" v-model="button.value" class="m-r-xs m-t-sm cov-checkbox--legend" />
                       <label :for="`item-second-${key}`">{{ button.label }}</label>
                       <div class="m-l-lg">
-                        <img :src="require(`~/assets/images/${button.img}`)">
+                        <img class="chart-legend__svg" :src="require(`~/assets/images/${button.img}`)">
                       </div>
                     </div>
                   </div>
@@ -325,7 +325,7 @@ export default {
 
     casesChartData () {
       return {
-        labels: this.historyDates,
+        labels: this.dateCases,
 
         datasets: [
           {
@@ -450,7 +450,7 @@ export default {
         }
       )
     },
-    // TODO resolver dados quando vem null
+
     historyCases () {
       const { historical } = this.dashboard
       const types = {}
@@ -460,7 +460,9 @@ export default {
 
         // Une vários objetos em um único, agrupando em matrizes.
         for (const key of Object.keys(data)) {
-          types[key] ? types[key].push(data[key]) : types[key] = [data[key]]
+          if (data.cureds) {
+            types[key] ? types[key].push(data[key]) : types[key] = [data[key]]
+          }
         }
       }
 
@@ -534,14 +536,41 @@ export default {
     },
 
     historyDates () {
-      return this.historyKeys.map(
-        date => format(new Date(date), 'dd/MM/yyyy')
-      )
+      const { historical } = this.dashboard
+      const dates = []
+
+      for (const key in historical) {
+        if (historical[key].beds[0].intensive_care_unit.covid.busy) {
+          dates.push(key)
+        }
+      }
+
+      return dates.map(date => format(new Date(date), 'dd/MM/yyyy'))
+    },
+
+    dateCases () {
+      const { historical } = this.dashboard
+      const cases = []
+
+      for (const key in historical) {
+        if (historical[key].covid_cases.cureds) {
+          cases.push(key)
+        }
+      }
+
+      return cases.map(date => format(new Date(date), 'dd/MM/yyyy'))
     },
 
     historyKeys () {
       const { historical } = this.dashboard
-      return historical ? Object.keys(historical) : []
+      const label = []
+
+      for (const key in historical) {
+        if (historical[key].covid_cases.cureds) {
+          label.push(key)
+        }
+      }
+      return label
     },
 
     hospitalOptions () {
@@ -890,6 +919,11 @@ export default {
 .chart-legend {
   display: flex;
   flex-wrap: wrap;
+
+  &__svg {
+    margin-left: 3px;
+    width: 50px;
+  }
 
   &--center {
     justify-content: center;
