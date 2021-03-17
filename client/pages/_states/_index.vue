@@ -102,7 +102,7 @@
                       <cov-checkbox :id="`item-${key}`" v-model="button.value" class="m-r-xs m-t-sm cov-checkbox--legend" />
                       <label :for="`item-${key}`">{{ button.label }}</label>
                       <div class="m-l-lg">
-                        <img :src="require(`~/assets/images/${button.img}`)">
+                        <img class="chart-legend__svg" :src="require(`~/assets/images/${button.img}`)">
                       </div>
                     </div>
                   </div>
@@ -186,7 +186,7 @@
                       <cov-checkbox :id="`item-second-${key}`" v-model="button.value" class="m-r-xs m-t-sm cov-checkbox--legend" />
                       <label :for="`item-second-${key}`">{{ button.label }}</label>
                       <div class="m-l-lg">
-                        <img :src="require(`~/assets/images/${button.img}`)">
+                        <img class="chart-legend__svg" :src="require(`~/assets/images/${button.img}`)">
                       </div>
                     </div>
                   </div>
@@ -919,6 +919,11 @@ export default {
 .chart-legend {
   display: flex;
   flex-wrap: wrap;
+
+  &__svg {
+    margin-left: 3px;
+    width: 50px;
+  }
 
   &--center {
     justify-content: center;
