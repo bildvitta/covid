@@ -132,10 +132,6 @@ $namespace: 'xmx';
   width: 100%;
 }
 
-.hiddenButton {
-  display: none;
-}
-
 .cov-date-filter {
   &__input-date {
     align-items: center;
