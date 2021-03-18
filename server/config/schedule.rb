@@ -31,7 +31,7 @@ every '9 * * * *' do
   runner 'DataBridge::UpaTreze.new.get_data.save!'
 end
 
-every 1.day, at: ['0:09', '6:09', '13:09', '19:09'] do
+every '15 * * * *' do
   runner 'DataBridge::SantaCasa.new.get_data.save!'
 end
 
