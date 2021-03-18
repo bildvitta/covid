@@ -50,12 +50,6 @@ export default {
     }
   },
 
-  computed: {
-    hidden () {
-      return this.values.length ? '' : 'hiddenButton'
-    }
-  },
-
   watch: {
     value: {
       handler (value, oldValue) {
