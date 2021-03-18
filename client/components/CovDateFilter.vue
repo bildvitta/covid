@@ -9,7 +9,9 @@
           {{ errorMessage }}
         </div>
       </transition>
-      <cov-button class="cov-button--filter" label="Limpar filtro" @click="clearFilter" />
+      <transition name="button">
+        <cov-button v-if="values.length" class="cov-button--filter" label="Limpar filtro" @click="clearFilter" />
+      </transition>
     </div>
     <div />
   </div>
@@ -45,6 +47,12 @@ export default {
       values: [],
       hasError: false,
       errorMessage: ''
+    }
+  },
+
+  computed: {
+    hidden () {
+      return this.values.length ? '' : 'hiddenButton'
     }
   },
 
@@ -124,6 +132,10 @@ $namespace: 'xmx';
   width: 100%;
 }
 
+.hiddenButton {
+  display: none;
+}
+
 .cov-date-filter {
   &__input-date {
     align-items: center;
@@ -151,6 +163,17 @@ $namespace: 'xmx';
     font-size: 12px;
     justify-content: start;
   }
+}
+
+.button-enter-active,
+.button-leave-active {
+  transition: opacity 1s;
+}
+
+.button-enter,
+.button-leave-to {
+  opacity: 0;
+  transform: translateY(0);
 }
 
 .fade-enter-active,
