@@ -325,7 +325,7 @@ export default {
 
     casesChartData () {
       return {
-        labels: this.dateCases,
+        labels: this.casesDates,
 
         datasets: [
           {
@@ -455,7 +455,7 @@ export default {
       const { historical } = this.dashboard
       const types = {}
 
-      for (const date of this.historyKeys) {
+      for (const date of this.casesKey) {
         const data = historical[date].covid_cases
 
         // Une vários objetos em um único, agrupando em matrizes.
@@ -536,29 +536,29 @@ export default {
     },
 
     historyDates () {
-      const { historical } = this.dashboard
-      const dates = []
-
-      for (const key in historical) {
-        if (historical[key].beds[0].intensive_care_unit.covid.busy) {
-          dates.push(key)
-        }
-      }
-
-      return dates.map(date => format(new Date(date), 'dd/MM/yyyy'))
+      return this.historyKeys.map(
+        date => format(new Date(date), 'dd/MM/yyyy')
+      )
     },
 
-    dateCases () {
+    casesDates () {
+      return this.casesKey.map(
+        date => format(new Date(date), 'dd/MM/yyyy')
+      )
+    },
+
+    casesKey () {
       const { historical } = this.dashboard
-      const cases = []
+      const label = []
 
       for (const key in historical) {
-        if (historical[key].covid_cases.cureds) {
-          cases.push(key)
+        const values = Object.values(historical[key].covid_cases)
+        if (values.filter(Boolean).length) {
+          label.push(key)
         }
       }
 
-      return cases.map(date => format(new Date(date), 'dd/MM/yyyy'))
+      return label
     },
 
     historyKeys () {
@@ -566,10 +566,20 @@ export default {
       const label = []
 
       for (const key in historical) {
-        if (historical[key].covid_cases.cureds) {
+        const hasLabel = historical[key].beds.some((item) => {
+          return (
+            Object.values(item.intensive_care_unit.covid).filter(Boolean).length ||
+            Object.values(item.intensive_care_unit.normal).filter(Boolean).length ||
+            Object.values(item.nursing.covid).filter(Boolean).length ||
+            Object.values(item.nursing.normal).filter(Boolean).length
+          )
+        })
+
+        if (hasLabel) {
           label.push(key)
         }
       }
+
       return label
     },
 
