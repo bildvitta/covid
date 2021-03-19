@@ -569,6 +569,12 @@ export default {
         // const filter = historical[key].beds.filter(item => item.intensive_care_unit.covid.total > 0 && item.intensive_care_unit.covid.busy > 0 && item.intensive_care_unit.normal.busy > 0 && item.nursing.covid.total > 0 && item.nursing.covid.busy > 0 && item.nursing.normal.busy > 0)
         for (const item of historical[key].beds) {
           console.log(item)
+          const intensiveCareUnit = item.intensive_care_unit
+          const nursing = item.nursing
+
+          if (Object.values(intensiveCareUnit.normal.busy)) {
+
+          }
         }
         // const values = Object.values(filter)
         // if (values.filter(Boolean).length) {
