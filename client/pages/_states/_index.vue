@@ -566,20 +566,18 @@ export default {
       const label = []
 
       for (const key in historical) {
-        // const filter = historical[key].beds.filter(item => item.intensive_care_unit.covid.total > 0 && item.intensive_care_unit.covid.busy > 0 && item.intensive_care_unit.normal.busy > 0 && item.nursing.covid.total > 0 && item.nursing.covid.busy > 0 && item.nursing.normal.busy > 0)
-        for (const item of historical[key].beds) {
-          console.log(item)
-          const intensiveCareUnit = item.intensive_care_unit
-          const nursing = item.nursing
+        const hasLabel = historical[key].beds.some((item) => {
+          return (
+            Object.values(item.intensive_care_unit.covid).filter(Boolean).length ||
+            Object.values(item.intensive_care_unit.normal).filter(Boolean).length ||
+            Object.values(item.nursing.covid).filter(Boolean).length ||
+            Object.values(item.nursing.normal).filter(Boolean).length
+          )
+        })
 
-          if (Object.values(intensiveCareUnit.normal.busy)) {
-
-          }
+        if (hasLabel) {
+          label.push(key)
         }
-        // const values = Object.values(filter)
-        // if (values.filter(Boolean).length) {
-        //   label.push(key)
-        // }
       }
 
       return label
