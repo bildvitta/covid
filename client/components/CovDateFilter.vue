@@ -9,7 +9,7 @@
           {{ errorMessage }}
         </div>
       </transition>
-      <transition name="button">
+      <transition name="fadeButton">
         <cov-button v-if="values.length" class="cov-button--filter" label="Limpar filtro" @click="clearFilter" />
       </transition>
     </div>
@@ -155,13 +155,13 @@ $namespace: 'xmx';
   }
 }
 
-.button-enter-active,
-.button-leave-active {
+.fadeButton-enter-active,
+.fadeButton-leave-active {
   transition: opacity 1s;
 }
 
-.button-enter,
-.button-leave-to {
+.fadeButton-enter,
+.fadeButton-leave-to {
   opacity: 0;
   transform: translateY(0);
 }
