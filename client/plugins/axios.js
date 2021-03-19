@@ -1,3 +1,3 @@
 export default function ({ $axios }) {
-  $axios.defaults.baseURL = process.env.baseUrl
+  $axios.defaults.baseURL = 'https://api.leitoscovid.org/dashboard?city=ribeirao-preto'
 }
