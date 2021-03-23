@@ -93,7 +93,7 @@
             <cov-box class="m-t-md">
               <client-only>
                 <div class="m-b-md">
-                  <cov-date-filter v-model="datePickerModel" :avaliable-date="dashboard.filters" @clear-filter="filterChart" />
+                  <cov-date-filter v-model="datePickerModel" :avaliable-date="dashboard.filters" :shortcuts="shortcuts" @clear-filter="filterChart" />
                 </div>
                 <cov-line-chart :chart-data="historyChartData" :options="historyChartOptions" />
                 <div class="chart-legend">
@@ -177,7 +177,7 @@
             <cov-box class="m-t-md">
               <client-only>
                 <div class="m-b-md">
-                  <cov-date-filter v-model="datePickerModel" :avaliable-date="dashboard.filters" @clear-filter="filterChart" />
+                  <cov-date-filter v-model="datePickerModel" :avaliable-date="dashboard.filters" :shortcuts="shortcuts" @clear-filter="filterChart" />
                 </div>
                 <cov-line-chart :chart-data="casesChartData" :options="casesChartOptions" />
                 <div class="chart-legend chart-legend--center">
@@ -285,7 +285,13 @@ export default {
         confirmed: { label: 'Confirmados', img: 'purple-line.svg', value: true },
         recovered: { label: 'Recuperados', img: 'green-line.svg', value: true },
         deaths: { label: 'Óbitos', img: 'red-line.svg', value: true }
-      }
+      },
+      shortcuts: [
+        { title: 'Últimos 3 dias', days: 3 },
+        { title: 'Últimos 7 dias', days: 7 },
+        { title: 'Últimos 15 dias', days: 15 },
+        { title: 'Últimos 30 dias', days: 30 }
+      ]
     }
   },
 

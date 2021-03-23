@@ -1,22 +1,18 @@
 <template>
   <div class="cov-date-filter">
     <div class="cov-date-filter__input-date">
-      <date-picker v-if="!isMobile" v-model="values" class="cov-date-filter__date-picker" :clearable="false" :disabled-date="notBeforeToday" format="DD/MM/YYYY" placeholder="Filtrar por datas" prefix-class="xmx" range :shortcuts="shortcuts" value-type="DD/MM/YYYY" />
-      <!-- mobile -->
-      <date-picker v-if="isMobile" v-model="values" class="cov-date-filter__date-picker" :clearable="false" :disabled-date="notBeforeToday" format="DD/MM/YYYY" placeholder="Filtrar por datas" prefix-class="xmx" range value-type="DD/MM/YYYY">
-        <template v-slot:footer="{ emit }">
-          <div class="column" style="text-align: center;">
-            <button class="mx-btn mx-btn-text" @click="someDaysBefore(emit, 3)">
-              Últimos 3 dias
+      <date-picker v-model="values" class="cov-date-filter__date-picker" :clearable="false" :disabled-date="dateUnavailable" format="DD/MM/YYYY" placeholder="Filtrar por datas" prefix-class="xmx" range value-type="DD/MM/YYYY">
+        <template v-if="isMobile" v-slot:footer="{ emit }">
+          <div v-for="(item, index) in shortcuts" :key="index" class="column" style="text-align: center;">
+            <button class="mx-btn mx-btn-text" @click="dateRangeShortcut(emit, item.days)">
+              {{ item.title }}
             </button>
-            <button class="mx-btn mx-btn-text" @click="someDaysBefore(emit, 7)">
-              Últimos 7 dias
-            </button>
-            <button class="mx-btn mx-btn-text" @click="someDaysBefore(emit, 15)">
-              Últimos 15 dias
-            </button>
-            <button class="mx-btn mx-btn-text" @click="someDaysBefore(emit, 30)">
-              Últimos 30 dias
+          </div>
+        </template>
+        <template v-if="!isMobile" v-slot:sidebar="{ emit }">
+          <div v-for="(item, index) in shortcuts" :key="index" class="column" style="text-align: center;">
+            <button class="mx-btn mx-btn-text" @click="dateRangeShortcut(emit, item.days)">
+              {{ item.title }}
             </button>
           </div>
         </template>
@@ -53,6 +49,11 @@ export default {
       default: () => []
     },
 
+    shortcuts: {
+      type: Array,
+      default: () => []
+    },
+
     avaliableDate: {
       type: Object,
       default: () => ({})
@@ -66,49 +67,7 @@ export default {
       },
       values: [],
       hasError: false,
-      errorMessage: '',
-      shortcuts: [
-        {
-          text: 'Últimos 3 dias',
-          onClick () {
-            const start = new Date()
-            const end = new Date()
-            start.setTime(start.getTime() - 3 * 24 * 3600 * 1000)
-            const date = [start, end]
-            return date
-          }
-        },
-        {
-          text: 'Últimos 7 dias',
-          onClick () {
-            const start = new Date()
-            const end = new Date()
-            start.setTime(start.getTime() - 7 * 24 * 3600 * 1000)
-            const date = [start, end]
-            return date
-          }
-        },
-        {
-          text: 'Últimos 15 dias',
-          onClick () {
-            const start = new Date()
-            const end = new Date()
-            start.setTime(start.getTime() - 15 * 24 * 3600 * 1000)
-            const date = [start, end]
-            return date
-          }
-        },
-        {
-          text: 'Últimos 30 dias',
-          onClick () {
-            const start = new Date()
-            const end = new Date()
-            start.setTime(start.getTime() - 30 * 24 * 3600 * 1000)
-            const date = [start, end]
-            return date
-          }
-        }
-      ]
+      errorMessage: ''
     }
   },
 
@@ -154,7 +113,7 @@ export default {
       this.window.width = window.innerWidth
     },
 
-    someDaysBefore (emit, days) {
+    dateRangeShortcut (emit, days) {
       const start = new Date()
       const end = new Date()
 
@@ -164,7 +123,7 @@ export default {
       return emit(date)
     },
 
-    notBeforeToday (date) {
+    dateUnavailable (date) {
       const startedDate = new Date(this.avaliableDate.started_at_gteq)
       startedDate.setHours(0, 0, 0, 0)
 
