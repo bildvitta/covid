@@ -124,6 +124,14 @@ if Hospital.none?
         city: city,
         latitude: -21.1761612,
         longitude: -47.7922277
+      },
+      {
+        name: 'Polo COVID 2 - UPA Central',
+        slug: 'polo-covid-2-upa-central',
+        hospital_type: 1,
+        city: city,
+        latitude: -21.1726925,
+        longitude: -47.8143013
       }
     ].each do |hospital|
       hospital = Hospital.create!(hospital)
