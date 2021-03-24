@@ -36,6 +36,8 @@ module DataBridge
       case hospital_slug
       when :campus
         return 'hc-campus-ribeirao-preto'
+      when :herp
+        return 'hospital-estadual-ribeirao-preto'
       else
         return 'hc-emergencia-ribeirao-preto'
       end

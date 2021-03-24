@@ -132,6 +132,14 @@ if Hospital.none?
         city: city,
         latitude: -21.1726925,
         longitude: -47.8143013
+      },
+      {
+        name: 'Hospital Estadual de Ribeirão Preto',
+        slug: 'hospital-estadual-ribeirao-preto',
+        hospital_type: 1,
+        city: city,
+        latitude: -21.2115222,
+        longitude: -47.8290127
       }
     ].each do |hospital|
       hospital = Hospital.create!(hospital)
