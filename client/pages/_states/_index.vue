@@ -287,7 +287,7 @@ export default {
         notUTICovid: { label: 'UTI não COVID-19', img: 'Grupo03.svg', value: false },
         totalNurseryCovid: { label: 'Total Enfermaria COVID-19', img: 'Grupo04.svg', value: false },
         nurseryCovid: { label: 'Enfermaria COVID-19', img: 'Grupo05.svg', value: true },
-        notNurseryCovid: { label: 'Enfermaria não COVID-19', img: 'Grupo05.svg', value: false }
+        notNurseryCovid: { label: 'Enfermaria não COVID-19', img: 'Grupo06.svg', value: false }
       },
       casesChart: {
         confirmed: { label: 'Confirmados', img: 'purple-line.svg', value: true },

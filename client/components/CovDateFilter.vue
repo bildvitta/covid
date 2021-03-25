@@ -24,7 +24,9 @@
           {{ errorMessage }}
         </div>
       </transition>
-      <cov-button class="cov-button--filter" label="Limpar filtro" @click="clearFilter" />
+      <transition name="fade-button">
+        <cov-button v-if="values.length" class="cov-button--filter" label="Limpar filtro" @click="clearFilter" />
+      </transition>
     </div>
     <div />
   </div>
@@ -204,6 +206,17 @@ $sidebar-margin-left: 130px;
     font-size: 12px;
     justify-content: start;
   }
+}
+
+.fade-button-enter-active,
+.fade-button-leave-active {
+  transition: opacity 1s;
+}
+
+.fade-button-enter,
+.fade-button-leave-to {
+  opacity: 0;
+  transform: translateY(0);
 }
 
 .fade-enter-active,
