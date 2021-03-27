@@ -1,7 +1,22 @@
 <template>
   <div class="cov-date-filter">
     <div class="cov-date-filter__input-date">
-      <date-picker v-model="values" class="cov-date-filter__date-picker" :clearable="false" :disabled-date="notBeforeToday" format="DD/MM/YYYY" placeholder="Filtrar por datas" prefix-class="xmx" range value-type="DD/MM/YYYY" />
+      <date-picker v-model="values" class="cov-date-filter__date-picker" :clearable="false" :disabled-date="dateUnavailable" format="DD/MM/YYYY" placeholder="Filtrar por datas" prefix-class="xmx" range value-type="DD/MM/YYYY">
+        <template v-if="isMobile" v-slot:footer="{ emit }">
+          <div v-for="(item, index) in shortcuts" :key="index" class="column" style="text-align: center;">
+            <button class="mx-btn mx-btn-text" @click="dateRangeShortcut(emit, item.days)">
+              {{ item.title }}
+            </button>
+          </div>
+        </template>
+        <template v-if="!isMobile" v-slot:sidebar="{ emit }">
+          <div v-for="(item, index) in shortcuts" :key="index" class="column" style="text-align: center;">
+            <button class="mx-btn mx-btn-text" @click="dateRangeShortcut(emit, item.days)">
+              {{ item.title }}
+            </button>
+          </div>
+        </template>
+      </date-picker>
     </div>
     <div class="text-right m-t-md">
       <transition name="fade">
@@ -9,7 +24,9 @@
           {{ errorMessage }}
         </div>
       </transition>
-      <cov-button class="cov-button--filter" label="Limpar filtro" @click="clearFilter" />
+      <transition name="fade-button">
+        <cov-button v-if="values.length" class="cov-button--filter" label="Limpar filtro" @click="clearFilter" />
+      </transition>
     </div>
     <div />
   </div>
@@ -34,6 +51,11 @@ export default {
       default: () => []
     },
 
+    shortcuts: {
+      type: Array,
+      default: () => []
+    },
+
     avaliableDate: {
       type: Object,
       default: () => ({})
@@ -42,9 +64,18 @@ export default {
 
   data () {
     return {
+      window: {
+        width: 0
+      },
       values: [],
       hasError: false,
       errorMessage: ''
+    }
+  },
+
+  computed: {
+    isMobile () {
+      return this.window.width < 480
     }
   },
 
@@ -70,8 +101,31 @@ export default {
     }
   },
 
+  mounted () {
+    window.addEventListener('resize', this.handleResize)
+    this.handleResize()
+  },
+
+  destroyed () {
+    window.removeEventListener('resize', this.handleResize)
+  },
+
   methods: {
-    notBeforeToday (date) {
+    handleResize () {
+      this.window.width = window.innerWidth
+    },
+
+    dateRangeShortcut (emit, days) {
+      const start = new Date()
+      const end = new Date()
+
+      start.setTime(start.getTime() - days * 24 * 3600 * 1000)
+      const date = [start, end]
+
+      return emit(date)
+    },
+
+    dateUnavailable (date) {
       const startedDate = new Date(this.avaliableDate.started_at_gteq)
       startedDate.setHours(0, 0, 0, 0)
 
@@ -104,6 +158,7 @@ export default {
 
 <style lang="scss">
 $namespace: 'xmx';
+$sidebar-margin-left: 130px;
 
 @import '~vue2-datepicker/scss/index.scss';
 
@@ -151,6 +206,17 @@ $namespace: 'xmx';
     font-size: 12px;
     justify-content: start;
   }
+}
+
+.fade-button-enter-active,
+.fade-button-leave-active {
+  transition: opacity 1s;
+}
+
+.fade-button-enter,
+.fade-button-leave-to {
+  opacity: 0;
+  transform: translateY(0);
 }
 
 .fade-enter-active,
