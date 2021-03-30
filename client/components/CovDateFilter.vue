@@ -210,7 +210,7 @@ $sidebar-margin-left: 130px;
     color: $red;
     display: flex;
     font-size: 12px;
-    justify-content: start;
+    justify-content: flex-start;
   }
 }
 
