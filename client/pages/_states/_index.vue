@@ -242,7 +242,9 @@ const shortcuts = [
   { title: 'Últimos 3 dias', days: 3 },
   { title: 'Últimos 7 dias', days: 7 },
   { title: 'Últimos 15 dias', days: 15 },
-  { title: 'Últimos 30 dias', days: 30 }
+  { title: 'Últimos 30 dias', days: 30 },
+  { title: 'Últimos 90 dias', days: 90 },
+  { title: 'Todo o período', days: 'all' }
 ]
 
 export default {
@@ -472,9 +474,7 @@ export default {
 
         // Une vários objetos em um único, agrupando em matrizes.
         for (const key of Object.keys(data)) {
-          if (data.cureds) {
-            types[key] ? types[key].push(data[key]) : types[key] = [data[key]]
-          }
+          types[key] ? types[key].push(data[key]) : types[key] = [data[key]]
         }
       }
 
