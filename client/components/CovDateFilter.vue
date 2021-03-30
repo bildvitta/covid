@@ -122,6 +122,15 @@ export default {
       start.setTime(start.getTime() - days * 24 * 3600 * 1000)
       const date = [start, end]
 
+      if (days === 'all') {
+        const start = new Date(this.avaliableDate.started_at_gteq + ':0:0:0:0')
+        const end = new Date(this.avaliableDate.finished_at_lteq + ':0:0:0:0')
+
+        const date = [start, end]
+
+        return emit(date)
+      }
+
       return emit(date)
     },
 
