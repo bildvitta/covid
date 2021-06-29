@@ -9,6 +9,7 @@ module DataBridge
     TO_DO_TYPES = %i[beds cases].freeze
 
     attr_accessor :city, :hospital, :credentials, :to_do, :cases_results
+    # Makes the 'save!' method from super class be called 'super_save!', so it can be accessed anywhere
     alias super_save! save!
 
     def initialize(city, to_do: TO_DO_TYPES)
@@ -32,8 +33,10 @@ module DataBridge
 
       file = get_data_from_google_drive(credentials)
 
+      # Treats each datas separately
       to_do.each do |type|
         @worksheet = file.worksheets[TO_DO_TYPES.index(type)]
+        # Hard send is defined later on the code
         hard_send("process_#{type}")
       end
 
@@ -98,9 +101,12 @@ module DataBridge
       )
     end
 
-    # Since it's a very generic class, it's very well protected to avoid unnecessary debugs
+    # Since it's a very generic class, it's very well protected to avoid too much debugging
     private
 
+    # It's the same thing as usual send, but warns the developer in case he miss the method creation
+    # Might be useless, but since it's a class that might be used for a lot of cities, and might be
+    # used as another class' superclass, this method might help to abstract this class and debug
     def hard_send(symbol)
       begin
         send_method = method(symbol)
