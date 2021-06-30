@@ -1,4 +1,6 @@
 def fake_historical hospital
+  possible_status = Bed.defined_enums['status'].keys
+
   30.times do |i|
     bed_state = BedState.create!(
       date: (30 - i).days.ago, hospital: hospital
@@ -14,6 +16,13 @@ def fake_historical hospital
           status_free: rand(1000),
           status_busy: rand(1000),
           status_unavailable: rand(1000),
+        )
+
+        Bed.create!(
+          hospital: hospital,
+          bed_type: value,
+          status: possible_status.sample,
+          using_ventilator: [true, false].sample
         )
       end
     end
@@ -157,6 +166,7 @@ if Hospital.none?
     ].each do |hospital|
       hospital = Hospital.create!(hospital)
 
+      puts "Creating data for #{hospital.name}"
       fake_historical(hospital)
     end
   end
