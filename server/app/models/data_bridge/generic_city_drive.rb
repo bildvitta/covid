@@ -2,7 +2,7 @@
 
 module DataBridge
   # This class has the intend to simplify future generic google drive sheets
-  class CityDriveBase < DataBridge::GoogleDriveBase
+  class GenericCityDrive < DataBridge::GoogleDriveBase
     MULTIPLE_HOSPITAL_WARNING = I18n.t('development_notes.hospital_warning')
     HOSPITAL_NOT_FOUND_MESSAGE = I18n.t('activerecord.passive_errors.not_found', count: 1, arg: Hospital.model_name.human)
     CREDENTIALS_NOT_FOUND_MESSAGE = I18n.t('activerecord.passive_errors.not_found', count: 2, arg: I18n.t('development_notes.credentials'))
