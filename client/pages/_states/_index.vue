@@ -126,7 +126,7 @@
       </div>
     </cov-section>
 
-    <cov-section v-if="showCases" color="melrose">
+    <cov-section v-if="showCasesSection" color="melrose">
       <div class="container">
         <cov-grid gutter justify-between>
           <!-- <cov-grid-cell :breakpoints="{ col: '1-of-2', sm: 'full', md: 'full' }"> -->
@@ -197,7 +197,7 @@
         </cov-grid>
       </div>
     </cov-section>
-    <cov-section v-if="showVaccine" class="cov-section__vaccine flex items-center">
+    <cov-section v-if="showVaccineSection" class="cov-section__vaccine flex items-center">
       <div class="container">
         <div class="vaccine">
           <cov-grid-cell :breakpoints="{ sm:'10-of-12', md:'8-of-12', lg:'3-of-6' }">
@@ -295,12 +295,6 @@ export default {
         confirmed: { label: 'Confirmados', img: 'purple-line.svg', value: true },
         recovered: { label: 'Recuperados', img: 'green-line.svg', value: true },
         deaths: { label: 'Óbitos', img: 'red-line.svg', value: true }
-      },
-      citiesContent: {
-        'ribeirao-preto': { label: 'Ribeirão Preto', sections: ['cases', 'vaccine'], vaccineLink: 'https://www.ribeiraopreto.sp.gov.br/agendamento-vacinacao-covid/' },
-        batatais: { label: 'Batatais', sections: ['vaccine'], vaccineLink: 'http://www.batatais.sp.gov.br/vacina/controlecidadao/' },
-        cajuru: { label: 'Cajuru', sections: [] },
-        paulinia: { label: 'Paulinia', sections: ['cases'], vaccineLink: '' }
       }
     }
   },
@@ -314,6 +308,29 @@ export default {
       params: 'dashboard/params'
     }),
 
+    citiesContent () {
+      return {
+        'ribeirao-preto': {
+          label: 'Ribeirão Preto',
+          sections: ['cases', 'vaccine'],
+          vaccineLink: 'https://www.ribeiraopreto.sp.gov.br/agendamento-vacinacao-covid/'
+        },
+        batatais: {
+          label: 'Batatais',
+          sections: ['vaccine'],
+          vaccineLink: 'http://www.batatais.sp.gov.br/vacina/controlecidadao/'
+        },
+        cajuru: {
+          label: 'Cajuru'
+        },
+        paulinia: {
+          label: 'Paulinia',
+          sections: ['cases'],
+          vaccineLink: ''
+        }
+      }
+    },
+
     dateShortcuts () {
       return shortcuts
     },
@@ -322,12 +339,12 @@ export default {
       return this.$route.params.index
     },
 
-    showVaccine () {
-      return this.citiesContent[this.currentCity].sections.includes('vaccine')
+    showVaccineSection () {
+      return this.citiesContent[this.currentCity]?.sections?.includes('vaccine')
     },
 
-    showCases () {
-      return this.citiesContent[this.currentCity].sections.includes('cases')
+    showCasesSection () {
+      return this.citiesContent[this.currentCity]?.sections?.includes('cases')
     },
 
     beds () {
