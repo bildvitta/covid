@@ -17,7 +17,7 @@ class CreateCities < ActiveRecord::Migration[6.0]
       City.create!(json_to_params(city))
     end
 
-    ['Ribeirão Preto', 'Paulínia'].each do |city_name|
+    ['Ribeirão Preto', 'Paulínia', 'Cajuru', 'Batatais'].each do |city_name|
       next if City.exists?(name: city_name)
 
       city_json = cities.find { |city_array| city_array.first == city_name }
