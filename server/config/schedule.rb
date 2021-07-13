@@ -54,3 +54,7 @@ end
 every '50 * * * *' do
   runner 'DataBridge::CovidCases::Paulinia.new.get_data.save!'
 end
+
+every 1.day, at: ['14:30'] do
+  runner 'DataBridge::GenericCityDrive.new(City.find(562)).get_data.save!'
+end

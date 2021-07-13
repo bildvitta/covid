@@ -120,9 +120,15 @@ export default {
       const end = new Date()
 
       start.setTime(start.getTime() - days * 24 * 3600 * 1000)
-      const date = [start, end]
 
-      return emit(date)
+      if (days === 'all') {
+        const startAll = new Date(this.avaliableDate.started_at_gteq + ':0:0:0:0')
+        const endAll = new Date(this.avaliableDate.finished_at_lteq + ':0:0:0:0')
+
+        return emit([startAll, endAll])
+      }
+
+      return emit([start, end])
     },
 
     dateUnavailable (date) {
@@ -204,7 +210,7 @@ $sidebar-margin-left: 130px;
     color: $red;
     display: flex;
     font-size: 12px;
-    justify-content: start;
+    justify-content: flex-start;
   }
 }
 

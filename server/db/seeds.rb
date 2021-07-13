@@ -1,4 +1,6 @@
 def fake_historical hospital
+  possible_status = Bed.defined_enums['status'].keys
+
   30.times do |i|
     bed_state = BedState.create!(
       date: (30 - i).days.ago, hospital: hospital
@@ -15,30 +17,34 @@ def fake_historical hospital
           status_busy: rand(1000),
           status_unavailable: rand(1000),
         )
+
+        Bed.create!(
+          hospital: hospital,
+          bed_type: value,
+          status: possible_status.sample,
+          using_ventilator: [true, false].sample
+        )
       end
     end
   end
 end
 
 if Hospital.none?
-  rand_geocoded = -> { ([-1, 1].sample * rand(0..1.0).round(6)) }
-  cities = City.offset(rand(35)).limit(3)
+  cities = City.where(slug: %w[ribeirao-preto paulinia cajuru batatais]).map { |city| [city.slug, city] }.to_h
 
-  city = City.find_by_slug('ribeirao-preto')
-
-  unless city.nil?
+  unless cities.nil?
     [
       {
         name: 'Hospital Unimed',
         hospital_type: 2,
-        city: city,
+        city: cities['ribeirao-preto'],
         latitude: -21.225617,
         longitude: -47.816327
       },
       {
         name: 'Hospital São Lucas',
         hospital_type: 2,
-        city: city,
+        city: cities['ribeirao-preto'],
         latitude: -21.188736,
         longitude: -47.803895
       },
@@ -46,14 +52,14 @@ if Hospital.none?
         name: 'Ribeirânia (Hospital São Lucas Ribeirânia)',
         slug: 'sao-lucas-ribeirania',
         hospital_type: 2,
-        city: city,
+        city: cities['ribeirao-preto'],
         latitude: -21.200055,
         longitude: -47.787171
       },
       {
         name: 'Hospital Especializado',
         hospital_type: 2,
-        city: city,
+        city: cities['ribeirao-preto'],
         latitude: -21.207647,
         longitude: -47.823695
       },
@@ -61,28 +67,28 @@ if Hospital.none?
         name: 'Hospital Santa Casa de Misericórdia de Ribeirão Preto',
         slug: 'santa-casa-ribeirao',
         hospital_type: 1,
-        city: city,
+        city: cities['ribeirao-preto'],
         latitude: -21.167811,
         longitude: -47.805911
       },
       {
         name: 'Hospital São Paulo',
         hospital_type: 2,
-        city: city,
+        city: cities['ribeirao-preto'],
         latitude: -21.184408,
         longitude: -47.815726
       },
       {
         name: 'Beneficência Portuguesa',
         hospital_type: 1,
-        city: city,
+        city: cities['ribeirao-preto'],
         latitude: -21.180653,
         longitude: -47.813874
       },
       {
         name: 'Hospital Santa Lydia',
         hospital_type: 1,
-        city: city,
+        city: cities['ribeirao-preto'],
         latitude: -21.170,
         longitude: -47.802
       },
@@ -90,7 +96,7 @@ if Hospital.none?
         name: 'Hospital das Clínicas',
         slug: 'hc-campus-ribeirao-preto',
         hospital_type: 1,
-        city: city,
+        city: cities['ribeirao-preto'],
         latitude: -21.1624149,
         longitude: -47.8544455
       },
@@ -98,14 +104,14 @@ if Hospital.none?
         name: 'Hospital das Clínicas Unidade de Emergência',
         slug: 'hc-emergencia-ribeirao-preto',
         hospital_type: 1,
-        city: city,
+        city: cities['ribeirao-preto'],
         latitude: -21.185455,
         longitude: -47.8084284
       },
       {
         name: 'Hospital São Francisco',
         hospital_type: 1,
-        city: city,
+        city: cities['ribeirao-preto'],
         latitude: -21.1854888,
         longitude: -47.8096485
       },
@@ -113,7 +119,7 @@ if Hospital.none?
         name: 'Hospital Paulínia',
         slug: 'hospital-paulinia',
         hospital_type: 1,
-        city: City.find_by_slug('paulinia'),
+        city: cities['paulinia'],
         latitude: -22.7727157,
         longitude: -47.1591621
       },
@@ -121,7 +127,7 @@ if Hospital.none?
         name: 'Polo COVID - UPA Treze de Maio',
         slug: 'polo-covid-upa-treze-de-maio',
         hospital_type: 1,
-        city: city,
+        city: cities['ribeirao-preto'],
         latitude: -21.1761612,
         longitude: -47.7922277
       },
@@ -129,7 +135,7 @@ if Hospital.none?
         name: 'Polo COVID 2 - UPA Central',
         slug: 'polo-covid-2-upa-central',
         hospital_type: 1,
-        city: city,
+        city: cities['ribeirao-preto'],
         latitude: -21.1726925,
         longitude: -47.8143013
       },
@@ -137,13 +143,30 @@ if Hospital.none?
         name: 'Hospital Estadual de Ribeirão Preto',
         slug: 'hospital-estadual-ribeirao-preto',
         hospital_type: 1,
-        city: city,
+        city: cities['ribeirao-preto'],
         latitude: -21.2115222,
         longitude: -47.8290127
+      },
+      {
+        name: 'Hospital Batatais',
+        slug: 'hospital-batatais',
+        hospital_type: 1,
+        city: cities['batatais'],
+        latitude: -20.8947599,
+        longitude: -47.5898626
+      },
+      {
+        name: 'Hospital Cajuru',
+        slug: 'hospital-cajuru',
+        hospital_type: 1,
+        city: cities['cajuru'],
+        latitude: -21.2754479,
+        longitude: -47.3030665
       }
     ].each do |hospital|
       hospital = Hospital.create!(hospital)
 
+      puts "Creating data for #{hospital.name}"
       fake_historical(hospital)
     end
   end
@@ -158,7 +181,7 @@ if CovidCase.none?
       cureds = rand(500)
       total = cureds + deaths
 
-      covid_case = CovidCase.create!(
+      CovidCase.create!(
         city: city,
         total: rand(total..(total + 500)),
         deaths: deaths,

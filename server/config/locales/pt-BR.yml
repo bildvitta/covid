@@ -268,6 +268,9 @@ pt-BR:
     update: "Modificou"
     create: "Criou"
     destroy: "Deletou"
+  development_notes:
+    hospital_warning: 'CUIDADO, mais de um hospital foi encontrado, só o primeiro será usado'
+    credentials: 'Credênciais'
   activemodel:
     attributes:
       contact:
@@ -285,6 +288,11 @@ pt-BR:
             email:
               not_found: 'Não encontrado'
               already_confirmed: "Já foi confirmado"
+    passive_errors:
+      not_found:
+        one: "%{arg} não foi encontrado"
+        other: "%{arg} não foram encontrados"
+      method_not_defined: "Método '%{method}' não definido"
     models:
     attributes:
   formtastic:
