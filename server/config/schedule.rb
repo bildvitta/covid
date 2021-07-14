@@ -58,3 +58,7 @@ end
 every 1.day, at: ['14:30'] do
   runner 'DataBridge::GenericCityDrive.new(City.find(562)).get_data.save!'
 end
+
+every 1.day, at: ['10:00', '17:00'] do
+  runner 'DataBridge::GenericCityDrive.new(City.find(901)).get_data.save!'
+end
