@@ -56,13 +56,13 @@ module DataBridge
     # Proccess the different type of bed_types
     def process_beds
       # Total UTI-Covid
-      create_result(1, [2, 2], [2, 3])
+      create_result(1, [2, 2], [2, 3], [2, 10])
       # Total UTI Não-Covid
-      create_result(2, [2, 4], [2, 5])
+      create_result(2, [2, 4], [2, 5], [2, 11])
       # Total Enfermaria Covid
-      create_result(3, [2, 6], [2, 7])
+      create_result(3, [2, 6], [2, 7], [2, 12])
       # Total Enfermaria Não-Covid
-      create_result(4, [2, 8], [2, 9])
+      create_result(4, [2, 8], [2, 9], [2, 13])
     end
 
     def process_cases
@@ -87,16 +87,21 @@ module DataBridge
     end
 
     # Uses "create_object" method to store DataBridge information on "results" accessor
-    def create_result(bed_type, total_position, busy_position)
+    # @param [Integer] bed_type Enum for bed_type
+    # @param [Array] total_position Array equivalent to total positions on worksheet
+    # @param [Array] busy_position Array equivalent to only busy positions on worksheet
+    def create_result(bed_type, total_position, busy_position, nursing_position)
       total = @worksheet[*total_position]
       busy = @worksheet[*busy_position]
+      nursing = @worksheet[*nursing_position].to_i
 
       (total.to_i - busy.to_i).times do |i|
         results << create_object(bed_type, :free, i)
       end
 
       busy.to_i.times do |i|
-        results << create_object(bed_type, :busy, i)
+        ventilator = nursing > i
+        results << create_object(bed_type, :busy, i, ventilator: ventilator)
       end
     end
 
@@ -105,13 +110,13 @@ module DataBridge
     # @param [Symbol] status Enum for status
     # @param [Integer] iterator
     # @return [DataBridge::InternalObject]
-    def create_object(bed_type, status, iterator)
+    def create_object(bed_type, status, iterator, ventilator: false)
       DataBridge::InternalObject.new(
         hospital_slug: hospital.slug,
         status: status,
         bed_type: bed_type,
-        slug: "#{hospital.slug}-#{bed_type}-#{status}-#{iterator}",
-        using_ventilator: false
+        slug: generate_slug(bed_type, status, iterator),
+        using_ventilator: ventilator
       )
     end
 
