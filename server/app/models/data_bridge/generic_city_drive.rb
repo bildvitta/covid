@@ -90,6 +90,7 @@ module DataBridge
     # @param [Integer] bed_type Enum for bed_type
     # @param [Array] total_position Array equivalent to total positions on worksheet
     # @param [Array] busy_position Array equivalent to only busy positions on worksheet
+    # @param [Array] nursing_position Array equivalent to nursing beds on worksheet
     def create_result(bed_type, total_position, busy_position, nursing_position)
       total = @worksheet[*total_position]
       busy = @worksheet[*busy_position]
