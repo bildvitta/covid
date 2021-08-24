@@ -12,6 +12,8 @@ module DataBridge
     # Makes the 'save!' method from super class be called 'super_save!', so it can be accessed anywhere
     alias super_save! save!
 
+    # @param [City, String] city
+    # @param [Symbol, Array] to_do It can be :beds, :cases or both on array
     def initialize(city, to_do: TO_DO_TYPES)
       self.city = (city.is_a?(City) ? city : City.friendly.find(city))
       self.hospital = retrieve_hospital
@@ -21,12 +23,15 @@ module DataBridge
       super()
     end
 
+    # Persists all accessors data
     def save!
       to_do.each { |type| hard_send("save_#{type}") }
 
       true
     end
 
+    # Stores all datas on accessors
+    # @return [GenericCityDrive]
     def get_data
       self.results = []
       self.cases_results = nil
@@ -48,15 +53,16 @@ module DataBridge
 
     protected
 
+    # Proccess the different type of bed_types
     def process_beds
       # Total UTI-Covid
-      create_result(1, [2, 2], [2, 3])
+      create_result(1, [2, 2], [2, 3], [2, 10])
       # Total UTI Não-Covid
-      create_result(2, [2, 4], [2, 5])
+      create_result(2, [2, 4], [2, 5], [2, 11])
       # Total Enfermaria Covid
-      create_result(3, [2, 6], [2, 7])
+      create_result(3, [2, 6], [2, 7], [2, 12])
       # Total Enfermaria Não-Covid
-      create_result(4, [2, 8], [2, 9])
+      create_result(4, [2, 8], [2, 9], [2, 13])
     end
 
     def process_cases
@@ -68,45 +74,69 @@ module DataBridge
       puts "WARNING on generate CovidCase (reference date #{Date.today}): #{e}"
     end
 
+    # Commits beds stored on "results" accessor into the database
     def save_beds
       hospital.beds.destroy_all
 
       super_save!
     end
 
+    # Commits cases stored on "cases_results" accessor into the database
     def save_cases
       CovidCase.find_or_initialize_by(cases_results[:find]).update(cases_results[:data])
     end
 
-    def create_result(bed_type, total_position, busy_position)
+    # Uses "create_object" method to store DataBridge information on "results" accessor
+    # @param [Integer] bed_type Enum for bed_type
+    # @param [Array] total_position Array equivalent to total positions on worksheet
+    # @param [Array] busy_position Array equivalent to only busy positions on worksheet
+    # @param [Array] nursing_position Array equivalent to nursing beds on worksheet
+    def create_result(bed_type, total_position, busy_position, nursing_position)
       total = @worksheet[*total_position]
       busy = @worksheet[*busy_position]
+      nursing = @worksheet[*nursing_position].to_i
 
       (total.to_i - busy.to_i).times do |i|
         results << create_object(bed_type, :free, i)
       end
 
       busy.to_i.times do |i|
-        results << create_object(bed_type, :busy, i)
+        ventilator = nursing > i
+        results << create_object(bed_type, :busy, i, ventilator: ventilator)
       end
     end
 
-    def create_object(bed_type, status, iterator)
+    # Creates a internal object for using on beds instances creation
+    # @param [Integer] bed_type Enum for bed_type
+    # @param [Symbol] status Enum for status
+    # @param [Integer] iterator
+    # @return [DataBridge::InternalObject]
+    def create_object(bed_type, status, iterator, ventilator: false)
       DataBridge::InternalObject.new(
         hospital_slug: hospital.slug,
         status: status,
         bed_type: bed_type,
-        slug: "#{hospital.slug}-#{bed_type}-#{status}-#{iterator}",
-        using_ventilator: false
+        slug: generate_slug(bed_type, status, iterator),
+        using_ventilator: ventilator
       )
     end
 
-    # Since it's a very generic class, it's very well protected to avoid too much debugging
     private
+
+    # Generates a slug for a bed
+    # @param [Integer] bed_type Enum for bed_type
+    # @param [Symbol] status Enum for status
+    # @param [Integer] iterator
+    # @return [String]
+    def generate_slug(bed_type, status, iterator)
+      "#{hospital.slug}-#{bed_type}-#{status}-#{iterator}"
+    end
 
     # It's the same thing as usual send, but warns the developer in case he miss the method creation
     # Might be useless, but since it's a class that might be used for a lot of cities, and might be
     # used as another class' superclass, this method might help to abstract this class and debug
+    # @param [Symbol] symbol A method's name
+    # @return [Object]
     def hard_send(symbol)
       begin
         send_method = method(symbol)
@@ -116,6 +146,7 @@ module DataBridge
       send_method.call
     end
 
+    # @return [Hash]
     def retrieve_credentials
       credentials = Rails.application.credentials.send("#{city.slug}_spreadsheet_key")
       return credentials if credentials
@@ -123,6 +154,7 @@ module DataBridge
       raise NotImplementedError, CREDENTIALS_NOT_FOUND_MESSAGE
     end
 
+    # @return [Hospital]
     def retrieve_hospital
       return @retrieve_hospital if @retrieve_hospital
 
