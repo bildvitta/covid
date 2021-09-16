@@ -29,23 +29,16 @@ module DataBridge
       # return unless valid_data?
 
       # create_result(bed_type, total_position, busy_position)
-      # Total UTI-Covid
-      create_result(:treze, 1, [2, 2], [2, 3])
-      # Total UTI Não-Covid
-      create_result(:treze, 2, [2, 4], [2, 5])
-      # Total Enfermaria Covid
-      create_result(:treze, 3, [2, 6], [2, 7])
-      # Total Enfermaria Não-Covid
-      create_result(:treze, 4, [2, 8], [2, 9])
-
-      # Total UTI-Covid
-      create_result(:central, 1, [3, 2], [3, 3])
-      # Total UTI Não-Covid
-      create_result(:central, 2, [3, 4], [3, 5])
-      # Total Enfermaria Covid
-      create_result(:central, 3, [3, 6], [3, 7])
-      # Total Enfermaria Não-Covid
-      create_result(:central, 4, [3, 8], [3, 9])
+      [:treze, :central, :pronto].each_with_index do |unit, i|
+        # Total UTI-Covid
+        create_result(unit, 1, [(i + 2), 2], [(i + 2), 3])
+        # Total UTI Não-Covid
+        create_result(unit, 2, [(i + 2), 4], [(i + 2), 5])
+        # Total Enfermaria Covid
+        create_result(unit, 3, [(i + 2), 6], [(i + 2), 7])
+        # Total Enfermaria Não-Covid
+        create_result(unit, 4, [(i + 2), 8], [(i + 2), 9])
+      end
     end
 
     def create_result(unit, bed_type, total_position, busy_position)
@@ -64,7 +57,8 @@ module DataBridge
     def create_object(unit, bed_type, status, iterator)
       units = {
         treze: ['polo-covid-upa-treze-de-maio', 'polo-covid-upa-treze'],
-        central: ['polo-covid-2-upa-central', 'polo-covid-2-upa-central']
+        central: ['polo-covid-2-upa-central', 'polo-covid-2-upa-central'],
+        pronto: ['pronto-atendimento-ribeirao-preto', 'pronto-atendimento']
       }
 
       DataBridge::InternalObject.new(
