@@ -162,6 +162,14 @@ if Hospital.none?
         city: cities['cajuru'],
         latitude: -21.2754479,
         longitude: -47.3030665
+      },
+      {
+        name: 'Unidades de Pronto Atendimento',
+        slug: 'pronto-atendimento-ribeirao-preto',
+        hospital_type: 1,
+        city: cities['ribeirao-preto'],
+        latitude: -21.1795368,
+        longitude: -47.8201003
       }
     ].each do |hospital|
       hospital = Hospital.create!(hospital)
