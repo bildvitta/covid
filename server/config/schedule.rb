@@ -23,9 +23,9 @@ every '10 * * * *' do
   runner 'DataBridge::SaoLucas.new.get_data.save!'
 end
 
-every '5 * * * *' do
-  runner 'DataBridge::SaoPaulo.new.get_data.save!'
-end
+# every '5 * * * *' do
+#   runner 'DataBridge::SaoPaulo.new.get_data.save!'
+# end
 
 every '9 * * * *' do
   runner 'DataBridge::UpaTreze.new.get_data.save!'
