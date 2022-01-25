@@ -26,7 +26,7 @@ module DataBridge
 
       self.data.each do |r|
         self.results << DataBridge::InternalObject.new(
-          hospital_slug:    'hospital-unimed',
+          hospital_slug:    (r['IdHospital'].to_s.downcase.include?('unimed') ? 'hospital-unimed' : 'hospital-sao-paulo'),
           status:           get_status(r['Status']),
           bed_type:         get_bed_type(r['TipoLeito']),
           slug:             r['IdLeito'].parameterize,
