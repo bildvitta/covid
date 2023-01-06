@@ -19,7 +19,7 @@
     "date-fns": "^2.14.0",
     "leaflet.heat": "^0.2.0",
     "lodash-es": "^4.17.15",
-    "nuxt": "^2.0.0",
+    "nuxt": "^2.15.8",
     "nuxt-leaflet": "0.0.21",
     "vue-chartjs": "^3.5.0",
     "vue-multiselect": "^2.1.6",
